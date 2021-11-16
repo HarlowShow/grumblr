@@ -1,0 +1,7 @@
+{
+  "name": "gripe-generator-v1",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
