@@ -11,7 +11,7 @@
         ></form-summary>
         </transition> -->
 
-        <p>{{ questions }}</p>
+        <!-- <p>{{ questions }}</p> -->
 
     <div class="sampleText">
         <div v-if="samplePronoun.length>0">
@@ -71,10 +71,10 @@
         </div> -->
 
 
-        <p
+        <!-- <p
         v-if="this.formPosition ===1">
         And who's the perpetrator?
-        </p>
+        </p> -->
 
         <p
         v-if="this.formPosition ===2">
@@ -93,7 +93,7 @@
         </pronoun-input>
 
         <personmate-input
-        :personmates="personmates"
+     
         @update:personmate="getPersonmate"
         v-if="this.formPosition === 1"
         ></personmate-input>

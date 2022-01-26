@@ -27,6 +27,7 @@ import './theme/core.css';
 import BaseLayout from './components/base/BaseLayout.vue';
 import TheTopMenu from './components/base/TheTopMenu.vue';
 import VueSocialSharing from 'vue-social-sharing';
+import VueCustomTooltip from '@adamdehaven/vue-custom-tooltip'
 
 const store = createStore({
   state() {
@@ -47,7 +48,8 @@ const app = createApp(App)
   .use(IonicVue)
   .use(router)
   .use(store)
-  .use(VueSocialSharing);
+  .use(VueSocialSharing)
+  .use(VueCustomTooltip);
   
 app.component('base-layout', BaseLayout);
 app.component('the-top-menu', TheTopMenu);
