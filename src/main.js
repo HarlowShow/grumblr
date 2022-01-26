@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
+import { createStore } from 'vuex';
 
 import { IonicVue } from '@ionic/vue';
 
@@ -22,11 +23,35 @@ import '@ionic/vue/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import './theme/core.css';
+import BaseLayout from './components/base/BaseLayout.vue';
+import TheTopMenu from './components/base/TheTopMenu.vue';
+import VueSocialSharing from 'vue-social-sharing';
+
+const store = createStore({
+  state() {
+    return {
+      baseOutput: {},
+      chosenPronouns: {},
+      chosenPersonmate: '',
+      chosenGripe: '',
+      add: 0,
+      sub: 0,
+      oldAdd: 0,
+      oldSub: 0
+    };
+  },
+});
 
 const app = createApp(App)
   .use(IonicVue)
-  .use(router);
+  .use(router)
+  .use(store)
+  .use(VueSocialSharing);
   
+app.component('base-layout', BaseLayout);
+app.component('the-top-menu', TheTopMenu);
+
 router.isReady().then(() => {
   app.mount('#app');
 });
