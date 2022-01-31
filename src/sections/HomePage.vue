@@ -1,13 +1,11 @@
 <template>
  
   <base-layout page-title="Gripe Generator">
-      
-      <transition name="fade" appear>
-      <blockquote><q></q>
-        <cite>Gautama Buddha</cite>
-      </blockquote>
-      </transition>
 
+    <template v-slot:top>
+      <ion-menu-button></ion-menu-button>
+    </template>
+     
       <!-- <ion-button @click="splitWords()">Try the thing</ion-button> -->
       <div class="content">
           <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/input">Start</ion-button>
@@ -73,7 +71,8 @@
   // import TheTopMenu from '../components/base/TheTopMenu.vue';
   import {
        IonButton,
-       IonIcon
+       IonIcon,
+       IonMenuButton
   } from '@ionic/vue';
 
   import TheIcons from './components/TheIcons.vue'
@@ -86,55 +85,11 @@ export default {
       IonButton,
       IonIcon,
       TheIcons,
-      TheSliders
+      TheSliders,
+      IonMenuButton,
       },
 
-    setup() {
-
-
-  function splitWords() {
-  let quote = document.querySelector("blockquote q");
-  quote.innerText.replace(/(<([^>]+)>)/ig,"");
-  let text = "Gripe gripe gripe gripe gripe"
-  // let quotewords = quote.innerText.split(" "),
-  let quotewords = text.split(" "),
-  wordCount = quotewords.length;
-  quote.innerHTML = "";
-
-      for (let i=0; i < wordCount; i++) {
-      quote.innerHTML += "<span>"+quotewords[i]+"</span>";
-      if (i < quotewords.length - 1) {
-      quote.innerHTML += " ";
-      }
-    }
-
-
-  quotewords = document.querySelectorAll("blockquote q span");
-  fadeWords(quotewords);
-}
-
-function getRandom(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
-function fadeWords(quotewords) {
-  Array.prototype.forEach.call(quotewords, function(word) {
-    word.animate([{
-      opacity: 0,
-      filter: "blur("+getRandom(2,5)+"px)"
-    }, {
-      opacity: 1,
-      filter: "blur(0px)"
-    }], 
-    { 
-      duration: 1000,
-      delay: getRandom(500,3300),
-      fill: 'forwards'
-    } 
-   )
-  })
-}
-
+  setup() {
 
       return {
         heart,
@@ -142,26 +97,19 @@ function fadeWords(quotewords) {
         logoTwitter,
         logoReddit,
         logoWhatsapp,
-        splitWords,
-        fadeWords,
        
       }
     },
 
     data() {
       return {
-        test: "test string",
         angryTracker: 0,
         noActivated: false,
         start: false,
+        test: 'it be test'
       }
     },
 
-    mounted() {
-      setTimeout(()=>{
-    this.splitWords()
-      }, 50)
-    },
 
     methods: {
       angrier() {
