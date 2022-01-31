@@ -13,7 +13,7 @@
 
         <!-- <p>{{ questions }}</p> -->
 
-    <div class="sampleText">
+    <div class="sampleText" v-if="test===true">
         <div v-if="samplePronoun.length>0">
         <transition-group
         name="move-complete"
@@ -76,10 +76,10 @@
         And who's the perpetrator?
         </p> -->
 
-        <p
+        <!-- <p
         v-if="this.formPosition ===2">
         Oh dear. What did they do?
-        </p>
+        </p> -->
 
         <!-- <transition
         name="fade">
@@ -95,11 +95,13 @@
         <personmate-input
      
         @update:personmate="getPersonmate"
+        @backClick="prevForm"
         v-if="this.formPosition === 1"
         ></personmate-input>
 
         <gripe-input 
         @update:gripe="getGripe"
+        @backClick="prevForm"
         v-if="this.formPosition === 2">
         </gripe-input>
 
@@ -110,23 +112,25 @@
         </input-summary>
         </transition>
 
-    <div v-if="this.formPosition>0">
-     <ion-button expand="block" color="primary" shape="round" fill="outline" @click="prevForm">Go back</ion-button>
-    </div>
-    <!-- <p>your chosen gripe: {{ this.chosen.chosenGripe }} </p>
-    <p>your chosen pronoun: {{ this.chosen.chosenPronoun }}</p>
-    <p>your chosen personmate: {{ this.chosen.chosenPersonmate }}</p> -->
+    <!-- <template v-slot:footer>
+        <div id="footer-bg">
+            <p>example :)</p>
+        </div>
+    </template> -->
 
-    <!-- <div v-if="this.formPosition === 3">
-    <ion-button expand="block" color="primary" shape="round" fill="outline" @click="generateGripe">CONFIRM</ion-button>
+<!-- <mobile-footer :content="'five'"></mobile-footer> -->
 
-    </div> -->
-    <template v-slot:footer>
-       
-    </template>
+      <!-- <ion-footer class="ion-no-border">
+    <ion-toolbar>
+
+        <ion-button>footer button</ion-button>
+      
+      </ion-toolbar>
+  </ion-footer> -->
+
     </base-layout>
 
-   
+ 
 </template>
 
 <script>
@@ -135,12 +139,8 @@
     import GripeInput from './components/GripeInput.vue';
     import PronounInput from './components/PronounInput.vue';
     import InputSummary from './components/InputSummary.vue';
+    // import MobileFooter from '../components/base/MobileFooter.vue'
     // import FormSummary from './components/FormSummary.vue'   
-    
-    import {
-    IonButton
-
-} from '@ionic/vue';
 
     export default {
 
@@ -148,8 +148,10 @@
             PersonmateInput,
             GripeInput,
             PronounInput,
-            IonButton,
             InputSummary,
+            // IonFooter,
+            // IonToolbar
+            // MobileFooter
             // FormSummary
         },
 
@@ -159,6 +161,7 @@
                 questions: ['So, ', 'who has a complaint?'],
                 nextQuestions: ['about your'],
                 thirdQuestions: ['because they'],
+                test: false,
                 
                 arr: [],
                 runOne: false,
@@ -501,7 +504,7 @@
                     this.chosen.offenseBadThing = "an overflowing bin ";
                     this.chosen.demoGripe = " didn't take the rubbish out. "
                 } else {
-                    this.chosen.chosenOffense = chosenGripe + '. ';
+                    this.chosen.chosenOffense = 'you ' + chosenGripe + '. ';
                     this.chosen.offenseActive = "your inconsiderate behavour ";
                     this.chosen.offenseBadThing = "this ";
                     this.gripeIsCustom = true;
@@ -545,6 +548,7 @@
 
             prevForm() {
                 this.formPosition--;
+                console.log('went back')
             }
         },
 
@@ -652,6 +656,10 @@
 
 .text-div {
     display: inline-flex;
+}
+
+#footer-bg {
+    background-color: aqua;
 }
 
 </style>

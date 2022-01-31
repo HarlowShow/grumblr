@@ -21,8 +21,7 @@
 
     <ion-footer>
         <ion-toolbar>
-            <!-- <slot name="footer"></slot> -->
-            <ThePithyQuote/>
+            <ThePithyQuote id="desktop"/>
         </ion-toolbar>
     </ion-footer>
    </ion-page>
@@ -32,6 +31,7 @@
 
 
 import ThePithyQuote from './ThePithyQuote.vue'
+// import MobileFooter from './MobileFooter.vue'
 
 import {
         IonPage,
@@ -42,13 +42,14 @@ import {
         IonBackButton,
         IonButtons,
         IonFooter,
+    
        
 } from '@ionic/vue';
 
 
 export default {
     components: { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonBackButton, IonButtons, IonFooter, ThePithyQuote },
-    props: ['page-title', 'page-default-back-link'],
+    props: ['page-title', 'page-default-back-link', 'content'],
 };
 </script>
 
@@ -77,8 +78,17 @@ export default {
  }
 
 @media(max-width: 576px) {
- ion-toolbar {
+ ion-footer {
      display: none;
  }
+ ion-content {
+     height: calc(100% - 100px);
+ }
 }
+
+/* @media(min-width: 576px) {
+ #mobile {
+     display: none;
+ }
+} */
 </style>

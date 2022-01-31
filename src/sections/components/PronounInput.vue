@@ -1,7 +1,8 @@
 <template>
 
 <area-title :title="'So, who has a complaint?'"
-:progress="0.25"></area-title>
+:progress="0.25">
+</area-title>
 
 <div class="button-area">
 
@@ -21,20 +22,33 @@
     </ion-button>
 </div>
 
-    <p v-if="invalidInput">Please select an option</p>
-    <ion-button class="btn-system" expand="block" @click="submitPronoun(selectedPronoun)">NEXT</ion-button>
+<p v-if="invalidInput">Please select an option</p>
+
+ <ion-button id="desktop" class="btn-system" expand="block" @click="submitPronoun(selectedPronoun)">NEXT</ion-button>
+
+
+    <ion-footer class="ion-no-border" id="mobile">
+            <ion-toolbar class="ion-no-padding">
+                 <ion-button class="btn-system ion-no-margin" expand="full" @click="submitPronoun(selectedPronoun)">NEXT</ion-button>
+            </ion-toolbar>
+    </ion-footer>
+
 
 </template>
+
 
 <script>
 import {
     IonButton,
     IonIcon,
-    IonRippleEffect
+    IonRippleEffect,
+    IonFooter,
+    IonToolbar
 } from '@ionic/vue';
 
-import { person, people } from 'ionicons/icons';
+import { person, people, arrowBackOutline } from 'ionicons/icons';
 import AreaTitle from './AreaTitle.vue'
+// import MobileFooter from '../../components/base/MobileFooter.vue';
 
 export default {
 
@@ -49,7 +63,10 @@ export default {
         IonButton,
         IonIcon,
         IonRippleEffect,
-        AreaTitle
+        AreaTitle,
+        IonFooter,
+        IonToolbar
+        // MobileFooter,
  
     },
 
@@ -57,7 +74,8 @@ export default {
 
         return {
             person,
-            people
+            people,
+            arrowBackOutline
         }
     },
 
@@ -131,5 +149,37 @@ export default {
         --text-transform: uppercase;
         letter-spacing: 0.15rem;
     }
+
+    /* @media(max-width: 576px) {
+        .btn-system {
+
+        }
+    } */
+
+    #mobile {
+    position: absolute;
+    bottom: 0px;
+    display: flex;
+    width: 100vw;
+    
+}
+
+ion-toolbar {
+    display: flex;
+    margin-left: -2.5rem;
+    margin-right: -2.5rem;
+}
+
+  @media(min-width: 576px) {
+        #mobile {
+            display: none;
+        }
+  }
+
+    @media(max-width: 576px) {
+        #desktop {
+            display: none;
+        }
+  }
 
 </style>

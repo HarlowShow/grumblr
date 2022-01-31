@@ -1,7 +1,11 @@
 <template>
 
 <area-title :title="'And who dunnit?'"
-:progress="0.5"></area-title>
+:progress="0.5">
+    <ion-button @click="goBack">
+        <ion-icon slot="icon-only" :icon="arrowBackOutline" ></ion-icon>
+    </ion-button>
+</area-title>
 
     <div class="button-area">
 
@@ -71,7 +75,7 @@
         <div v-if="personmateIsCustom===true">
             <ion-label>Who was it?</ion-label>
       
-            <ion-item lines="none">
+            <ion-item lines="none" id="input">
             <ion-input 
             type="text"
             @ionChange="otherPersonmate=$event.target.value"
@@ -80,15 +84,29 @@
             <vue-custom-tooltip  slot="end" label="test"><ion-icon :icon="helpCircle"></ion-icon></vue-custom-tooltip>
               
               </ion-item>
-              
+
+              <ion-item lines="none">
+            <ion-checkbox @ionChange="isChecked($event.target.checked)"></ion-checkbox>
+            <ion-label>this is a person's name</ion-label>
+            </ion-item>
               </div>
 
         <p v-if="this.invalidInput === true">Please enter a valid option</p>
 
-        <ion-button 
-        expand="block" color="primary" shape="round" fill="outline"
-        @click="submitPersonmate(this.tempPersonmate)">Next</ion-button>
+        <ion-button id="desktop"
+        class="btn-system"
+        expand="block"
+        @click="submitPersonmate(this.tempPersonmate, this.customNamed)">Next</ion-button>
             
+
+  <ion-footer class="ion-no-border" id="mobile">
+            <ion-toolbar>
+                  <ion-button 
+                    class="btn-system"
+                    expand="block"
+                    @click="submitPersonmate(this.tempPersonmate, this.customNamed)">NEXT</ion-button>
+            </ion-toolbar>
+    </ion-footer>
 
 </template>
 
@@ -105,12 +123,16 @@ import {
     IonInput,
     IonLabel,
     IonIcon,
-    IonItem
+    IonItem,
+    IonRippleEffect,
+    IonFooter,
+    IonToolbar,
+    IonCheckbox
  
     // actionSheetController
 } from '@ionic/vue'
 
-import { helpCircle, business, home, storefront, man, hammer  } from 'ionicons/icons';
+import { helpCircle, business, home, storefront, man, hammer, arrowBackOutline  } from 'ionicons/icons';
 
 
 export default {
@@ -123,8 +145,11 @@ export default {
         AreaTitle,
         IonLabel,
         IonIcon,
-        IonItem
-
+        IonItem,
+        IonRippleEffect,
+        IonFooter,
+        IonToolbar,
+        IonCheckbox
     },
 
     setup() {
@@ -135,7 +160,8 @@ export default {
             home,
             storefront,
             man,
-            hammer
+            hammer,
+            arrowBackOutline
         }
     },
 
@@ -148,44 +174,59 @@ export default {
             personmateIsCustom: 'false',
             invalidInput: false,
             activeBtn: '',
+            customNamed: false,
         };
     },
 
+    emits: ['update:personmate', 'backClick'],
+
     methods: {
 
-    validateLength(choice) {
-            console.log(choice);
-             if (choice.length < 1 || choice === 'none yet') {
-                this.invalidInput = true;
-                console.log("invalid input");
-                return this.choice;
-            } else {
-            this.invalidInput = false;
-            }
+        goBack() {
+            console.log('goback')
+            this.$emit('backClick')
         },
 
-    validateSubmission() {
-        console.log("function happened")
-            if (this.personmateIsCustom === true) {
-                this.selectedPersonmate = this.otherPersonmate;
-            } else {
-               this.selectedPersonmate = this.tempPersonmate;
-            }
-            this.validateLength(this.selectedPersonmate);
-    },
-
-    submitPersonmate(personmate) {
-            this.validateSubmission();
-
-            if(this.invalidInput === false) {
-                console.log("input was valid")
-                personmate = this.selectedPersonmate;
-
-            this.$emit('update:personmate', personmate)
-            this.$store.state.chosenPersonmate = this.selectedPersonmate;
-            }
+        isChecked(event) {
+            this.customNamed = event;
+            console.log(this.customNamed)
         },
-    },
+
+        validateLength(choice) {
+                console.log(choice);
+                if (choice.length < 1 || choice === 'none yet') {
+                    this.invalidInput = true;
+                    console.log("invalid input");
+                    return this.choice;
+                } else {
+                this.invalidInput = false;
+                }
+        },
+
+        validateSubmission() {
+            console.log("function happened")
+                if (this.personmateIsCustom === true) {
+                    this.selectedPersonmate = this.otherPersonmate;
+                } else {
+                this.selectedPersonmate = this.tempPersonmate;
+                }
+                this.validateLength(this.selectedPersonmate);
+        },
+
+        submitPersonmate(personmate, custom) {
+                this.validateSubmission();
+
+                if(this.invalidInput === false) {
+                    console.log("input was valid")
+                    personmate = this.selectedPersonmate;
+
+                this.$emit('update:personmate', personmate)
+                
+                this.$store.state.namedPersonmate = custom;
+                this.$store.state.chosenPersonmate = this.selectedPersonmate;
+                }
+            },
+        },
 
     watch: {
 
@@ -196,6 +237,7 @@ export default {
             this.personmateIsCustom = false;
                 }
         },
+
     }
 }
 </script>
@@ -237,7 +279,6 @@ ion-icon {
     .btn-system {
         --background: #646081;
         --border-radius: 0.25rem;
-        --text-transform: uppercase;
         letter-spacing: 0.15rem;
     }
 
@@ -254,10 +295,34 @@ ion-icon {
         --padding-end: 10px;
     } */
 
-    ion-item {
+    #input {
          border: 3px solid black;
         border-radius: 0.25rem;
         --padding-start: 10px !important;
         overflow: visible;
     }
+
+    #mobile {
+    position: absolute;
+    bottom: 0px;
+    background-color: #0F0A4A;
+    display: flex;
+    width: 85vw;
+}
+
+ion-toolbar {
+    display: flex;
+}
+
+  @media(min-width: 576px) {
+        #mobile {
+            display: none;
+        }
+  }
+
+    @media(max-width: 576px) {
+        #desktop {
+            display: none;
+        }
+  }
 </style>
