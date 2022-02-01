@@ -5,26 +5,26 @@
              <div slot="start"><slot name="top"></slot></div>
              
              <ion-title >{{ pageTitle }}</ion-title>
-             <ion-buttons slot="end">
-                 <ion-back-button :default-href="pageDefaultBackLink"></ion-back-button>
-             </ion-buttons>
-             
-             
+  
+                 <h3 class="close" slot="end" v-show="open===true">X</h3>
              
          </ion-toolbar>
       </ion-header>
 
-      <ion-menu side="start" contentId="main-content">
+      <ion-menu side="start" contentId="main-content" menuId="main"
+      @ionWillOpen="open=true"
+      @ionWillClose="open=false">
 
           <div id="main-content">
         <ion-list class="menu-items">
+
             <ion-item>
             
-              <ion-label>Inbox</ion-label>
+              <ion-label>Home</ion-label>
             </ion-item>
             <ion-item>
              
-              <ion-label>Outbox</ion-label>
+              <ion-label>About</ion-label>
             </ion-item>
             <ion-item>
             
@@ -42,10 +42,6 @@
             
               <ion-label>Spam</ion-label>
 
-            </ion-item>
-
-            <ion-item>
-                <ion-button>Close</ion-button>
             </ion-item>
           </ion-list>
 
@@ -81,14 +77,14 @@ import {
         IonToolbar,
         IonTitle,
         IonContent,
-        IonBackButton,
-        IonButtons,
+        // IonBackButton,
+        // IonButtons,
         IonFooter,
         IonMenu,
         // menuController,
         IonItem,
         IonList,
-        IonButton,
+        // IonButton,
         IonLabel,
 
       
@@ -110,13 +106,20 @@ export default {
         IonItem,
         IonList,
         IonLabel,
-        IonButton,
-        IonBackButton, 
-        IonButtons,
+        // IonButton,
+        // IonBackButton, 
+        // IonButtons,
         },
     
     //  
-    props: ['page-title', 'page-default-back-link', 'content'],
+    props: ['page-title', 'content'],
+
+    data() {
+
+        return {
+            open: false,
+        }
+    },
 
     // setup() {
     //     return {
@@ -168,6 +171,10 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.close {
+    margin: 0;
 }
 
 /* @media(min-width: 576px) {
