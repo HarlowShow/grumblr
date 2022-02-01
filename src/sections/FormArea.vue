@@ -1,17 +1,10 @@
 <template>
     <base-layout page-default-back-link="/home" page-title="Gripe Deets">
 
-        <!-- <transition appear
-        name="fade"
-        mode="out-in">
-        <form-summary
-        v-if="pronounSet"
-        :pronoun="samplePronoun"
-        key="pronoun"
-        ></form-summary>
-        </transition> -->
-
-        <!-- <p>{{ questions }}</p> -->
+    <template v-slot:top>
+      <ion-menu-button></ion-menu-button>
+      <button @click="openMain()">open</button>
+    </template>
 
     <div class="sampleText" v-if="test===true">
         <div v-if="samplePronoun.length>0">
@@ -105,12 +98,11 @@
         v-if="this.formPosition === 2">
         </gripe-input>
 
-        <transition 
-        name="fade">
         <input-summary
-        v-if="this.formPosition === 3">
+        v-if="this.formPosition === 3"
+        :tempSelection="tempChosen"
+        >
         </input-summary>
-        </transition>
 
     <!-- <template v-slot:footer>
         <div id="footer-bg">
@@ -139,6 +131,8 @@
     import GripeInput from './components/GripeInput.vue';
     import PronounInput from './components/PronounInput.vue';
     import InputSummary from './components/InputSummary.vue';
+
+    import { IonMenuButton, menuController } from '@ionic/vue'
     // import MobileFooter from '../components/base/MobileFooter.vue'
     // import FormSummary from './components/FormSummary.vue'   
 
@@ -149,6 +143,7 @@
             GripeInput,
             PronounInput,
             InputSummary,
+            IonMenuButton
             // IonFooter,
             // IonToolbar
             // MobileFooter
@@ -367,6 +362,24 @@
         },
 
         methods: {
+
+            testing() {
+                console.log(menuController)
+                menuController.enable(true, 'main')
+                menuController.open(true, 'main')
+        
+            },
+
+            openMain() {
+            menuController.enable(true, 'main');
+            menuController.open('main');
+            },
+
+            closeMain() {
+            menuController.enable(true, 'main');
+            menuController.close('main');
+            menuController.enable(true, 'main');
+            },
 
             animateOne() {
 

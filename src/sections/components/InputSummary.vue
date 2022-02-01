@@ -1,5 +1,5 @@
 <template>
-    <!-- <p> {{ pronoun }} have a problem with your {{ personmate }} because they {{ gripe }}</p> -->
+    <p> {{ pronoun }} have a problem with {{ personmate }} because they {{ gripe }}</p>
 
     
         <transition
@@ -27,32 +27,41 @@ export default {
     components: {
             IonButton,
     },
-    // props: {
-    //     tempSelection: {
-    //         type: Object,
-    //         required: true
-    //     },
-    // },
+    props: {
+        tempSelection: {
+            type: Object,
+            required: true
+        },
+    },
 
+    mounted() {
+        console.log(this.$store.state.namedPersonmate)
+    },
 
-    // computed: {
-    //     pronoun() {
-    //             let pro = ''
-    //             if(this.tempSelection.chosenPronoun === "me") {
-    //                 pro = "You"
-    //             }
-    //             if (this.tempSelection.chosenPronoun === "we"){
-    //                 pro = "More than one of you"
-    //             } return pro
-    //         },
-    //     personmate() {
-    //         return this.tempSelection.chosenPersonmate
-    //         },
-    //     gripe() {
-    //         let offenseText = this.$store.state.baseOutput.of0.slice(4)
-    //             return offenseText
-    //         },
-    // },
+    computed: {
+        pronoun() {
+                let pro = ''
+                if(this.tempSelection.chosenPronoun === "me") {
+                    pro = "You"
+                }
+                if (this.tempSelection.chosenPronoun === "we"){
+                    pro = "More than one of you"
+                } return pro
+            },
+        personmate() {
+            let pers = ''
+            if (this.$store.state.namedPersonmate===true) {
+                pers = this.tempSelection.chosenPersonmate
+            } else {
+                pers = 'your ' + this.tempSelection.chosenPersonmate
+            }
+            return pers
+            },
+        gripe() {
+            let offenseText = this.$store.state.baseOutput.of0.slice(4)
+                return offenseText
+            },
+    },
     methods: {
         routin() {
              this.$router.push('playground')

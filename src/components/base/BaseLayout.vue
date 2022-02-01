@@ -1,5 +1,6 @@
 <template>
-    <ion-page>
+   
+   <ion-page>
       <ion-header>
          <ion-toolbar>
              <div slot="start"><slot name="top"></slot></div>
@@ -7,19 +8,24 @@
              <ion-title >{{ pageTitle }}</ion-title>
   
                  <h3 class="close" slot="end" v-show="open===true">X</h3>
+                 <!-- <button @click="openMain()">open menu</button> -->
+                 
              
          </ion-toolbar>
       </ion-header>
 
-      <ion-menu side="start" contentId="main-content" menuId="main"
+      <ion-menu side="start" content-id="main-content" menu-id="main"
       @ionWillOpen="open=true"
       @ionWillClose="open=false">
 
           <div id="main-content">
         <ion-list class="menu-items">
 
-            <ion-item>
-            
+            <!-- <ion-item>
+                <button @click="closeMain()">close menu</button>
+            </ion-item> -->
+
+            <ion-item @click="route('home')">
               <ion-label>Home</ion-label>
             </ion-item>
             <ion-item>
@@ -48,7 +54,7 @@
           <ThePithyQuote id="mobile"/>
           </div>
       </ion-menu>
-   
+      
 
       <ion-content class="ion-align-self-center">
 
@@ -81,7 +87,7 @@ import {
         // IonButtons,
         IonFooter,
         IonMenu,
-        // menuController,
+        menuController,
         IonItem,
         IonList,
         // IonButton,
@@ -114,11 +120,41 @@ export default {
     //  
     props: ['page-title', 'content'],
 
+    // setup() {
+    //     window.menuController = menuController;
+
+    //     return {
+    //         menuController
+    //     }
+    // },
+
     data() {
 
         return {
             open: false,
         }
+    },
+
+    methods: {
+        
+        route(page) {
+            
+            console.log(page)
+            this.$router.push(page)
+
+        },
+
+          openMain() {
+            menuController.enable(true, 'main');
+            menuController.open('main');
+        },
+
+            closeMain() {
+            menuController.enable(true, 'main');
+            menuController.close('main');
+            menuController.enable(true, 'main');
+        },
+
     },
 
     // setup() {
