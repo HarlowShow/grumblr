@@ -1,11 +1,13 @@
 <template>
   <ion-app id="app">
-      <ion-router-outlet />
+    <the-side-menu></the-side-menu>
+      <ion-router-outlet/>
   </ion-app>
 </template>
 
 <script>
 import { IonApp, IonRouterOutlet} from '@ionic/vue';
+import TheSideMenu from './components/base/TheSideMenu.vue'
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -13,11 +15,13 @@ export default defineComponent({
   components: {
     IonApp, 
     IonRouterOutlet,
+    TheSideMenu
   }
 });
 </script>
 
 <style scoped>
+
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }

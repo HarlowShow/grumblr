@@ -1,71 +1,7 @@
 <template>
-   
-   <ion-page id="ion-page">
-      <ion-header>
-         <ion-toolbar>
-             <ion-menu-toggle><button>toggle</button></ion-menu-toggle>
-             <!-- <div slot="start"><slot name="top"></slot></div> -->
-             
-             <ion-title >{{ pageTitle }}</ion-title>
-  
-                 <h3 class="close" slot="end" v-show="open===true">X</h3>
-                 <!-- <button @click="openMain()">open menu</button> -->
-                 
-             
-         </ion-toolbar>
-      </ion-header>
-
-      <ion-menu side="start" content-id="main-menu" menu-id="main"
-      id="menu"
-      @ionWillOpen="open=true"
-      @ionWillClose="open=false"
-      @ionDidClose="menuDidClose">
-
-          <div id="main-menu">
-        <ion-list class="menu-items">
-
-            <!-- <ion-item>
-                <button @click="closeMain()">close menu</button>
-            </ion-item> -->
-
-                 <ion-menu-toggle menu="main">
-                     <ion-button router-link="/home">Home</ion-button>
-            <!-- <ion-item @click="route('home')">
-              <ion-label>Home</ion-label>
-            </ion-item> -->
-                  </ion-menu-toggle>
-
-
-                <ion-menu-toggle menu="main">
-            <ion-item> 
-              <ion-label>About</ion-label>
-            </ion-item>
-                </ion-menu-toggle>
-
-             <ion-item>
-              <ion-label>Favorites</ion-label>
-            </ion-item>
-
-            <ion-item>
-           
-              <ion-label>Archived</ion-label>
-            </ion-item>
-            <ion-item>
-            
-              <ion-label>Trash</ion-label>
-            </ion-item>
-            <ion-item>
-            
-              <ion-label>Spam</ion-label>
-
-            </ion-item>
-          </ion-list>
-
-          <ThePithyQuote id="mobile"/>
-          </div>
-      </ion-menu>
+   <!-- <the-side-menu></the-side-menu> -->
+   <ion-page>
       
-
       <ion-content class="ion-align-self-center" id="main-page">
 
                    <slot />
@@ -89,44 +25,44 @@ import ThePithyQuote from './ThePithyQuote.vue';
 
 import {
         IonPage,
-        IonHeader,
+        // IonHeader,
         IonToolbar,
-        IonTitle,
+        // IonTitle,
         IonContent,
         // IonBackButton,
         // IonButtons,
         IonFooter,
-        IonMenu,
+        // IonMenu,
         // menuController,
-        IonItem,
-        IonList,
-        IonMenuToggle,
-        IonButton,
-        IonLabel,
-
-      
-   
-       
+        // IonItem,
+        // IonList,
+        // IonMenuToggle,
+        // IonButton,
+        // IonLabel,
+     
 } from '@ionic/vue';
+
+// import TheSideMenu from './TheSideMenu.vue'
 
 
 export default {
     components: { 
         IonPage,
-        IonHeader, 
+        // IonHeader, 
         IonToolbar, 
-        IonTitle, 
+        // IonTitle, 
         IonContent, 
         IonFooter, 
         ThePithyQuote, 
-        IonMenu,
-        IonItem,
-        IonList,
-        IonLabel,
-        IonMenuToggle,
-        IonButton,
+        // IonMenu,
+        // IonItem,
+        // IonList,
+        // IonLabel,
+        // IonMenuToggle,
+        // IonButton,
         // IonBackButton, 
         // IonButtons,
+        // TheSideMenu
         },
     
     //  
@@ -215,7 +151,7 @@ export default {
      align-items: center;
      width: 100%;
      max-width: 60rem;
-     margin: 0 auto !important;
+     /* margin: 0 auto !important; */
  }
 
  ion-content {
@@ -223,12 +159,13 @@ export default {
      --padding-end: 2rem;
      --padding-top: 1rem;
      --padding-bottom: 1rem;
+     --offset-top: 100px !important;
      width: 100%;
      max-width: 50rem;
      display: flex;
      align-items: center;
      justify-content: center;
-     margin: 0 auto !important;
+     /* margin: 0 auto !important; */
  }
 
 @media(max-width: 576px) {

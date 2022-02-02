@@ -68,8 +68,8 @@ const router = createRouter({
 //     }, 100);
 //   })
 
-router.afterEach(() => {
+// router.afterEach(() => {
 
-})
+// })
 
 export default router
