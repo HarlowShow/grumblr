@@ -1,6 +1,6 @@
 <template>
    <!-- <the-side-menu></the-side-menu> -->
-   <ion-page>
+   <ion-page >
       
       <ion-content class="ion-align-self-center" id="main-page">
 
