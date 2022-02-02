@@ -1,10 +1,9 @@
 <template>
-    <base-layout page-default-back-link="/home" page-title="Gripe Deets">
+    <base-layout page-title="Gripe Deets">
 
-    <template v-slot:top>
-      <ion-menu-button></ion-menu-button>
-      <button @click="openMain()">open</button>
-    </template>
+    <!-- <template v-slot:top>
+         <ion-menu-toggle><button>toggle</button></ion-menu-toggle>
+    </template> -->
 
     <div class="sampleText" v-if="test===true">
         <div v-if="samplePronoun.length>0">
@@ -132,7 +131,7 @@
     import PronounInput from './components/PronounInput.vue';
     import InputSummary from './components/InputSummary.vue';
 
-    import { IonMenuButton, menuController } from '@ionic/vue'
+    // import { IonMenuToggle } from '@ionic/vue'
     // import MobileFooter from '../components/base/MobileFooter.vue'
     // import FormSummary from './components/FormSummary.vue'   
 
@@ -143,7 +142,7 @@
             GripeInput,
             PronounInput,
             InputSummary,
-            IonMenuButton
+            // IonMenuToggle
             // IonFooter,
             // IonToolbar
             // MobileFooter
@@ -362,24 +361,6 @@
         },
 
         methods: {
-
-            testing() {
-                console.log(menuController)
-                menuController.enable(true, 'main')
-                menuController.open(true, 'main')
-        
-            },
-
-            openMain() {
-            menuController.enable(true, 'main');
-            menuController.open('main');
-            },
-
-            closeMain() {
-            menuController.enable(true, 'main');
-            menuController.close('main');
-            menuController.enable(true, 'main');
-            },
 
             animateOne() {
 
@@ -673,6 +654,11 @@
 
 #footer-bg {
     background-color: aqua;
+}
+
+ion-menu-toggle {
+    display: block !important;
+    pointer-events: auto;
 }
 
 </style>

@@ -1,9 +1,10 @@
 <template>
    
-   <ion-page>
+   <ion-page id="ion-page">
       <ion-header>
          <ion-toolbar>
-             <div slot="start"><slot name="top"></slot></div>
+             <ion-menu-toggle><button>toggle</button></ion-menu-toggle>
+             <!-- <div slot="start"><slot name="top"></slot></div> -->
              
              <ion-title >{{ pageTitle }}</ion-title>
   
@@ -14,28 +15,37 @@
          </ion-toolbar>
       </ion-header>
 
-      <ion-menu side="start" content-id="main-content" menu-id="main"
+      <ion-menu side="start" content-id="main-menu" menu-id="main"
+      id="menu"
       @ionWillOpen="open=true"
-      @ionWillClose="open=false">
+      @ionWillClose="open=false"
+      @ionDidClose="menuDidClose">
 
-          <div id="main-content">
+          <div id="main-menu">
         <ion-list class="menu-items">
 
             <!-- <ion-item>
                 <button @click="closeMain()">close menu</button>
             </ion-item> -->
 
-            <ion-item @click="route('home')">
+                 <ion-menu-toggle menu="main">
+                     <ion-button router-link="/home">Home</ion-button>
+            <!-- <ion-item @click="route('home')">
               <ion-label>Home</ion-label>
-            </ion-item>
-            <ion-item>
-             
+            </ion-item> -->
+                  </ion-menu-toggle>
+
+
+                <ion-menu-toggle menu="main">
+            <ion-item> 
               <ion-label>About</ion-label>
             </ion-item>
-            <ion-item>
-            
+                </ion-menu-toggle>
+
+             <ion-item>
               <ion-label>Favorites</ion-label>
             </ion-item>
+
             <ion-item>
            
               <ion-label>Archived</ion-label>
@@ -56,7 +66,7 @@
       </ion-menu>
       
 
-      <ion-content class="ion-align-self-center">
+      <ion-content class="ion-align-self-center" id="main-page">
 
                    <slot />
              
@@ -87,10 +97,11 @@ import {
         // IonButtons,
         IonFooter,
         IonMenu,
-        menuController,
+        // menuController,
         IonItem,
         IonList,
-        // IonButton,
+        IonMenuToggle,
+        IonButton,
         IonLabel,
 
       
@@ -112,21 +123,14 @@ export default {
         IonItem,
         IonList,
         IonLabel,
-        // IonButton,
+        IonMenuToggle,
+        IonButton,
         // IonBackButton, 
         // IonButtons,
         },
     
     //  
     props: ['page-title', 'content'],
-
-    // setup() {
-    //     window.menuController = menuController;
-
-    //     return {
-    //         menuController
-    //     }
-    // },
 
     data() {
 
@@ -135,27 +139,60 @@ export default {
         }
     },
 
+    // mounted() {
+    //      menuController.enable(true, 'main');
+
+    // },
+
     methods: {
+
+        menuDidClose(){
+            console.log('menu closed')
+        },
+
+        // test(){
+        //     menuController.enable(true, 'main');
+        //     menuController.close('main');
+        // },
         
-        route(page) {
-            
-            console.log(page)
+        async route(page) {
+            try {
+                await this.startUpdate(page)
+                console.log('update started')
+            }
+
+            catch(error) {
+                console.log('there was an error')
+            }
+
+            finally {
+                  console.log('final thing')
+            }
+          
+
+            // 
+
+        },
+
+        runUpdate(page){
             this.$router.push(page)
-
+            console.log("Update has been run!")
         },
 
-          openMain() {
-            menuController.enable(true, 'main');
-            menuController.open('main');
-        },
+        startUpdate(page){
+              setTimeout(()=>{
+            this.runUpdate(page)},500)
+        }
 
-            closeMain() {
-            menuController.enable(true, 'main');
-            menuController.close('main');
-            menuController.enable(true, 'main');
-        },
+
 
     },
+
+    watch: {
+        '$route' () {
+            console.log('route thing happened')
+        }
+    }
 
     // setup() {
     //     return {
@@ -170,7 +207,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 
  ion-page {
      display: flex;
@@ -211,6 +248,11 @@ export default {
 
 .close {
     margin: 0;
+}
+
+ion-menu-toggle {
+    display: block !important;
+    pointer-events: auto;
 }
 
 /* @media(min-width: 576px) {

@@ -1,5 +1,5 @@
 <template>
-  <ion-app>
+  <ion-app id="app">
       <ion-router-outlet />
   </ion-app>
 </template>
@@ -21,6 +21,7 @@ export default defineComponent({
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
+
 
 ion-menu.md ion-content {
   --padding-start: 8px;
@@ -136,5 +137,9 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
+}
+
+#app {
+ min-height: 100vh;
 }
 </style>
