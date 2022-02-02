@@ -2,9 +2,7 @@
 
 <area-title :title="'Oh dear. What did they do?'"
 :progress="0.75">
-<ion-button @click="goBack">
-        <ion-icon slot="icon-only" :icon="arrowBackOutline" ></ion-icon>
-    </ion-button>
+ <ion-icon @click="goBack" :icon="arrowBackOutline" ></ion-icon>
 </area-title>
 
  <div class="button-area">
@@ -14,7 +12,7 @@
         @click="[activeBtn='one', selected='dishes', gripeIsCustom='false']"
         class="btn-onboarding" :class="{ active: activeBtn === 'one' }">
         <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="business"></ion-icon>Dishes in the sink
+        <ion-icon slot="start" :icon="water"></ion-icon>Dishes in the sink
         </ion-button>
 
         <ion-button 
@@ -22,7 +20,7 @@
         @click="[activeBtn='two', selected='noise', gripeIsCustom='false']"
         class="btn-onboarding" :class="{ active: activeBtn === 'two' }">
         <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="business"></ion-icon>Unreasonable noise
+        <ion-icon slot="start" :icon="musicalNotes"></ion-icon>Unreasonable noise
         </ion-button>
 
         <ion-button 
@@ -30,7 +28,7 @@
         @click="[activeBtn='three', selected='rubbish', gripeIsCustom='false']"
         class="btn-onboarding" :class="{ active: activeBtn === 'three' }">
         <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="business"></ion-icon>Not taking the rubbish out
+        <ion-icon slot="start" :icon="trash"></ion-icon>Not taking the rubbish out
         </ion-button>
 
          <ion-button 
@@ -38,7 +36,7 @@
         @click="[activeBtn='four', selected='other', gripeIsCustom='true']"
         class="btn-onboarding" :class="{ active: activeBtn === 'four' }">
         <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="business"></ion-icon>Other
+        <ion-icon slot="start" :icon="addCircle"></ion-icon>Other
         </ion-button>
 
 </div>
@@ -130,7 +128,7 @@ import {
 
 } from '@ionic/vue'
 
-import { helpCircle, business, home, storefront, man, hammer, arrowBackOutline  } from 'ionicons/icons';
+import { helpCircle, musicalNotes, water, trash, addCircle, arrowBackOutline  } from 'ionicons/icons';
 
 import AreaTitle from './AreaTitle.vue'
 
@@ -183,11 +181,10 @@ export default  {
 
         return {
             helpCircle,
-            business,
-            home,
-            storefront,
-            man,
-            hammer,
+            musicalNotes,
+            water,
+            trash,
+            addCircle,
             placeholders,
             characters,
             idx,

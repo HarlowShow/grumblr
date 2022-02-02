@@ -1,31 +1,59 @@
 <template>
-    <p> {{ pronoun }} have a problem with {{ personmate }} because they {{ gripe }}</p>
+
+<area-title
+:progress="1">
+
+</area-title>
+    <h4> {{ pronoun }} have a problem with {{ personmate }} because they {{ gripe }}</h4>
 
     
         <transition
         name="fade"
         style="transition-delay: 1s">
-        <div>
-            <p>Is that right?</p>
-            <ion-button 
-            expand="block" color="primary" shape="round" fill="outline"
-            @click="routin">Confirm
-            </ion-button>
-        </div>
+            <h3>Is that right?</h3>
         </transition>
     
+
+     <ion-footer class="ion-no-border" id="mobile">
+            <ion-toolbar class="ion-no-padding">
+
+                    <ion-button @click="goBack"
+                    class="ion-no-margin btn-row"
+                    color="primary"
+                    >
+                        GO BACK
+                         <ion-icon slot="start" :icon="arrowBackOutline"></ion-icon>
+                    </ion-button>
+                    <ion-button 
+
+                    class="btn-system ion-no-margin btn-row"
+                    @click="routin">CONFIRM</ion-button>
+
+            </ion-toolbar>
+    </ion-footer>
+
 </template>
 
 <script>
 
 import {
     IonButton,
+    IonIcon,
+    IonToolbar,
+    IonFooter,
+
 } from '@ionic/vue'
 
+import AreaTitle from './AreaTitle.vue'
+import { arrowBackOutline } from 'ionicons/icons'
 export default {
 
     components: {
             IonButton,
+            AreaTitle,
+            IonIcon,
+            IonToolbar,
+            IonFooter,
     },
     props: {
         tempSelection: {
@@ -34,8 +62,12 @@ export default {
         },
     },
 
-    mounted() {
-        console.log(this.$store.state.namedPersonmate)
+    emits: ['backClick'],
+
+    setup() {
+        return {
+            arrowBackOutline
+        }
     },
 
     computed: {
@@ -50,7 +82,7 @@ export default {
             },
         personmate() {
             let pers = ''
-            if (this.$store.state.namedPersonmate===true) {
+            if (this.$store.state.personmateIsNamed===true) {
                 pers = this.tempSelection.chosenPersonmate
             } else {
                 pers = 'your ' + this.tempSelection.chosenPersonmate
@@ -58,14 +90,20 @@ export default {
             return pers
             },
         gripe() {
-            let offenseText = this.$store.state.baseOutput.of0.slice(4)
-                return offenseText
+            // let offenseText = this.$store.state.baseOutput.of0.slice(4)
+            //     return offenseText
+            return this.tempSelection.demoGripe
             },
     },
     methods: {
         routin() {
              this.$router.push('playground')
-        }
+        },
+
+     goBack() {
+            console.log('goback')
+            this.$emit('backClick')
+        },
     }
 }
 </script>
@@ -80,4 +118,20 @@ export default {
 .fade-leave-to {
   opacity: 0;
 }
+
+ion-toolbar {
+    display: flex;
+    flex: 1;
+    margin-left: -2rem;
+    margin-right: -4rem;
+}
+
+ion-button {
+    width: 40%;
+}
+
+.btn-row {
+    --border-radius: 0px !important;
+}
+
 </style>

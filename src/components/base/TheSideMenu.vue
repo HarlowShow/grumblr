@@ -45,12 +45,8 @@
 
             </ion-item>
           </ion-list>
-
-          <ion-item>
-              <the-pithy-quote></the-pithy-quote>
-          </ion-item>
-
           </div>
+           <the-pithy-quote id="mobile"></the-pithy-quote>
       </ion-menu>
       
 
@@ -89,3 +85,17 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+@media(min-width: 576px) {
+        #mobile {
+            display: none;
+        }
+  }
+
+    @media(max-width: 576px) {
+        #desktop {
+            display: none;
+        }
+  }
+</style>

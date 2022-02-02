@@ -1,84 +1,6 @@
 <template>
     <base-layout page-title="Gripe Deets">
 
-    <!-- <template v-slot:top>
-         <ion-menu-toggle><button>toggle</button></ion-menu-toggle>
-    </template> -->
-
-    <div class="sampleText" v-if="test===true">
-        <div v-if="samplePronoun.length>0">
-        <transition-group
-        name="move-complete"
-        appear
-        tag="p">
-            <span
-            v-for="question in questions"
-            :key="question"
-            class="move-complete-item"
-            > {{ question }}</span>
-        </transition-group>
-        </div>
-
-                <transition-group
-        name="move-complete"
-        appear
-        tag="p"
-       >
-            <span
-            v-show="this.formPosition >1"
-            v-for="nextQuestion in nextQuestions"
-            :key="nextQuestion"
-            class="move-complete-item"
-            > {{ nextQuestion }}</span>
-        </transition-group>
-
-       
-            <transition-group
-        name="move-complete"
-        appear
-        tag="p"
-       >
-        <span
-            v-show="this.formPosition >2"
-            v-for="thirdQuestion in thirdQuestions"
-            :key="thirdQuestion"
-            class="move-complete-item"
-            > {{ thirdQuestion }}</span>
-        </transition-group>
-    </div>
-
-     <!-- <div class="text-div" v-if="runOne">
-           <p class="animate drop"> {{ questions[0]}} </p>
-           <p class="animate drop delay-1"> {{ questions[1]}} </p>
-           <p class="animate drop delay-2"> {{ questions[2] }}</p>
-        </div>
-
-        <div class="text-div" v-show="runTwo">
-            <p
-            class="animate drop"
-            v-for="string in arr"
-            :key="string.index">
-            {{ string }}
-            </p>
-        </div> -->
-
-
-        <!-- <p
-        v-if="this.formPosition ===1">
-        And who's the perpetrator?
-        </p> -->
-
-        <!-- <p
-        v-if="this.formPosition ===2">
-        Oh dear. What did they do?
-        </p> -->
-
-        <!-- <transition
-        name="fade">
-        <p
-        v-if="pronounSet">hey there</p>
-        </transition> -->
-
         <pronoun-input
         @update:pronoun="getPronoun"
         v-if="this.formPosition === 0">
@@ -98,6 +20,7 @@
         </gripe-input>
 
         <input-summary
+        @backClick="prevForm"
         v-if="this.formPosition === 3"
         :tempSelection="tempChosen"
         >
@@ -531,6 +454,7 @@
 
             generateGripe() {
                 this.tempChosen = this.chosen;
+                console.log(this.tempChosen)
                 this.setPronouns();
                 this.setTempOpen(this.tempOpens);
                 this.setGripe(this.chosen.chosenGripe);

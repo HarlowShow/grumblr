@@ -2,6 +2,12 @@
 
     <base-layout page-default-back-link="/input" page-title="Edit your gripe">
 
+    <p>selected tone: {{ selectedTone }}</p>
+    <!-- <p>delete options: {{ deleteOptions }}</p>
+    <p>used phrases: {{ usedPhrases }}</p> -->
+    <!-- <p>prior phrases: {{ priorPhrases }}</p>
+    <p>gripe object: {{ gripeObject }}</p> -->
+
     <div class="snippets">
         <text-snippet v-for="(value, name, index) in gripeObject"
         :key="index"
@@ -10,162 +16,95 @@
         :index="index"
         :snippet="gripeObject[name]"
         ></text-snippet>
-    </div>
+    </div>   
 
-    <h5> {{ output.op0 }}
-         {{ output.op1 }}
-         {{ output.op2 }}
-         {{ output.of0 }}
-         {{ output.of1 }}
-         {{ output.of2 }}
-         {{ output.co0 }}
-         {{ output.co1 }}
-         {{ output.co2 }}
-         {{ output.pl0 }}
-         {{ output.pl1 }}
-         {{ output.pl2 }}
-    </h5>
+        <ion-grid>
+             <ion-row>
+                <ion-col></ion-col>
+                <ion-col size="9">
 
-    <!-- <text-area
-    :words="['hello there']"
-    :newText="[selectedPhrase]"></text-area> -->
-  
-    <ion-item-divider></ion-item-divider>
+            <the-sliders
+            :tone="'angry'"
+            @update:moodCount="updateMoodAngry"
+            >
+            </the-sliders>
 
-    <div class="buttons"> 
-        
-                    <ion-button
-                    color="angry"
-                    expand="block"
-                    @click="[setTone('angry'), updateGripe('button')]"
-                    >ANGRY
-                    </ion-button>
 
-                    <ion-button
-                    color="polite"
-                    expand="block"
-                    @click="[setTone('polite'), updateGripe('button')]"
-                    >Polite
-                    </ion-button>
+                </ion-col>
+                <ion-col></ion-col>
+             </ion-row>
+             
+              <ion-row>
+                <ion-col></ion-col>
+                <ion-col size="9">
+                    <the-sliders
+                    :tone="'polite'"
+                    @update:moodCount="updateMoodPolite"
+                    >
+                    </the-sliders>
+              </ion-col>
+                <ion-col></ion-col>
+             </ion-row>
 
-                    <ion-button
-                    color="warning"
-                    expand="block"
-                    @click="[setTone('paggro'), updateGripe('button')]"
-                    >Passive Agressive
-                    </ion-button>
 
-                    <ion-button
-                    color="success"
-                    expand="block"
-                    @click="[setTone('pirate'), updateGripe('button')]"
-                    >Pirate</ion-button>
-                    
-    </div>
-
-<ion-item-divider></ion-item-divider>
-
-        <div class="buttons">
-            <ion-button 
-            color="angry"
-            expand="block"
-            v-if="reversable['angry']"
-            @click="reverseGripe('angry', 'button')"
-            >Less angry</ion-button>
-            <ion-button
-            color="polite"
-            expand="block"
-            v-if="reversable['polite']"
-            @click="reverseGripe('polite', 'button')"
-            >Less polite</ion-button>
-            <ion-button
-            color="warning"
-            expand="block"
-            v-if="reversable['paggro']"
-            @click="reverseGripe('paggro', 'button')"
-            >Less paggro</ion-button>
-            <ion-button
-            color="success"
-            expand="block"
-            v-if="reversable['pirate']"
-            @click="reverseGripe('pirate', 'button')"
-            >Less pirate</ion-button>
-        </div>
-
-        <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/finish">Finish</ion-button>
-
-        <the-sliders
-        :tone="'angry'"
-        @update:moodCount="updateMood"
+             <ion-row>
+                <ion-col></ion-col>
+                <ion-col size="9">
+              <the-sliders
+        :tone="'paggro'"
+        @update:moodCount="updateMoodPaggro"
         >
         </the-sliders>
+        </ion-col>
+                <ion-col></ion-col>
+             </ion-row>
+
+                <ion-row>
+                <ion-col></ion-col>
+                <ion-col size="9">
+          <the-sliders
+        :tone="'pirate'"
+        @update:moodCount="updateMoodPirate"
+        >
+        </the-sliders>
+             </ion-col>
+                <ion-col></ion-col>
+             </ion-row>
+        </ion-grid>   
+     
+
+        
+
 
         <p> {{ moodcount }} </p>
+
+         <!-- <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/finish">Finish</ion-button> -->
+
             
-        <!-- <ion-range 
-        min="0"
-        max="9"
-        snaps="true"
-        step="1"
-        ref="rangeAngry"
-        debounce="100"
-        @ionChange="[setTone('angry'), rangeChange($event)]">
-        </ion-range>
-
-        <ion-range 
-        min="0"
-        max="9"
-        snaps="true"
-        step="1"
-        ref="rangeAngry"
-        debounce="100"
-        @ionChange="[setTone('polite'), rangeChange($event)]">
-        </ion-range>
-
-        <ion-range 
-        min="0"
-        max="9"
-        snaps="true"
-        step="1"
-        ref="rangeAngry"
-        debounce="100"
-        @ionChange="[setTone('paggro'), rangeChange($event)]">
-        </ion-range>
-
-        <ion-range 
-        min="0"
-        max="9"
-        snaps="true"
-        step="1"
-        ref="rangeAngry"
-        debounce="100"
-        @ionChange="[setTone('pirate'), rangeChange($event)]">
-        </ion-range> --> -->
-
     </base-layout>
 </template>
 
 <script>
-import {
-    IonItemDivider,
-    IonButton,
-   
-    // IonRange
-
-} from '@ionic/vue';
 
 import { useStore } from 'vuex'
 import TextSnippet from './TextSnippet.vue'
 import TheSliders from './TheSliders.vue'
 
 // import TextArea from './TextArea.vue';
+import {
+    IonGrid,
+    IonRow,
+    IonCol
+} from '@ionic/vue'
 
 export default {
     components: {
-        IonItemDivider,
-        IonButton,
+        // IonButton,
         TextSnippet,
-        TheSliders
+        TheSliders,
+        IonGrid,
+        IonRow,
+        IonCol
         // TextArea
     },
 
@@ -182,6 +121,9 @@ export default {
         
         // phrase: position, status (boolean), phrase, tone
         return {
+            removingFirst: false,
+            moodLimit: 7,
+            activeMoods: [],
             activePronouns: {},
             activePersonmate: '',
             activeGripe: '',
@@ -189,7 +131,7 @@ export default {
 
             activeIndexes: ['op1', 'op2', 'of1', 'of2', 'co0', 'co2', 'pl0', 'pl1', 'pl2'],
             allIndexes: ['op1', 'op2', 'of1', 'of2', 'co0', 'co2', 'pl0', 'pl1', 'pl2'],
-            selectedTone: 'angry',
+            selectedTone: '',
             selectedPhrase: '',
             phrases: [],
             updatedPhrases: [],
@@ -221,6 +163,7 @@ export default {
                 polite: 0,
                 paggro: 0,
                 pirate: 0,
+                total: 0,
             },
 
             reversable: {
@@ -235,6 +178,70 @@ export default {
 
     watch: {
         'moodcount.angry': function(newValue, oldValue) {
+            this.selectedTone = 'angry'
+            console.log(newValue)
+            console.log(oldValue)
+            let difference = 0
+
+            if(newValue>oldValue) {
+                difference = newValue - oldValue;
+                let type = 'add'
+                this.runChanges(difference, type);
+                
+            }
+            if(oldValue>newValue) {
+                difference = oldValue - newValue;
+                let type = 'sub'
+                this.runChanges(difference, type);
+
+            }
+            
+        },
+
+         'moodcount.polite': function(newValue, oldValue) {
+             this.selectedTone = 'polite'
+            console.log(newValue)
+            console.log(oldValue)
+            let difference = 0
+
+            if(newValue>oldValue) {
+                difference = newValue - oldValue;
+                let type = 'add'
+                this.runChanges(difference, type);
+                
+            }
+            if(oldValue>newValue) {
+                difference = oldValue - newValue;
+                let type = 'sub'
+                this.runChanges(difference, type);
+
+            }
+            
+        },
+
+                 'moodcount.paggro': function(newValue, oldValue) {
+             this.selectedTone = 'paggro'
+            console.log(newValue)
+            console.log(oldValue)
+            let difference = 0
+
+            if(newValue>oldValue) {
+                difference = newValue - oldValue;
+                let type = 'add'
+                this.runChanges(difference, type);
+                
+            }
+            if(oldValue>newValue) {
+                difference = oldValue - newValue;
+                let type = 'sub'
+                this.runChanges(difference, type);
+
+            }
+            
+        },
+
+                 'moodcount.pirate': function(newValue, oldValue) {
+             this.selectedTone = 'pirate'
             console.log(newValue)
             console.log(oldValue)
             let difference = 0
@@ -269,28 +276,31 @@ export default {
 
                 if (type==='sub') {
                     for(; difference>0; difference--) {
-                        this.reverseGripe('angry')
+                        this.reverseGripe(this.selectedTone)
                         console.log("phrase removed")
                     }
                 }
         },
 
-        updateMood(moodCount) {
-            console.log(moodCount)
+        updateMoodAngry(moodCount) {
+            console.log('moodcount is' + moodCount)
             this.moodcount['angry'] = moodCount 
         },
-        // rangeChange(event) {
-        //     this.rangeVal = event.target.value;
-            
-        //     console.log(this.rangeVal);
-        //     console.log(this.prevRangeVal);
-        //     if (this.rangeVal > this.prevRangeVal) {
-        //         this.updateGripe('slider');
-        //     } else if (this.rangeVal < this.prevRangeVal) {
-        //         this.reverseGripe(this.selectedTone, 'slider');
-        //     }
-        //     this.prevRangeVal = this.rangeVal;
-        // },
+
+        updateMoodPolite(moodCount) {
+            console.log('moodcount is' + moodCount)
+            this.moodcount['polite'] = moodCount 
+        },
+
+         updateMoodPaggro(moodCount) {
+            console.log('moodcount is' + moodCount)
+            this.moodcount['paggro'] = moodCount 
+        },
+
+         updateMoodPirate(moodCount) {
+            console.log('moodcount is' + moodCount)
+            this.moodcount['pirate'] = moodCount 
+        },
 
         setTone(tone) {
              this.selectedTone = tone;
@@ -322,72 +332,103 @@ export default {
         reverseGripe(tone) {
 
             this.$store.state.sub++
-
+            this.moodcount.total--
+            // if (this.removingFirst === true) {
+            //      this.deleteOptions = this.usedPhrases.filter(phrase => phrase.tone === tone && phrase.status === true);
+            // }
             this.deleteOptions = this.usedPhrases.filter(phrase => phrase.tone === tone && phrase.status === true);
-
-            let deleteThisPhrase = this.deleteOptions[0];
-            deleteThisPhrase.status = false;
-            console.log(deleteThisPhrase);
-            let deleteKey = deleteThisPhrase['position'];
+            if(this.deleteOptions.length===0){
+              console.log('something went wrong')
+            }
+            // let deleteThisPhrase = this.deleteOptions[0];
+            this.deleteOptions[0].status = false;
+            let deleteKey = this.deleteOptions[0].position;
+            console.log('delete key: ' + deleteKey)
            
-            console.log(deleteKey);
             this.$store.state.baseOutput[deleteKey] = this.priorPhrases[deleteKey];
-            
-                // if(handlerType === 'slider') {
-                // this.moodcount[tone] = this.rangeVal;
-                //     }
-
-                // if(handlerType === 'button') {
-
-                // if (this.moodcount[tone]>0) {
-                // this.moodcount[tone]--;
-                //     }
-                // }
-
-            this.deleteOptions[deleteKey] = deleteThisPhrase;
-            
+            this.gripeObject[deleteKey] =  this.priorPhrases[deleteKey];
+          
+            // this.deleteOptions[deleteKey] = deleteThisPhrase;
+            // const selectedOption = deleteThisPhrase;
+            // const currentIndex = deleteKey;
+            // this.changeLog(currentIndex, selectedOption);
            
+        },
+
+        removeFirst() {
+            this.removingFirst = true;
+            const tones = []
+            //phrases that haven't been used are FALSE status
+            let findActive = this.usedPhrases.filter(phrase => phrase.status === true);
+            if(findActive.some(object => object.tone === 'angry')) {
+                tones.push('angry')
+            }
+
+            if(findActive.some(object => object.tone === 'polite')) {
+                tones.push('polite')
+            }
+
+            if(findActive.some(object => object.tone === 'pirate')) {
+                tones.push('pirate')
+            }
+
+            if(findActive.some(object => object.tone === 'paggro')) {
+                tones.push('paggro')
+            }
+
+            let otherTones = tones.filter(tone => tone !== this.selectedTone)
+            otherTones.sort(() => {return 0.5 - Math.random()});
+            let sacrificialTone = otherTones[0]
+            console.log('sacrificial tone is' + sacrificialTone)
+            this.reverseGripe(sacrificialTone)
         },
 
         addPhrase() {
 
             this.$store.state.add++
+            this.moodcount.total++;
+
+            if(this.moodcount.total>=7) {
+                this.removeFirst()
+                this.addPhrase()
+            }
 
             if(this.activeIndexes.length>0) {
 
-            this.randomize(this.activeIndexes);
-            let currentIndex = this.activeIndexes[0];
+                this.randomize(this.activeIndexes);
+                let currentIndex = this.activeIndexes[0];
 
-            this.selectedPhrases = this.phrases.filter(phrase => phrase.tone === this.selectedTone && phrase.position === currentIndex && phrase.status === false);
-            this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
+                this.selectedPhrases = this.phrases.filter(phrase => phrase.tone === this.selectedTone && phrase.position === currentIndex && phrase.status === false);
+                this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
 
-            const selectedOption = this.selectedPhrases[0];
-            this.selectedPhrase =  this.selectedPhrases[0].phrase;
-            // console.log(this.selectedPhrase);
-            this.$store.state.baseOutput[currentIndex] = this.selectedPhrase;
-            this.gripeObject[currentIndex] = this.selectedPhrase
+                const selectedOption = this.selectedPhrases[0];
+                this.selectedPhrase =  this.selectedPhrases[0].phrase;
+                // console.log(this.selectedPhrase);
+                this.$store.state.baseOutput[currentIndex] = this.selectedPhrase;
+                this.gripeObject[currentIndex] = this.selectedPhrase
 
-            this.selectedPhrases[0].status = true;
-            this.changeTracker[currentIndex]++;
-            this.activeIndexes.shift();
-            this.changeLog(currentIndex, selectedOption);
+                this.selectedPhrases[0].status = true;
+                this.changeTracker[currentIndex]++;
+                this.activeIndexes.shift();
+                this.changeLog(currentIndex, selectedOption);
+            
             } else if (this.activeIndexes.length===0) {
                  this.randomize(this.allIndexes);
                 let currentIndex = this.allIndexes[0];
                 console.log('current index is' + currentIndex)
 
-            this.selectedPhrases = this.phrases.filter(phrase => phrase.tone === this.selectedTone && phrase.position === currentIndex && phrase.status === false);
-            this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
+                this.selectedPhrases = this.phrases.filter(phrase => phrase.tone === this.selectedTone && phrase.position === currentIndex && phrase.status === false);
+                this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
 
-            const selectedOption = this.selectedPhrases[0];
-            this.selectedPhrase =  this.selectedPhrases[0].phrase;
-            // console.log(this.selectedPhrase);
-            this.$store.state.baseOutput[currentIndex] = this.selectedPhrase;
-            this.gripeObject[currentIndex] = this.selectedPhrase
+                const selectedOption = this.selectedPhrases[0];
+                this.selectedPhrase =  this.selectedPhrases[0].phrase;
+                // console.log(this.selectedPhrase);
+                this.$store.state.baseOutput[currentIndex] = this.selectedPhrase;
+                this.gripeObject[currentIndex] = this.selectedPhrase
 
-            this.selectedPhrases[0].status = true;
-            this.changeTracker[currentIndex]++;
-            this.changeLog(currentIndex, selectedOption);
+                this.selectedPhrases[0].status = true;
+                this.changeTracker[currentIndex]++;
+                this.changeLog(currentIndex, selectedOption);
             } else {
                 console.log('something went wrong')
             }
@@ -397,16 +438,12 @@ export default {
         },
 
         changeLog(key, newPhrase) {
+             this.usedPhrases.push(newPhrase);
 
-            // console.log(newPhrase);
-            this.usedPhrases.push(newPhrase);
-            
-            // if (this.changeTracker[key]>1) {
-                this.priorPhrases[key] = newPhrase;
-                console.log("phrase added to prior phrases array")
-            // } else {
-            //     console.log("change count too low")
-            // }
+            if(this.changeTracker[key]>1) {
+            console.log('might need to do something here later');
+            }
+           
 
         },
 

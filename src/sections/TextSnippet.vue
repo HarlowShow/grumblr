@@ -3,16 +3,16 @@
 <p> sub count: {{ sub }}, {{ oldSub }}</p> -->
     <div class="snippetarea">
             <transition name="fade">
-            <p v-if="changeMade===false">{{ snippet }}</p>
+            <p class="snippet" v-if="changeMade===false">{{ snippet }}</p>
             </transition>
 
             <transition name="fade">
-            <p v-if="snippetOneActive===true&&changeMade===true">{{ activeSnippet }}</p>
+            <p class="snippet" v-if="snippetOneActive===true&&changeMade===true">{{ activeSnippet }}</p>
             </transition>
     <!-- <p>og snippet: {{ ogSnippet }}</p> -->
 
             <transition name="fade">
-                <p v-if="snippetTwoActive===true&&changeMade===true">{{ activeSnippet }}</p>
+                <p class="snippet" v-if="snippetTwoActive===true&&changeMade===true">{{ activeSnippet }}</p>
             </transition>
 
     <!-- <p> value {{ value }}</p>
@@ -119,7 +119,7 @@ export default {
                 this.snippetTwoActive = !this.snippetTwoActive
             
                 // console.log('doing start add')
-                // console.log('new value is' + newVal)
+                console.log('new value is' + newVal)
                 console.log('old value is' + oldVal)
 
                 // console.log('add count is' + this.addCount)
@@ -137,6 +137,8 @@ export default {
         snippet(newValue, oldValue) {
 
             this.changeMade = true;
+            console.log('WATCHER: new value is' + newValue)
+            console.log('WATCHER: old value is' + oldValue)
 
             if(this.$store.state.add>this.$store.state.oldAdd) {
 
@@ -217,5 +219,9 @@ export default {
 
 p {
     display: inline
+}
+
+.snippet {
+    font-size: 1.5rem;
 }
 </style>

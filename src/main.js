@@ -37,6 +37,7 @@ const store = createStore({
       chosenPersonmate: '',
       chosenGripe: '',
       namedPersonmate: '',
+      personmateIsNamed: false,
       add: 0,
       sub: 0,
       oldAdd: 0,

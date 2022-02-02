@@ -2,9 +2,7 @@
 
 <area-title :title="'And who dunnit?'"
 :progress="0.5">
-    <ion-button @click="goBack">
-        <ion-icon slot="icon-only" :icon="arrowBackOutline" ></ion-icon>
-    </ion-button>
+        <ion-icon @click="goBack" :icon="arrowBackOutline" ></ion-icon>
 </area-title>
 
     <div class="button-area">
@@ -221,6 +219,10 @@ export default {
                     personmate = this.selectedPersonmate;
 
                 this.$emit('update:personmate', personmate)
+
+                if(this.customNamed===true) {
+                    this.$store.state.personmateIsNamed = true;
+                }
                 
                 this.$store.state.namedPersonmate = custom;
                 this.$store.state.chosenPersonmate = this.selectedPersonmate;
@@ -302,5 +304,9 @@ ion-toolbar {
     margin-left: -2.5rem;
     margin-right: -2.5rem;
 }
+
+/* #arrow {
+    --border-radius: 100%
+} */
 
 </style>

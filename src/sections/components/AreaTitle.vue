@@ -49,4 +49,13 @@ export default {
     h3 {
         color: #2C2E32;
     }
+
+    ion-col {
+        align-items: center;
+        justify-content: center;
+    }
+
+    ion-row {
+        align-items: center;
+    }
 </style>
