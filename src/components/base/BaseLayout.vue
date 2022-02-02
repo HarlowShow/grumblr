@@ -1,6 +1,18 @@
 <template>
    <!-- <the-side-menu></the-side-menu> -->
    <ion-page >
+
+       <ion-header>
+         <ion-toolbar>
+             <ion-menu-toggle><button>toggle</button></ion-menu-toggle>
+             <!-- <div slot="start"><slot name="top"></slot></div> -->
+  
+                 <h3 class="close" slot="end" v-show="open===true">X</h3>
+                 <!-- <button @click="openMain()">open menu</button> -->
+                 
+             
+         </ion-toolbar>
+      </ion-header>
       
       <ion-content class="ion-align-self-center" id="main-page">
 
@@ -25,7 +37,7 @@ import ThePithyQuote from './ThePithyQuote.vue';
 
 import {
         IonPage,
-        // IonHeader,
+        IonHeader,
         IonToolbar,
         // IonTitle,
         IonContent,
@@ -36,7 +48,7 @@ import {
         // menuController,
         // IonItem,
         // IonList,
-        // IonMenuToggle,
+        IonMenuToggle,
         // IonButton,
         // IonLabel,
      
@@ -48,7 +60,7 @@ import {
 export default {
     components: { 
         IonPage,
-        // IonHeader, 
+        IonHeader, 
         IonToolbar, 
         // IonTitle, 
         IonContent, 
@@ -58,7 +70,7 @@ export default {
         // IonItem,
         // IonList,
         // IonLabel,
-        // IonMenuToggle,
+        IonMenuToggle,
         // IonButton,
         // IonBackButton, 
         // IonButtons,

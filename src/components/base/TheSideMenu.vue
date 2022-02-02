@@ -1,15 +1,4 @@
 <template>
-    <ion-header>
-         <ion-toolbar>
-             <ion-menu-toggle><button>toggle</button></ion-menu-toggle>
-             <!-- <div slot="start"><slot name="top"></slot></div> -->
-  
-                 <h3 class="close" slot="end" v-show="open===true">X</h3>
-                 <!-- <button @click="openMain()">open menu</button> -->
-                 
-             
-         </ion-toolbar>
-      </ion-header>
 
       <ion-menu side="start" content-id="main-menu" menu-id="main"
       id="menu"
@@ -57,6 +46,10 @@
             </ion-item>
           </ion-list>
 
+          <ion-item>
+              <the-pithy-quote></the-pithy-quote>
+          </ion-item>
+
           </div>
       </ion-menu>
       
@@ -65,10 +58,14 @@
 
 <script>
 
-import { IonMenu, IonItem, IonList, IonMenuToggle, IonButton, IonLabel, IonToolbar, IonHeader} from '@ionic/vue'
+import { IonMenu, IonItem, IonList, IonMenuToggle, IonButton, IonLabel,
+//  IonToolbar, IonHeader
+ } from '@ionic/vue'
+import ThePithyQuote from './ThePithyQuote.vue'
 export default {
     components: {
-        IonMenu, IonItem, IonList, IonMenuToggle, IonButton, IonLabel, IonToolbar, IonHeader
+        IonMenu, IonItem, IonList, IonMenuToggle, IonButton, IonLabel, ThePithyQuote
+        // IonToolbar, IonHeader
     },
 
     data() {

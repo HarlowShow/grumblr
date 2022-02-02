@@ -656,9 +656,30 @@
     background-color: aqua;
 }
 
-ion-menu-toggle {
-    display: block !important;
-    pointer-events: auto;
+    .btn-system {
+        --background: #646081;
+        --border-radius: 0.25rem;
+        --text-transform: uppercase;
+        letter-spacing: 0.15rem;
+    }
+
+ #mobile {
+    position: absolute;
+    bottom: 0px;
+    display: flex;
+    width: 100vw;
+    
 }
 
+  @media(min-width: 576px) {
+        #mobile {
+            display: none;
+        }
+  }
+
+    @media(max-width: 576px) {
+        #desktop {
+            display: none;
+        }
+  }
 </style>

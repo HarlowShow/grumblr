@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { IonApp, IonRouterOutlet} from '@ionic/vue';
+import { IonApp, IonRouterOutlet } from '@ionic/vue';
 import TheSideMenu from './components/base/TheSideMenu.vue'
 import { defineComponent } from 'vue';
 
@@ -15,7 +15,7 @@ export default defineComponent({
   components: {
     IonApp, 
     IonRouterOutlet,
-    TheSideMenu
+    TheSideMenu,
   }
 });
 </script>

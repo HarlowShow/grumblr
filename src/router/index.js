@@ -9,14 +9,14 @@ import TestArea from '../sections/TestArea.vue';
 import EndPage from '../sections/EndPage.vue';
 // import { menuController } from '@ionic/vue';
 
-const afterRoute = (to, from) => {
-  if(to.path === '/home') {
-    console.log("you are home!")
-    console.log("you came from" + from.path)
-  } else {
-    console.log('you are not going home!')
-  }
-}
+// const afterRoute = (to, from) => {
+//   if(to.path === '/home') {
+//     console.log("you are home!")
+//     console.log("you came from" + from.path)
+//   } else {
+//     console.log('you are not going home!')
+//   }
+// }
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -28,12 +28,12 @@ const router = createRouter({
     {
       path: '/home',
       component: HomePage,
-      beforeEnter: afterRoute
+
     },
     {
       path: '/input',
       component: FormArea,
-      beforeEnter: afterRoute,
+
       props: true
     },
     {

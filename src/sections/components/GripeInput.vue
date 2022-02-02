@@ -86,10 +86,10 @@
             
 
   <ion-footer class="ion-no-border" id="mobile">
-            <ion-toolbar>
+            <ion-toolbar class="ion-no-padding">
                     <ion-button
-                    class="btn-system"
-                    expand="block"
+                    class="btn-system ion-no-margin"
+                    expand="full"
                     @click="activate(this.selected)">Confirm</ion-button>
             </ion-toolbar>
     </ion-footer>
@@ -385,12 +385,6 @@ ion-icon {
         flex: 50%;
     }
 
-    .btn-system {
-        --background: #646081;
-        --border-radius: 0.25rem;
-        letter-spacing: 0.15rem;
-    }
-
     ion-label {
         font-family: 'Readex pro', sans-serif;
         font-weight: 400;
@@ -415,14 +409,6 @@ ion-icon {
         overflow: visible;
     }
 
-    #mobile {
-    position: absolute;
-    bottom: 0px;
-    background-color: #0F0A4A;
-    display: flex;
-    width: 85vw;
-}
-
 .hidePlaceholder {
     --placeholder-opacity: 0;
 }
@@ -438,19 +424,9 @@ ion-icon {
 
 ion-toolbar {
     display: flex;
+    margin-left: -2.5rem;
+    margin-right: -2.5rem;
 }
-
-  @media(min-width: 576px) {
-        #mobile {
-            display: none;
-        }
-  }
-
-    @media(max-width: 576px) {
-        #desktop {
-            display: none;
-        }
-  }
 
   vue-custom-tooltip {
       z-index: 1000;

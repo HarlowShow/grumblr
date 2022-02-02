@@ -143,43 +143,15 @@ export default {
         flex: 50%;
     }
 
-    .btn-system {
-        --background: #646081;
-        --border-radius: 0.25rem;
-        --text-transform: uppercase;
-        letter-spacing: 0.15rem;
-    }
-
+    ion-toolbar {
+    display: flex;
+    margin-left: -2.5rem;
+    margin-right: -2.5rem;
+}
     /* @media(max-width: 576px) {
         .btn-system {
 
         }
     } */
-
-    #mobile {
-    position: absolute;
-    bottom: 0px;
-    display: flex;
-    width: 100vw;
-    
-}
-
-ion-toolbar {
-    display: flex;
-    margin-left: -2.5rem;
-    margin-right: -2.5rem;
-}
-
-  @media(min-width: 576px) {
-        #mobile {
-            display: none;
-        }
-  }
-
-    @media(max-width: 576px) {
-        #desktop {
-            display: none;
-        }
-  }
 
 </style>
