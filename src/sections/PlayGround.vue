@@ -18,60 +18,55 @@
         ></text-snippet>
     </div>   
 
-        <ion-grid>
-             <ion-row>
-                <ion-col></ion-col>
-                <ion-col size="9">
+    <div id="sliders">
 
+                <ion-icon :icon="removeCircle" class="angry"
+                @click="changeMood('angry', 'sub')"
+                ></ion-icon>
             <the-sliders
             :tone="'angry'"
             @update:moodCount="updateMoodAngry"
             >
             </the-sliders>
+                <ion-icon :icon="addCircle" class="angry" @click="changeMood('angry', 'add')"></ion-icon>
 
-
-                </ion-col>
-                <ion-col></ion-col>
-             </ion-row>
-             
-              <ion-row>
-                <ion-col></ion-col>
-                <ion-col size="9">
+                    <ion-icon :icon="removeCircle" class="polite"
+                    @click="changeMood('polite', 'sub')"
+                    ></ion-icon>
                     <the-sliders
                     :tone="'polite'"
                     @update:moodCount="updateMoodPolite"
                     >
                     </the-sliders>
-              </ion-col>
-                <ion-col></ion-col>
-             </ion-row>
+                    <ion-icon :icon="addCircle" class="polite"
+                      @click="changeMood('polite', 'add')"
+                    ></ion-icon>
+               
+                    <ion-icon :icon="removeCircle" class="paggro"
+                      @click="changeMood('paggro', 'sub')"
+                      ></ion-icon>
+                    <the-sliders
+                        :tone="'paggro'"
+                        @update:moodCount="updateMoodPaggro"
+                        >
+                    </the-sliders>
+                    <ion-icon :icon="addCircle" class="paggro"
+                      @click="changeMood('paggro', 'add')"
+                    ></ion-icon>
 
-
-             <ion-row>
-                <ion-col></ion-col>
-                <ion-col size="9">
-              <the-sliders
-        :tone="'paggro'"
-        @update:moodCount="updateMoodPaggro"
-        >
-        </the-sliders>
-        </ion-col>
-                <ion-col></ion-col>
-             </ion-row>
-
-                <ion-row>
-                <ion-col></ion-col>
-                <ion-col size="9">
-          <the-sliders
-        :tone="'pirate'"
-        @update:moodCount="updateMoodPirate"
-        >
-        </the-sliders>
-             </ion-col>
-                <ion-col></ion-col>
-             </ion-row>
-        </ion-grid>   
+                    <ion-icon :icon="removeCircle" class="pirate"
+                    @click="changeMood('pirate', 'sub')"
+                    ></ion-icon>
+                    <the-sliders
+                    :tone="'pirate'"
+                    @update:moodCount="updateMoodPirate"
+                    >
+                    </the-sliders>
+                    <ion-icon :icon="addCircle" class="pirate"
+                    @click="changeMood('pirate', 'add')"
+                    ></ion-icon>
      
+    </div>
 
         
 
@@ -89,12 +84,14 @@
 import { useStore } from 'vuex'
 import TextSnippet from './TextSnippet.vue'
 import TheSliders from './TheSliders.vue'
+import { addCircle, removeCircle } from 'ionicons/icons'
 
 // import TextArea from './TextArea.vue';
 import {
-    IonGrid,
-    IonRow,
-    IonCol
+    // IonGrid,
+    // IonRow,
+    // IonCol,
+    IonIcon
 } from '@ionic/vue'
 
 export default {
@@ -102,9 +99,10 @@ export default {
         // IonButton,
         TextSnippet,
         TheSliders,
-        IonGrid,
-        IonRow,
-        IonCol
+        // IonGrid,
+        // IonRow,
+        // IonCol,
+        IonIcon
         // TextArea
     },
 
@@ -113,7 +111,9 @@ export default {
         const gripeObject = store.state.baseOutput
 
         return {
-            gripeObject
+            gripeObject,
+            addCircle,
+            removeCircle
         }
     },
 
@@ -264,6 +264,18 @@ export default {
 
     methods: {
 
+        changeMood(tone, type) {
+            this.selectedTone = tone;
+
+            if (type === 'add') {
+            this.moodcount[tone]++
+            } else if ( type === 'sub') {
+                this.moodcount[tone]-- 
+            } else {
+                console.log('mood buttons, something went wrong')
+            }
+        },
+
         runChanges(difference, type){
                 console.log('difference is ' + difference)
 
@@ -305,29 +317,6 @@ export default {
         setTone(tone) {
              this.selectedTone = tone;
         },
-
-        updateGripe(handlerType) {
-
-        let tone = this.selectedTone;
-
-            if(handlerType === 'button') {
-
-                if(this.moodcount[tone]>=0){
-                this.moodcount[tone]++;
-                }
-            }
-
-            // if(handlerType === 'slider') {
-            //     this.moodcount[tone] = this.rangeVal;
-            // }
-
-             this.addPhrase();
-            //  if (this.activeIndexes.length===0) {
-            //     console.log("nah m8");
-            //     } else {
-            //         this.addPhrase();
-            //     }
-            },
 
         reverseGripe(tone) {
 
@@ -1347,6 +1336,22 @@ export default {
 
 <style scoped>
 /* temp styling! make less ugly */
+
+.angry {
+    color: var(--ion-color-angry);
+}
+
+.pirate {
+    color: var(--ion-color-pirate);
+}
+
+.polite {
+    color: var(--ion-color-polite);
+}
+
+.paggro {
+    color: var(--ion-color-paggro);
+}
     #buttons {
      --ion-grid-padding-xs: 0.25rem;
      --ion-grid-padding-sm: 0.5rem;
@@ -1363,12 +1368,10 @@ export default {
     }
 
     ion-range::part(bar) {
-        --bar-background: red;
         pointer-events: none;
     }
 
     ion-range::part(bar-active) {
-        --bar-background: red;
         pointer-events: none;
     }
 
@@ -1392,6 +1395,18 @@ export default {
     .snippets {
         margin: 0 auto;
         padding: 0.5rem;
+    }
+
+    ion-icon {
+        font-size: 2.2rem;
+    }
+
+    #sliders {
+        /* display: grid; */
+        align-items: center;
+        justify-content: center;
+        /* grid-template-rows: repeat(3, min-content); */
+        /* grid-template-columns: minmax(min-content, 1.5fr) 8fr minmax(min-content, 1.5fr); */
     }
 </style>
 

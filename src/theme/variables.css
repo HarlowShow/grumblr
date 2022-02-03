@@ -73,16 +73,37 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-polite-contrast-rgb: 255,255,255;
   --ion-color-polite-shade: #19169f;
   --ion-color-polite-tint: #3330bc;
+
+  --ion-color-angry: #ec0927;
+  --ion-color-angry-rgb: 236,9,39;
+  --ion-color-angry-contrast:  #ffffff;
+  --ion-color-angry-contrast-rgb: 255,255,255;
+  --ion-color-angry-shade: #d00822;
+  --ion-color-angry-tint: #ee223d;
+
+  --ion-color-pirate: #07b04b;
+	--ion-color-pirate-rgb: 7,176,75;
+	--ion-color-pirate-contrast: #ffffff;
+	--ion-color-pirate-contrast-rgb: 255,255,255;
+	--ion-color-pirate-shade: #069b42;
+	--ion-color-pirate-tint: #20b85d;
+
+  --ion-color-paggro: #dba800;
+	--ion-color-paggro-rgb: 219,168,0;
+	--ion-color-paggro-contrast: #000000;
+	--ion-color-paggro-contrast-rgb: 0,0,0;
+	--ion-color-paggro-shade: #c19400;
+	--ion-color-paggro-tint: #dfb11a;
 }
 
 /** custom colours **/
 .ion-color-angry {
-  --ion-color-base: #ec0927;
-  --ion-color-base-rgb: 236,9,39;
-  --ion-color-contrast:  #ffffff;
-  --ion-color-contrast-rgb: 255,255,255;
-  --ion-color-shade: #d00822;
-  --ion-color-tint: #ee223d;
+  --ion-color-base: var(--ion-color-angry);
+  --ion-color-base-rgb: var(--ion-color-angry-rgb);
+  --ion-color-contrast:  var(--ion-color-angry-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-angry-contrast-rgb);
+  --ion-color-shade: var(--ion-color-angry-shade);
+  --ion-color-tint: var(--ion-color-angry-tint);
 }
 
   .ion-color-polite {
@@ -92,6 +113,27 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-contrast-rgb: var(--ion-color-polite-contrast-rgb);
     --ion-color-shade: var(--ion-color-polite-shade);
     --ion-color-tint: var(--ion-color-polite-tint);
+
+}
+
+.ion-color-pirate {
+  --ion-color-base: var(--ion-color-pirate);
+  --ion-color-base-rgb: var(--ion-color-pirate-rgb);
+  --ion-color-contrast:  var(--ion-color-pirate-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-pirate-contrast-rgb);
+  --ion-color-shade: var(--ion-color-pirate-shade);
+  --ion-color-tint: var(--ion-color-pirate-tint);
+
+};
+
+.ion-color-paggro {
+  --ion-color-base: var(--ion-color-paggro);
+  --ion-color-base-rgb: var(--ion-color-paggro-rgb);
+  --ion-color-contrast:  var(--ion-color-paggro-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-paggro-contrast-rgb);
+  --ion-color-shade: var(--ion-color-paggro-shade);
+  --ion-color-tint: var(--ion-color-paggro-tint);
+
 };
 
 @media (prefers-color-scheme: dark) {

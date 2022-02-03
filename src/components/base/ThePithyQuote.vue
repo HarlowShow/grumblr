@@ -128,6 +128,11 @@ export default {
                     attrib: "H. Jackson Brown, Jr."
                 },
 
+                {
+                    quote: "You can't spell pirate without 'irate'.",
+                    attrib: "Unknown author"
+                },
+
             ]
         }
     }

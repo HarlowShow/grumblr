@@ -167,8 +167,8 @@ export default {
  }
 
  ion-content {
-     --padding-start: 2rem;
-     --padding-end: 2rem;
+     --padding-start: 1.5rem;
+     --padding-end: 1.5rem;
      --padding-top: 1rem;
      --padding-bottom: 1rem;
      --offset-top: 100px !important;
