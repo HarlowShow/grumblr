@@ -1,71 +1,57 @@
 <template>
 
     <base-layout page-default-back-link="/input" page-title="Edit your gripe">
+    <p> {{ this.selectedPhrases }} </p>
+    <p>active moods: {{ activeTones }}</p>
+    <p>active index length: {{ activeIndexLength }}</p>
 
-    <p>selected tone: {{ selectedTone }}</p>
+    <p v-for="text in output" :key="text">
+        {{ text }}
+    </p>
     <!-- <p>delete options: {{ deleteOptions }}</p>
     <p>used phrases: {{ usedPhrases }}</p> -->
-    <!-- <p>prior phrases: {{ priorPhrases }}</p>
-    <p>gripe object: {{ gripeObject }}</p> -->
+<!-- <p>prior phrases: {{ priorPhrases }}</p> -->
+
 
     <div class="snippets">
         <text-snippet v-for="(value, name, index) in gripeObject"
+        :initReset="removingFirst"
         :key="index"
         :value="value"
         :name="name"
         :index="index"
         :snippet="gripeObject[name]"
+        :tone="this.selectedTone"
         ></text-snippet>
     </div>   
 
     <div id="sliders">
 
-                <ion-icon :icon="removeCircle" class="angry"
-                @click="changeMood('angry', 'sub')"
-                ></ion-icon>
-            <the-sliders
-            :tone="'angry'"
-            @update:moodCount="updateMoodAngry"
-            >
-            </the-sliders>
-                <ion-icon :icon="addCircle" class="angry" @click="changeMood('angry', 'add')"></ion-icon>
-
-                    <ion-icon :icon="removeCircle" class="polite"
-                    @click="changeMood('polite', 'sub')"
-                    ></ion-icon>
+                    <the-sliders
+                    :tone="'angry'"
+                    :sliderVal="sliderVal['angry']"
+                    @update:moodCount="updateMoodAngry"
+                    >
+                    </the-sliders>
                     <the-sliders
                     :tone="'polite'"
+                     :sliderVal="sliderVal['polite']"
                     @update:moodCount="updateMoodPolite"
                     >
                     </the-sliders>
-                    <ion-icon :icon="addCircle" class="polite"
-                      @click="changeMood('polite', 'add')"
-                    ></ion-icon>
-               
-                    <ion-icon :icon="removeCircle" class="paggro"
-                      @click="changeMood('paggro', 'sub')"
-                      ></ion-icon>
                     <the-sliders
                         :tone="'paggro'"
+                        :sliderVal="sliderVal['paggro']"
                         @update:moodCount="updateMoodPaggro"
                         >
                     </the-sliders>
-                    <ion-icon :icon="addCircle" class="paggro"
-                      @click="changeMood('paggro', 'add')"
-                    ></ion-icon>
-
-                    <ion-icon :icon="removeCircle" class="pirate"
-                    @click="changeMood('pirate', 'sub')"
-                    ></ion-icon>
                     <the-sliders
                     :tone="'pirate'"
+                    :sliderVal="sliderVal['pirate']"
                     @update:moodCount="updateMoodPirate"
                     >
                     </the-sliders>
-                    <ion-icon :icon="addCircle" class="pirate"
-                    @click="changeMood('pirate', 'add')"
-                    ></ion-icon>
-     
+                  
     </div>
 
         
@@ -84,15 +70,15 @@
 import { useStore } from 'vuex'
 import TextSnippet from './TextSnippet.vue'
 import TheSliders from './TheSliders.vue'
-import { addCircle, removeCircle } from 'ionicons/icons'
+// import { addCircle, removeCircle } from 'ionicons/icons'
 
 // import TextArea from './TextArea.vue';
-import {
-    // IonGrid,
-    // IonRow,
-    // IonCol,
-    IonIcon
-} from '@ionic/vue'
+// import {
+//     IonGrid,
+//     IonRow,
+//     IonCol,
+//     IonIcon
+// } from '@ionic/vue'
 
 export default {
     components: {
@@ -102,7 +88,7 @@ export default {
         // IonGrid,
         // IonRow,
         // IonCol,
-        IonIcon
+        // IonIcon
         // TextArea
     },
 
@@ -112,8 +98,8 @@ export default {
 
         return {
             gripeObject,
-            addCircle,
-            removeCircle
+            // addCircle,
+            // removeCircle
         }
     },
 
@@ -121,9 +107,22 @@ export default {
         
         // phrase: position, status (boolean), phrase, tone
         return {
+            reAddPhrase: null,
+            sliderVal: {
+                'angry': false,
+                'polite': false,
+                'paggro': false,
+                'pirate': false
+            },
             removingFirst: false,
-            moodLimit: 7,
+            sacrificialTone: '',
+            cahchedTone: '',
+            moodLimit: 9,
             activeMoods: [],
+            hasAngry: false,
+            hasPolite: false,
+            hasPaggro: false,
+            hasPirate: false,
             activePronouns: {},
             activePersonmate: '',
             activeGripe: '',
@@ -137,8 +136,14 @@ export default {
             updatedPhrases: [],
 
             priorPhrases: {},
+            //prior phrases - a copy of the OG gripe for simple deletes, no mutations
+            phraseHistory: {},
+            //phrase history - a log of everything that's been there, the previous step,
+            //used to determine which slider[tone] moves back when the phrases are full
             usedPhrases: [],
+            //add phrases that have been used, currently for deleting
             deleteOptions: [],
+            //filtered array for more precise delete options
 
             rangeVal: 0,
             prevRangeVal: 0,
@@ -176,120 +181,194 @@ export default {
         };
     },
 
-    watch: {
+    watch: 
+    {
         'moodcount.angry': function(newValue, oldValue) {
-            this.selectedTone = 'angry'
-            console.log(newValue)
-            console.log(oldValue)
-            let difference = 0
 
-            if(newValue>oldValue) {
-                difference = newValue - oldValue;
-                let type = 'add'
-                this.runChanges(difference, type);
-                
-            }
-            if(oldValue>newValue) {
-                difference = oldValue - newValue;
-                let type = 'sub'
-                this.runChanges(difference, type);
+             if(newValue>0&&this.hasAngry===false) {
+                    this.activeMoods.push('angry')
+                    this.hasAngry = true;
+                } else if (newValue<=0) {
+                    this.activeMoods = this.activeMoods.filter(mood => mood !=='angry')
+                    this.hasAngry = false;
+                }
+           
+            if (this.removingFirst===true) {
+                console.log('doing nothing about that')
+                setTimeout (() =>{
+                      this.removingFirst = false;
+                }, 400)
+              
+            } else {
+ 
+                this.selectedTone = 'angry'
+        
+                let difference = 0
 
+                if(newValue>oldValue) {
+                    difference = newValue - oldValue;
+                    let type = 'add'
+                    this.runChanges(difference, type);
+                    
+                }
+                if(oldValue>newValue) {
+                    difference = oldValue - newValue;
+                    let type = 'sub'
+                    this.runChanges(difference, type);
+
+                }
             }
-            
         },
 
          'moodcount.polite': function(newValue, oldValue) {
-             this.selectedTone = 'polite'
-            console.log(newValue)
-            console.log(oldValue)
-            let difference = 0
+             
+            if(newValue>0&&this.hasPolite===false) {
+                    this.activeMoods.push('polite')
+                    this.hasPolite=true
+                } else if (newValue<=0) {
+                    this.activeMoods = this.activeMoods.filter(mood => mood !=='polite')
+                    this.hasPolite=false
+                }
 
-            if(newValue>oldValue) {
-                difference = newValue - oldValue;
-                let type = 'add'
-                this.runChanges(difference, type);
+            if (this.removingFirst===true) {
+                console.log('doing nothing about that')
+                 setTimeout (() =>{
+                      this.removingFirst = false;
+                }, 400)
+            } else {
                 
-            }
-            if(oldValue>newValue) {
-                difference = oldValue - newValue;
-                let type = 'sub'
-                this.runChanges(difference, type);
+                this.selectedTone = 'polite'
+                
+    
+                let difference = 0
 
+                if(newValue>oldValue) {
+                    difference = newValue - oldValue;
+                    let type = 'add'
+                    this.runChanges(difference, type);
+                    
+                }
+                if(oldValue>newValue) {
+                    difference = oldValue - newValue;
+                    let type = 'sub'
+                    this.runChanges(difference, type);
+
+                }
             }
             
         },
 
-                 'moodcount.paggro': function(newValue, oldValue) {
-             this.selectedTone = 'paggro'
-            console.log(newValue)
-            console.log(oldValue)
-            let difference = 0
+            'moodcount.paggro': function(newValue, oldValue) {
+           
+             if(newValue>0&&this.hasPaggro===false) {
+                    this.activeMoods.push('paggro')
+                    this.hasPaggro=true;
+                } else if (newValue<=0) {
+                    this.activeMoods = this.activeMoods.filter(mood => mood !=='paggro')
+                    this.hasPaggro=false;
+                }
 
-            if(newValue>oldValue) {
-                difference = newValue - oldValue;
-                let type = 'add'
-                this.runChanges(difference, type);
-                
-            }
-            if(oldValue>newValue) {
-                difference = oldValue - newValue;
-                let type = 'sub'
-                this.runChanges(difference, type);
+            if (this.removingFirst===true) {
+                console.log('doing nothing about that')
+                 setTimeout (() =>{
+                      this.removingFirst = false;
+                }, 400)
+            } else {
 
+                 this.selectedTone = 'paggro'
+               
+
+                let difference = 0
+
+                if(newValue>oldValue) {
+                    difference = newValue - oldValue;
+                    let type = 'add'
+                    this.runChanges(difference, type);
+                    
+                }
+                if(oldValue>newValue) {
+                    difference = oldValue - newValue;
+                    let type = 'sub'
+                    this.runChanges(difference, type);
+
+                }
             }
-            
         },
 
-                 'moodcount.pirate': function(newValue, oldValue) {
-             this.selectedTone = 'pirate'
-            console.log(newValue)
-            console.log(oldValue)
-            let difference = 0
+            'moodcount.pirate': function(newValue, oldValue) {
 
-            if(newValue>oldValue) {
-                difference = newValue - oldValue;
-                let type = 'add'
-                this.runChanges(difference, type);
-                
-            }
-            if(oldValue>newValue) {
-                difference = oldValue - newValue;
-                let type = 'sub'
-                this.runChanges(difference, type);
+               if(newValue>0&&this.hasPirate===false) {
+                    this.activeMoods.push('pirate')
+                    this.hasPirate=true;
+                } else if (newValue<=0) {
+                    this.activeMoods = this.activeMoods.filter(mood => mood !=='pirate')
+                    this.hasPirate=false;
+                }
+           
+            if (this.removingFirst===true) {
+                console.log('doing nothing about that')
+                  setTimeout (() =>{
+                      this.removingFirst = false;
+                }, 400)
+            } else {
+                this.selectedTone = 'pirate'
+             
 
+                let difference = 0
+
+                if(newValue>oldValue) {
+                    difference = newValue - oldValue;
+                    let type = 'add'
+                    this.runChanges(difference, type);
+                    
+                }
+                if(oldValue>newValue) {
+                    difference = oldValue - newValue;
+                    let type = 'sub'
+                    this.runChanges(difference, type);
+
+                }
             }
-            
         },
+
+        activeIndexLength: {
+                handler() {
+                console.log('watcher triggered, length is' + this.activeIndexes.length)
+                    if(this.activeIndexes.length===0) {
+                            this.activeIndexes = this.allIndexes;
+                            console.log('indexes reset')
+                    }  
+                },
+                deep: true
+            }
+        
     },
 
     methods: {
 
-        changeMood(tone, type) {
-            this.selectedTone = tone;
-
-            if (type === 'add') {
-            this.moodcount[tone]++
-            } else if ( type === 'sub') {
-                this.moodcount[tone]-- 
-            } else {
-                console.log('mood buttons, something went wrong')
-            }
-        },
-
         runChanges(difference, type){
-                console.log('difference is ' + difference)
+                // console.log('difference is ' + difference)
 
                 if (type==='add') {
+                     if (this.reAddPhrase===true) {
+                        console.log("about to REadd phrase")
+                     }
+    
                     for(; difference>0; difference--) {
-                        this.addPhrase()
-                        console.log("phrase added")
+                        console.log("about to add phrase")
+                        setTimeout(() =>{
+                            this.addPhrase()
+                        },300)
+                        
                     }
                 }
 
                 if (type==='sub') {
                     for(; difference>0; difference--) {
-                        this.reverseGripe(this.selectedTone)
-                        console.log("phrase removed")
+                        console.log("about to remove phrase")
+                        setTimeout(()=> {
+                            this.reverseGripe(this.selectedTone)
+                        },300)
                     }
                 }
         },
@@ -322,6 +401,7 @@ export default {
 
             this.$store.state.sub++
             this.moodcount.total--
+            // this.moodcount[tone]--
             // if (this.removingFirst === true) {
             //      this.deleteOptions = this.usedPhrases.filter(phrase => phrase.tone === tone && phrase.status === true);
             // }
@@ -330,12 +410,23 @@ export default {
               console.log('something went wrong')
             }
             // let deleteThisPhrase = this.deleteOptions[0];
-            this.deleteOptions[0].status = false;
+          
+            //need to set status here.
             let deleteKey = this.deleteOptions[0].position;
-            console.log('delete key: ' + deleteKey)
+            // console.log('delete key: ' + deleteKey)
+            // console.log('delete option is' + this.deleteOptions[0])
+            this.deleteOptions[0].status=false;
            
             this.$store.state.baseOutput[deleteKey] = this.priorPhrases[deleteKey];
             this.gripeObject[deleteKey] =  this.priorPhrases[deleteKey];
+            this.activeIndexes.push(deleteKey);
+
+            // if(this.removingFirst === true) {
+            //     console.log('gripe got removed, adding next one')
+            //     this.reAddPhrase=true;
+            //     this.moodcount[this.cachedTone]++
+            //     this.removingFirst = false
+            // }
           
             // this.deleteOptions[deleteKey] = deleteThisPhrase;
             // const selectedOption = deleteThisPhrase;
@@ -346,49 +437,37 @@ export default {
 
         removeFirst() {
             this.removingFirst = true;
-            const tones = []
-            //phrases that haven't been used are FALSE status
-            let findActive = this.usedPhrases.filter(phrase => phrase.status === true);
-            if(findActive.some(object => object.tone === 'angry')) {
-                tones.push('angry')
-            }
+            this.cachedTone = this.selectedTone;
+            let moodOptions = this.activeMoods.filter(mood => mood !==this.cachedTone)
 
-            if(findActive.some(object => object.tone === 'polite')) {
-                tones.push('polite')
-            }
-
-            if(findActive.some(object => object.tone === 'pirate')) {
-                tones.push('pirate')
-            }
-
-            if(findActive.some(object => object.tone === 'paggro')) {
-                tones.push('paggro')
-            }
-
-            let otherTones = tones.filter(tone => tone !== this.selectedTone)
-            otherTones.sort(() => {return 0.5 - Math.random()});
-            let sacrificialTone = otherTones[0]
-            console.log('sacrificial tone is' + sacrificialTone)
-            this.reverseGripe(sacrificialTone)
+            moodOptions.sort(() => {return 0.5 - Math.random()});
+            this.sacrificialTone = moodOptions[0]
         },
 
         addPhrase() {
 
-            this.$store.state.add++
-            this.moodcount.total++;
 
-            if(this.moodcount.total>=7) {
+            if(this.moodcount.total>=this.moodLimit) {
+                console.log('moodcount too high, beginning swapsies')
                 this.removeFirst()
-                this.addPhrase()
             }
 
-            if(this.activeIndexes.length>0) {
+            // if(this.activeIndexes.length>0) {
 
                 this.randomize(this.activeIndexes);
                 let currentIndex = this.activeIndexes[0];
 
                 this.selectedPhrases = this.phrases.filter(phrase => phrase.tone === this.selectedTone && phrase.position === currentIndex && phrase.status === false);
-                this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
+                console.log('current index is' + currentIndex)
+                //come back to this bit. where you left off, because you're trying to iterate through a non iterable
+                if(this.selectedPhrases.length===0) {
+                    console.log('you ran out of fresh phrases, selected tone is: ' + this.selectedTone)
+                    console.log('current index is' + currentIndex)
+                 
+                    this.selectedPhrases = this.phrases.filter(phrase => phrase.tone === this.selectedTone && phrase.position === currentIndex);
+                    this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
+                    console.log('selected phrases are' + this.selectedPhrases)
+    
 
                 const selectedOption = this.selectedPhrases[0];
                 this.selectedPhrase =  this.selectedPhrases[0].phrase;
@@ -399,14 +478,9 @@ export default {
                 this.selectedPhrases[0].status = true;
                 this.changeTracker[currentIndex]++;
                 this.activeIndexes.shift();
+                console.log('active indexes are: ' + this.activeIndexes)
                 this.changeLog(currentIndex, selectedOption);
-            
-            } else if (this.activeIndexes.length===0) {
-                 this.randomize(this.allIndexes);
-                let currentIndex = this.allIndexes[0];
-                console.log('current index is' + currentIndex)
-
-                this.selectedPhrases = this.phrases.filter(phrase => phrase.tone === this.selectedTone && phrase.position === currentIndex && phrase.status === false);
+                } else {
                 this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
 
                 const selectedOption = this.selectedPhrases[0];
@@ -417,21 +491,28 @@ export default {
 
                 this.selectedPhrases[0].status = true;
                 this.changeTracker[currentIndex]++;
+                this.activeIndexes.shift()
+                console.log('active indexes are: ' + this.activeIndexes)
                 this.changeLog(currentIndex, selectedOption);
-            } else {
-                console.log('something went wrong')
-            }
+                }
 
-            console.log('active indexes are' + this.activeIndexes);
+                if(this.removingFirst === true) {
+                this.moodcount[this.sacrificialTone]--
+                this.sliderVal[this.sacrificialTone]=!this.sliderVal[this.sacrificialTone];
+                } else {
+                this.$store.state.add++
+                this.moodcount.total++;
+                }
 
         },
 
         changeLog(key, newPhrase) {
              this.usedPhrases.push(newPhrase);
 
-            if(this.changeTracker[key]>1) {
-            console.log('might need to do something here later');
-            }
+            // if(this.changeTracker[key]>1) {
+            // console.log('phrase history updated');
+            // this.phraseHistory[key] = this.newPhrase
+            // }
            
 
         },
@@ -450,12 +531,13 @@ export default {
     
 
     mounted() {
-
+        //added experimental if statement, reminder to maybe remove at some point
             for (const mood in this.moodcount){
+                if(this.removingFirst===false){
                 this.$watch(
                     () => this.moodcount[mood],
                     (newVal) => {
-                        console.log('newVal is' + newVal)
+                        // console.log('newVal is' + newVal)
                         if (newVal>0) {
                             this.reversable[mood] = true;
                             // console.log(this.reversable);
@@ -465,6 +547,7 @@ export default {
                         }
                     }
                 );
+                }
             }
 
             this.activePronouns = {...this.$store.state.chosenPronouns};
@@ -508,7 +591,7 @@ export default {
                  {
                     position: "op1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} hope you don't mind me saying this, but `,
+                    phrase: `${this.activePronouns.subjectPCap} hope you don't mind ${this.activePronouns.objectP}  saying this, but `,
                     tone: "polite",
 
                 },
@@ -516,7 +599,7 @@ export default {
                  {
                     position: "op1",
                     status: false,
-                    phrase: `How are you? ${this.activePronouns.subjectP} hope you're well. ${this.activePronouns.subjectP} couldn't help but notice that `,
+                    phrase: `How are you? ${this.activePronouns.subjectPCap} hope you're well. ${this.activePronouns.subjectPCap} couldn't help but notice that `,
                     tone: "polite",
 
                 },
@@ -580,7 +663,7 @@ export default {
                  {
                     position: "op2",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} am PISSED that`,
+                    phrase: `${this.activePronouns.subjectP} ${this.activePronouns.toBePresent} PISSED that`,
                     tone: "angry",
 
                 },
@@ -588,7 +671,7 @@ export default {
                 {
                     position: "op2",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} am RAGING because`,
+                    phrase: `${this.activePronouns.subjectP} ${this.activePronouns.toBePresent} RAGING because`,
                     tone: "angry",
 
                 },
@@ -636,7 +719,7 @@ export default {
                   {
                     position: "op2",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} had the unfortunate privilege of noticing that `,
+                    phrase: `${this.activePronouns.subjectPCap} had the unfortunate privilege of noticing that `,
                     tone: "paggro",
 
                 },
@@ -684,7 +767,7 @@ export default {
                 {
                     position: "of1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} can't believe you've done this. `,
+                    phrase: `${this.activePronouns.subjectPCap} can't believe you've done this. `,
                     tone: "angry",
 
                 },
@@ -692,7 +775,7 @@ export default {
                  {
                     position: "of1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} really hope you don't mind ${this.activePronouns.objectP} bringing this up. `,
+                    phrase: `${this.activePronouns.subjectPCap} really hope you don't mind ${this.activePronouns.objectP} bringing this up. `,
                     tone: "polite",
 
                 },
@@ -804,7 +887,7 @@ export default {
                  {
                     position: "of2",
                     status: false,
-                    phrase: `(${this.activePronouns.toBeContracted} so sorry for even mentioning this. ${this.activePronouns.toBeContracted} sure you're busy.) `,
+                    phrase: `(${this.activePronouns.toBeContracted} so sorry for even mentioning this - ${this.activePronouns.toBeContracted} sure you're busy.) `,
                     tone: "polite",
 
                 },
@@ -876,7 +959,7 @@ export default {
                 {
                     position: "co0",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} always knew you were a bit of a bellend, but `,
+                    phrase: `${this.activePronouns.subjectPCap} always knew you were a bit of a bellend, but `,
                     tone: "angry",
 
                 },
@@ -892,7 +975,7 @@ export default {
                 {
                     position: "co0",
                     status: false,
-                    phrase: `${this.activePronouns.toBeContracted} not annoyed at you at all, it's just that `,
+                    phrase: `${this.activePronouns.toBeContractedCap} not annoyed at you at all, it's just that `,
                     tone: "polite",
 
                 },
@@ -900,7 +983,7 @@ export default {
                  {
                     position: "co0",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} know that personal responsibility isn't really your thing, but `,
+                    phrase: `${this.activePronouns.subjectPCap} know that personal responsibility isn't really your thing, but `,
                     tone: "paggro",
 
                 },
@@ -908,7 +991,7 @@ export default {
                 {
                     position: "co0",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} can see that you're suuuuper busy with all sorts of very important things, but `,
+                    phrase: `${this.activePronouns.subjectPCap} can see that you're suuuuper busy with all sorts of very important things, but `,
                     tone: "paggro",
 
                 },
@@ -924,7 +1007,7 @@ export default {
                {
                     position: "co0",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP}  grant ye that a landlubber's life aint easy, but `,
+                    phrase: `${this.activePronouns.subjectPCap}  grant ye that a landlubber's life aint easy, but `,
                     tone: "pirate",
 
                 }, 
@@ -932,7 +1015,7 @@ export default {
                 {
                     position: "co0",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} may be old salt, but `,
+                    phrase: `${this.activePronouns.subjectPCap} may be old salt, but `,
                     tone: "pirate",
 
                 }, 
@@ -980,7 +1063,7 @@ export default {
                 {
                     position: "co2",
                     status: false,
-                    phrase: "can a little bit inconvenient. ",
+                    phrase: "can be a tad inconvenient. ",
                     tone: "polite",
 
                 },
@@ -1125,7 +1208,7 @@ export default {
                 {
                     position: "pl1",
                     status: false,
-                    phrase: "please have mercy on me and ",
+                    phrase: `please have mercy on ${this.activePronouns.objectP} and `,
                     tone: "angry",
 
                 },
@@ -1133,7 +1216,7 @@ export default {
                 {
                     position: "pl1",
                     status: false,
-                    phrase: "please help restore my sanity and ",
+                    phrase: `please help restore ${this.activePronouns.objectP} sanity and `,
                     tone: "angry",
 
                 },
@@ -1149,7 +1232,7 @@ export default {
                 {
                     position: "pl1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} would really appreciate it if you could `,
+                    phrase: `${this.activePronouns.subjectPCap} would really appreciate it if you could `,
                     tone: "polite",
 
                 },
@@ -1157,7 +1240,7 @@ export default {
                 {
                     position: "pl1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} would be very grateful if you could `,
+                    phrase: `${this.activePronouns.subjectPCap} would be very grateful if you could `,
                     tone: "polite",
 
                 },
@@ -1173,7 +1256,7 @@ export default {
                 {
                     position: "pl1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} have a TEENY WEENY favour to ask... `,
+                    phrase: `${this.activePronouns.subjectPCap} have a TEENY WEENY favour to ask... `,
                     tone: "paggro",
 
                 },
@@ -1181,7 +1264,7 @@ export default {
                 {
                     position: "pl1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} would sooooooo grateful (and impressed!) if you could `,
+                    phrase: `${this.activePronouns.subjectPCap} would sooooooo grateful (and impressed!) if you could `,
                     tone: "paggro",
 
                 },
@@ -1197,7 +1280,7 @@ export default {
                 {
                     position: "pl1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} suggest ye' leave yer bilge-suckin' ways behind and `,
+                    phrase: `${this.activePronouns.subjectPCap} suggest ye' leave yer bilge-suckin' ways behind and `,
                     tone: "pirate",
 
                 },
@@ -1205,7 +1288,7 @@ export default {
                  {
                     position: "pl1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} reckon ye'd better heave ho and `,
+                    phrase: `${this.activePronouns.subjectPCap} reckon ye'd better heave ho and `,
                     tone: "pirate",
 
                 },
@@ -1213,7 +1296,7 @@ export default {
                  {
                     position: "pl1",
                     status: false,
-                    phrase: `${this.activePronouns.subjectP} be asking ye' to batten down the hatches and `,
+                    phrase: `${this.activePronouns.subjectPCap} be asking ye' to batten down the hatches and `,
                     tone: "pirate",
 
                 },
@@ -1315,17 +1398,42 @@ export default {
                 },
             ];
             this.priorPhrases = Object.assign({}, this.$store.state.baseOutput);
+            this.phraseHistory = Object.assign({}, this.$store.state.baseOutput)
             this.updatedPhrases = this.phrases;
-            console.log("mounted mate");
+            // console.log("mounted mate");
 
     },
 
      computed: {
+        activeIndexLength(){
+            return this.activeIndexes.length
+        },
+        initReset() {
+            return this.removingFirst
+        },
+        activeTones() {
+            return this.activeMoods
+        },
+        currentTone() {
+            return this.selectedTone
+        },
         output() {
             return this.$store.state.baseOutput;
         },
         priors() {
             return this.priorPhrases;
+        },
+        addCount(){
+            return this.$store.state.add;
+        },
+        oldAddCount(){
+            return this.$store.state.oldAdd
+        },
+        subCount() {
+            return this.$store.state.sub;
+        },
+        oldSubCount(){
+            return this.$store.state.oldSub;
         }
     },
 }

@@ -1,15 +1,22 @@
 <template>
      <ion-range :class="tone"
+        id="slider"
+        :value="rangeVal"
         min="0"
-        max="7"
+        max="9"
         step="1"
         debounce="100"
         @ionChange="rangeChange($event)">
 
-         <ion-icon slot="start" :icon="removeCircle" class="angry"
-                @click="changeMood('angry', 'sub')"
+         <ion-icon 
+                v-if="isDisabled===false"
+                slot="start" :icon="removeCircle"
+                size="medium"
+                @click="buttonRangeChange('sub')"
         ></ion-icon>
-         <ion-icon slot="end" :icon="addCircle" class="angry" @click="changeMood('angry', 'add')"></ion-icon>
+         <ion-icon slot="end" :icon="addCircle"
+                @click="buttonRangeChange('add')"
+                ></ion-icon>
         </ion-range>
 </template>
 
@@ -17,37 +24,68 @@
 
 import { IonRange, IonIcon } from '@ionic/vue';
 import { addCircle, removeCircle } from 'ionicons/icons'
+
 export default {
 
-    props: ['tone'],
+    props: ['tone', 'sliderVal'],
     emits: ['update:moodCount'],
-
+//you might need to look at the 'watcheffect' stuff
     components: {
         IonRange,
         IonIcon
     },
 
     setup() {
+
         return {
-            addCircle, removeCircle
+            addCircle, 
+            removeCircle,
         }
     },
 
     data() {
         return {
             rangeVal: 0,
+            isDisabled: false,
         }
     },
 
     methods: {
-    rangeChange(event) {
-            this.rangeVal = event.target.value;
-             this.$emit('update:moodCount', this.rangeVal);
-            
-            // console.log(this.rangeVal);
+
+        rangeChange(event) {
+                this.rangeVal = event.target.value;
+                this.$emit('update:moodCount', this.rangeVal);
+                
+                // console.log(this.rangeVal);
+            },
+
+        buttonRangeChange(type) {
+
+        if(type==="add") {
+            this.rangeVal++
+        } else if (type==="sub") {
+            this.rangeVal--
+        } else {
+            console.log('rangeval, something went wrong')
+        }
+        },
+    },
+
+    watch: {
+
+        sliderVal() {
+            this.rangeVal--
+        },
+
+        rangeVal() {
+             if(this.rangeVal<=0){
+                this.isDisabled=true
+                console.log('disabled style applied')
+            } else {
+                this.isDisabled=false
+            }
         },
     }
-    
 }
 </script>
 
@@ -70,5 +108,12 @@ export default {
 
     ion-range.pirate {
     --knob-background: var(--ion-color-pirate);
+    }
+
+    ion-icon {
+        font-size: 24px;
+    }
+    .disabled {
+    color: grey!important;
     }
 </style>

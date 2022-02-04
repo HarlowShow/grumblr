@@ -12,7 +12,22 @@
         style="transition-delay: 1s">
             <h3>Is that right?</h3>
         </transition>
-    
+
+        <div id="desktop">
+
+         <ion-button @click="goBack"
+                    color="primary"
+                    >
+                        GO BACK
+                         <ion-icon slot="start" :icon="arrowBackOutline"></ion-icon>
+                    </ion-button>
+
+      <ion-button
+        class="btn-system"
+        expand="block"
+        @click="routin">CONFIRM</ion-button>
+
+        </div>
 
      <ion-footer class="ion-no-border" id="mobile">
             <ion-toolbar class="ion-no-padding">
