@@ -4,7 +4,7 @@
 :progress="0.25">
 </area-title>
 
-<div class="button-area">
+<div class="button-area container flex">
 
     <ion-button 
     ion-activatable
@@ -24,8 +24,9 @@
 
 <p v-if="invalidInput">Please select an option</p>
 
+<div class="flex ion-justify-content-center">
  <ion-button id="desktop" class="btn-system" expand="block" @click="submitPronoun(selectedPronoun)">NEXT</ion-button>
-
+</div>
 
     <ion-footer class="ion-no-border" id="mobile">
             <ion-toolbar class="ion-no-padding">
@@ -136,7 +137,6 @@ export default {
 
     .button-area {
         display: flex;
-        align-items: stretch;
     }
 
     .button-area > button {

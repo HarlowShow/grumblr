@@ -5,7 +5,7 @@
         <ion-icon @click="goBack" :icon="arrowBackOutline" ></ion-icon>
 </area-title>
 
-    <div class="button-area">
+    <div class="button-area container">
 
         <ion-button 
         ion-activatable
@@ -91,10 +91,12 @@
 
         <p v-if="this.invalidInput === true">Please enter a valid option</p>
 
-        <ion-button id="desktop"
+        <div id="desktop" class="flex ion-justify-content-center">
+        <ion-button
         class="btn-system"
         expand="block"
         @click="submitPersonmate(this.tempPersonmate, this.customNamed)">Next</ion-button>
+        </div>
             
 
   <ion-footer class="ion-no-border" id="mobile">
@@ -269,7 +271,6 @@ ion-icon {
 
     .button-area {
         display: flex;
-        align-items: stretch;
         flex-wrap: wrap;
         padding-bottom: 1rem;
     }

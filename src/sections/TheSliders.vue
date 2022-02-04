@@ -9,14 +9,23 @@
         @ionChange="rangeChange($event)">
 
          <ion-icon 
-                v-if="isDisabled===false"
+                v-if="subIsDisabled===false"
                 slot="start" :icon="removeCircle"
-                size="medium"
                 @click="buttonRangeChange('sub')"
         ></ion-icon>
-         <ion-icon slot="end" :icon="addCircle"
+        <ion-icon v-else
+                slot="start" :icon="removeCircle"
+                class="disabled">
+        </ion-icon>
+         <ion-icon 
+                 v-if="addIsDisabled===false"
+                slot="end" :icon="addCircle"
                 @click="buttonRangeChange('add')"
                 ></ion-icon>
+           <ion-icon v-else
+                slot="end" :icon="addCircle"
+                class="disabled">
+        </ion-icon>
         </ion-range>
 </template>
 
@@ -46,7 +55,8 @@ export default {
     data() {
         return {
             rangeVal: 0,
-            isDisabled: false,
+            subIsDisabled: true,
+            addIsDisabled: false,
         }
     },
 
@@ -79,13 +89,19 @@ export default {
 
         rangeVal() {
              if(this.rangeVal<=0){
-                this.isDisabled=true
+                this.subIsDisabled=true
                 console.log('disabled style applied')
             } else {
-                this.isDisabled=false
+                this.subIsDisabled=false
             }
+
+            if(this.rangeVal>=9){
+                this.addIsDisabled=true
+                } else {
+                this.addIsDisabled=false
+                }
+            },
         },
-    }
 }
 </script>
 
@@ -113,6 +129,7 @@ export default {
     ion-icon {
         font-size: 24px;
     }
+
     .disabled {
     color: grey!important;
     }

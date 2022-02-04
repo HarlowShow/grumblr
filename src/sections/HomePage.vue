@@ -9,7 +9,7 @@
           <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/input">Start</ion-button>
       </div>
 
-
+      <the-icons :name="'raccoon'"></the-icons>
       <div class="sharing-icons">
 
           <ShareNetwork
@@ -59,7 +59,7 @@
       //  IonMenuToggle
   } from '@ionic/vue';
 
-  // import TheIcons from './components/TheIcons.vue'
+  import TheIcons from './components/TheIcons.vue'
   // import TheSliders from './TheSliders.vue'
 
   import { heart, logoFacebook, logoTwitter, logoReddit, logoWhatsapp } from 'ionicons/icons';
@@ -68,7 +68,7 @@ export default {
    components: { 
       IonButton,
       IonIcon,
-      // TheIcons,
+      TheIcons,
       // TheSliders,
       // IonMenuToggle,
       },

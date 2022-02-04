@@ -15,14 +15,14 @@
 
         <div id="desktop">
 
-         <ion-button @click="goBack"
-                    color="primary"
-                    >
-                        GO BACK
-                         <ion-icon slot="start" :icon="arrowBackOutline"></ion-icon>
-                    </ion-button>
+        <ion-button @click="goBack"
+        color="primary"
+        >
+        GO BACK
+        <ion-icon slot="start" :icon="arrowBackOutline"></ion-icon>
+        </ion-button>
 
-      <ion-button
+        <ion-button
         class="btn-system"
         expand="block"
         @click="routin">CONFIRM</ion-button>
@@ -147,6 +147,13 @@ ion-button {
 
 .btn-row {
     --border-radius: 0px !important;
+}
+
+#desktop {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
 }
 
 </style>

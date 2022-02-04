@@ -1,6 +1,11 @@
 <template>
     <base-layout page-title="Gripe Deets">
 
+        <div class="chat"
+        v>
+
+        </div>
+
         <pronoun-input
         @update:pronoun="getPronoun"
         v-if="this.formPosition === 0">
@@ -25,6 +30,12 @@
         :tempSelection="tempChosen"
         >
         </input-summary>
+
+        <emotional-teaser
+        @backClick="prevForm"
+        v-if="this.formPosition === 4"
+        >  
+        </emotional-teaser>
 
     <!-- <template v-slot:footer>
         <div id="footer-bg">
@@ -53,6 +64,7 @@
     import GripeInput from './components/GripeInput.vue';
     import PronounInput from './components/PronounInput.vue';
     import InputSummary from './components/InputSummary.vue';
+    import EmotionalTeaser from './components/EmotionalTeaser.vue'
 
     // import { IonMenuToggle } from '@ionic/vue'
     // import MobileFooter from '../components/base/MobileFooter.vue'
@@ -65,6 +77,7 @@
             GripeInput,
             PronounInput,
             InputSummary,
+            EmotionalTeaser
             // IonMenuToggle
             // IonFooter,
             // IonToolbar
@@ -610,9 +623,23 @@
     
 }
 
+.flex {
+    display: flex;
+}
+
   @media(min-width: 576px) {
         #mobile {
             display: none;
+        }
+         .flex {
+            gap: 1rem;
+        }
+        .button-area {
+            justify-content: center;
+        }
+        ion-button {
+            min-width: 10rem;
+            max-width: 15rem;
         }
   }
 
@@ -620,5 +647,18 @@
         #desktop {
             display: none;
         }
-  }
+        .button-area {
+            align-items: stretch;
+        }
+       
+    }
+
+.center {
+    margin: 0 auto;
+}
+
+.container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
 </style>
