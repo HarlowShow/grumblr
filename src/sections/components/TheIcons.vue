@@ -22,6 +22,13 @@
     v-if="name==='raccoon'"
     class="raccoon avatar">
     </div>
+
+    <div
+    v-if="name==='user'"
+    class="user avatar"
+    >
+    <h1>?</h1>
+    </div>
 </template>
 
 <script>
@@ -31,6 +38,16 @@ export default {
 </script>
 
 <style scoped>
+
+.user {
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .avatar {
     height: 5rem;
     width: 5rem;

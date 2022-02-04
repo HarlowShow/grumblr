@@ -1,35 +1,129 @@
 <template>
     <base-layout page-title="Gripe Deets">
 
-        <div class="chat"
-        v>
+        <div class="chat">
 
+             <chat-bubble
+             :gridClass="'left'">
+                 <template v-slot:start>
+                    <the-icons :name="'raccoon'"></the-icons>
+                </template>
+                 <template v-slot:end>
+                    <p>Pssst... hey. This is gonna feel like a real conversation when I can be bothered to write it. Now, how many of you schmuckos have a complaint today?</p>
+                </template>
+                <template  v-slot:responses>
+                     <set-pronouns
+                     v-if="this.formPosition===0"
+                    @update:pronoun="getPronoun"
+                    >
+                    </set-pronouns>
+                </template>
+             </chat-bubble>
+
+            <chat-bubble 
+             :gridClass="'right'"
+             v-if="this.formPosition>0">
+                <template v-slot:start>
+                    <p> {{ pronounResponse }}</p>
+                </template>
+                 <template v-slot:end>
+                      <the-icons :name="'user'"></the-icons>
+                </template>
+            </chat-bubble>
+
+            <chat-bubble :gridClass="'left'"
+            v-if="this.formPosition>0"
+            >
+                    <template v-slot:start>
+                    <the-icons :name="'raccoon'"></the-icons>
+                    </template>
+                    <template v-slot:end>
+                        <p>That's a real tragedy mate. By the way, you should imagine that I'm speaking in an australian accent. Who did this then?</p>
+                    </template>
+                      <template  v-slot:responses>
+                    <set-personmate
+                        v-if="this.formPosition===1"
+                       @update:personmate="getPersonmate"
+                    >
+                    </set-personmate>
+                    </template>
+            </chat-bubble>
+
+             <chat-bubble 
+             :gridClass="'right'"
+             v-if="this.formPosition>1">
+                <template v-slot:start>
+                    <p>{{ personmateResponse }}</p>
+                </template>
+                 <template v-slot:end>
+                      <the-icons :name="'user'"></the-icons>
+                </template>
+            </chat-bubble>
+
+
+            <chat-bubble :gridClass="'left'"
+             v-if="this.formPosition>1"
+             >
+                    <template v-slot:start>
+                    <the-icons :name="'raccoon'"></the-icons>
+                    </template>
+                    <template v-slot:end>
+                        <p>Aw naw mate. What did this bugger do then?</p>
+                    </template>
+                      <template  v-slot:responses>
+                          <set-gripe
+                            v-if="this.formPosition===2"
+                            @update:gripe="getGripe"
+                          ></set-gripe>
+                    </template>
+                </chat-bubble>
+
+              <chat-bubble
+               v-if="this.formPosition>2"
+             :gridClass="'right'">
+                <template v-slot:start>
+                    <p>Aw bloomin' 'eck.</p>
+                    <review-selection
+                     :tempSelection="tempChosen"
+                     >
+                    </review-selection>
+                </template>
+                 <template v-slot:end>
+                      <the-icons :name="'user'"></the-icons>
+                </template>
+                <template  v-slot:responses>
+                    <confirm-selection
+                      v-if="this.formPosition===3"
+                    ></confirm-selection>
+                </template>
+            </chat-bubble>
+             
         </div>
 
-        <pronoun-input
+        <!-- <pronoun-input
         @update:pronoun="getPronoun"
         v-if="this.formPosition === 0">
-        </pronoun-input>
+        </pronoun-input> -->
 
-        <personmate-input
+        <!-- <personmate-input
      
         @update:personmate="getPersonmate"
         @backClick="prevForm"
         v-if="this.formPosition === 1"
-        ></personmate-input>
+        ></personmate-input> -->
 
-        <gripe-input 
+        <!-- <gripe-input 
         @update:gripe="getGripe"
         @backClick="prevForm"
         v-if="this.formPosition === 2">
-        </gripe-input>
+        </gripe-input> -->
 
-        <input-summary
+        <!-- <input-summary
         @backClick="prevForm"
         v-if="this.formPosition === 3"
         :tempSelection="tempChosen"
         >
-        </input-summary>
+        </input-summary> -->
 
         <emotional-teaser
         @backClick="prevForm"
@@ -60,11 +154,18 @@
 
 <script>
 
-    import PersonmateInput from './components/PersonmateInput.vue';
-    import GripeInput from './components/GripeInput.vue';
-    import PronounInput from './components/PronounInput.vue';
-    import InputSummary from './components/InputSummary.vue';
-    import EmotionalTeaser from './components/EmotionalTeaser.vue'
+    // import PersonmateInput from './components/PersonmateInput.vue';
+    // import GripeInput from './components/GripeInput.vue';
+    // import PronounInput from './components/PronounInput.vue';
+    import SetPronouns from './components/SetPronouns.vue'
+    import SetPersonmate from './components/SetPersonmate.vue'
+    import SetGripe from './components/SetGripe.vue'
+    import ReviewSelection from './components/ReviewSelection.vue'
+    import ConfirmSelection from './components/ConfirmSelection.vue'
+    // import InputSummary from './components/InputSummary.vue';
+    import EmotionalTeaser from './components/EmotionalTeaser.vue';
+    import TheIcons from './components/TheIcons.vue';
+    import ChatBubble from './components/ChatBubble.vue'
 
     // import { IonMenuToggle } from '@ionic/vue'
     // import MobileFooter from '../components/base/MobileFooter.vue'
@@ -73,11 +174,18 @@
     export default {
 
         components: {
-            PersonmateInput,
-            GripeInput,
-            PronounInput,
-            InputSummary,
-            EmotionalTeaser
+            // PersonmateInput,
+            // GripeInput,
+            // PronounInput,
+            // InputSummary,
+            EmotionalTeaser,
+            TheIcons,
+            ChatBubble,
+            SetPronouns,
+            SetPersonmate,
+            SetGripe,
+            ReviewSelection,
+            ConfirmSelection
             // IonMenuToggle
             // IonFooter,
             // IonToolbar
@@ -293,6 +401,22 @@
                 })
             },
 
+            pronounResponse() {
+                let response = ''
+                if(this.chosen.chosenPronoun==="me") {
+                    response = "just me"
+                }
+                if (this.chosen.chosenPronoun==="we") {
+                    response = "several of us"
+                }
+                return response
+            },
+
+            personmateResponse() {
+                let response = 'confirmation text will go here'
+                return response
+            }
+
         
         },
 
@@ -495,7 +619,7 @@
             prevForm() {
                 this.formPosition--;
                 console.log('went back')
-            }
+            },
         },
 
         watch: {
