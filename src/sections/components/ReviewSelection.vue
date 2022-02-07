@@ -1,6 +1,6 @@
 <template>
 
-    <p> {{ pronoun }} have a problem with {{ personmate }} because they {{ gripe }}. Is that right?</p>
+    <p> {{ pronoun }} have a problem with {{ personmate }} because they {{ gripe }} Is that right?</p>
 
 </template>
 

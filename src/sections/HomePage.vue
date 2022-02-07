@@ -9,7 +9,20 @@
           <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/input">Start</ion-button>
       </div>
 
-      <the-icons :name="'raccoon'"></the-icons>
+      <div class="sharing-icons">
+
+      <the-icons :name="'raccoon-angry'"></the-icons>
+      <the-icons :name="'raccoon-shifty'"></the-icons>
+      <the-icons :name="'raccoon-polite'"></the-icons>
+      <the-icons :name="'raccoon-pirate'"></the-icons>
+      <the-icons :name="'raccoon-crown'"></the-icons>
+      <the-icons :name="'raccoon-disappointed'"></the-icons>
+      <the-icons :name="'raccoon-confused'"></the-icons>
+      <the-icons :name="'raccoon-dazed'"></the-icons>
+      <the-icons :name="'raccoon-winky'"></the-icons>
+      <the-icons :name="'raccoon-sosad'"></the-icons>
+
+      </div>
       <div class="sharing-icons">
 
           <ShareNetwork

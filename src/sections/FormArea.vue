@@ -6,7 +6,7 @@
              <chat-bubble
              :gridClass="'left'">
                  <template v-slot:start>
-                    <the-icons :name="'raccoon'"></the-icons>
+                    <the-icons :name="'raccoon-shifty'"></the-icons>
                 </template>
                  <template v-slot:end>
                     <p>Pssst... hey. This is gonna feel like a real conversation when I can be bothered to write it. Now, how many of you schmuckos have a complaint today?</p>
@@ -22,6 +22,7 @@
 
             <chat-bubble 
              :gridClass="'right'"
+             :responseClass="true"
              v-if="this.formPosition>0">
                 <template v-slot:start>
                     <p> {{ pronounResponse }}</p>
@@ -35,10 +36,10 @@
             v-if="this.formPosition>0"
             >
                     <template v-slot:start>
-                    <the-icons :name="'raccoon'"></the-icons>
+                    <the-icons :name="'raccoon-shifty'"></the-icons>
                     </template>
                     <template v-slot:end>
-                        <p>That's a real tragedy mate. By the way, you should imagine that I'm speaking in an australian accent. Who did this then?</p>
+                        <p>I see. Who did this then?</p>
                     </template>
                       <template  v-slot:responses>
                     <set-personmate
@@ -65,7 +66,7 @@
              v-if="this.formPosition>1"
              >
                     <template v-slot:start>
-                    <the-icons :name="'raccoon'"></the-icons>
+                    <the-icons :name="'raccoon-disappointed'"></the-icons>
                     </template>
                     <template v-slot:end>
                         <p>Aw naw mate. What did this bugger do then?</p>
@@ -78,25 +79,36 @@
                     </template>
                 </chat-bubble>
 
-              <chat-bubble
-               v-if="this.formPosition>2"
-             :gridClass="'right'">
+             <chat-bubble 
+             :gridClass="'right'"
+             v-if="this.formPosition>1">
                 <template v-slot:start>
-                    <p>Aw bloomin' 'eck.</p>
-                    <review-selection
-                     :tempSelection="tempChosen"
-                     >
-                    </review-selection>
+                    <p>{{ personmateResponse }}</p>
                 </template>
                  <template v-slot:end>
                       <the-icons :name="'user'"></the-icons>
                 </template>
-                <template  v-slot:responses>
+            </chat-bubble>
+
+              <chat-bubble :gridClass="'left'"
+             v-if="this.formPosition>2"
+             >
+                    <template v-slot:start>
+                    <the-icons :name="'raccoon-disappointed'"></the-icons>
+                    </template>
+                    <template v-slot:end>
+                       <p>Oh deary me.</p>
+                    <review-selection
+                     :tempSelection="tempChosen"
+                     >
+                    </review-selection>
+                    </template>
+                       <template  v-slot:responses>
                     <confirm-selection
                       v-if="this.formPosition===3"
                     ></confirm-selection>
                 </template>
-            </chat-bubble>
+                </chat-bubble>
              
         </div>
 

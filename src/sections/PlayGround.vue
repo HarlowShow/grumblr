@@ -1,16 +1,30 @@
 <template>
 
     <base-layout page-default-back-link="/input" page-title="Edit your gripe">
-    <p> {{ this.selectedPhrases }} </p>
+    <!-- <p> {{ this.selectedPhrases }} </p>
     <p>active moods: {{ activeTones }}</p>
     <p>active index length: {{ activeIndexLength }}</p>
 
     <p v-for="text in output" :key="text">
         {{ text }}
-    </p>
+    </p> -->
     <!-- <p>delete options: {{ deleteOptions }}</p>
     <p>used phrases: {{ usedPhrases }}</p> -->
 <!-- <p>prior phrases: {{ priorPhrases }}</p> -->
+
+     <chat-bubble
+             :gridClass="'left'">
+                 <template v-slot:start>
+                    <the-icons :name="'raccoon-shifty'"></the-icons>
+                </template>
+                 <template v-slot:end>
+                    <p>How about this?</p>
+                </template>
+                <template  v-slot:responses>
+                    
+
+                </template>
+             </chat-bubble>
 
 
     <div class="snippets">
@@ -70,6 +84,8 @@
 import { useStore } from 'vuex'
 import TextSnippet from './TextSnippet.vue'
 import TheSliders from './TheSliders.vue'
+import ChatBubble from './components/ChatBubble.vue'
+import TheIcons from './components/TheIcons.vue'
 // import { addCircle, removeCircle } from 'ionicons/icons'
 
 // import TextArea from './TextArea.vue';
@@ -82,6 +98,8 @@ import TheSliders from './TheSliders.vue'
 
 export default {
     components: {
+        ChatBubble,
+        TheIcons,
         // IonButton,
         TextSnippet,
         TheSliders,
@@ -719,7 +737,7 @@ export default {
                   {
                     position: "op2",
                     status: false,
-                    phrase: `${this.activePronouns.subjectPCap} had the unfortunate privilege of noticing that `,
+                    phrase: `${this.activePronouns.subjectP} had the unfortunate privilege of noticing that `,
                     tone: "paggro",
 
                 },
@@ -1503,7 +1521,15 @@ export default {
     .snippets {
         margin: 0 auto;
         padding: 0.5rem;
+
     }
+
+     @media(max-width: 576px) {
+         .snippets {
+             min-height: 50%;
+        
+         }
+     }
 
     ion-icon {
         font-size: 2.2rem;

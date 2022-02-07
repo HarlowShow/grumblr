@@ -4,9 +4,10 @@
 
        <ion-header>
          <ion-toolbar>
-             <ion-menu-toggle><button>toggle</button></ion-menu-toggle>
+             <ion-menu-button slot="start"></ion-menu-button>
+             <!-- <ion-menu-toggle><button>toggle</button></ion-menu-toggle> -->
              <!-- <div slot="start"><slot name="top"></slot></div> -->
-  
+                <!-- <h1>Trash Talk Panda</h1> -->
                  <h3 class="close" slot="end" v-show="open===true">X</h3>
                  <!-- <button @click="openMain()">open menu</button> -->
                  
@@ -44,11 +45,12 @@ import {
         // IonBackButton,
         // IonButtons,
         IonFooter,
+        IonMenuButton
         // IonMenu,
         // menuController,
         // IonItem,
         // IonList,
-        IonMenuToggle,
+        // IonMenuToggle,
         // IonButton,
         // IonLabel,
      
@@ -62,6 +64,7 @@ export default {
         IonPage,
         IonHeader, 
         IonToolbar, 
+        IonMenuButton,
         // IonTitle, 
         IonContent, 
         IonFooter, 
@@ -70,7 +73,7 @@ export default {
         // IonItem,
         // IonList,
         // IonLabel,
-        IonMenuToggle,
+        // IonMenuToggle,
         // IonButton,
         // IonBackButton, 
         // IonButtons,

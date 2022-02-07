@@ -20,7 +20,8 @@ import {
     // IonIcon,
     // IonToolbar,
     // IonFooter,
-    IonChip
+    IonChip,
+    IonLabel
 
 } from '@ionic/vue'
 
@@ -30,6 +31,7 @@ export default {
     components: {
             // IonButton,
             IonChip,
+            IonLabel
             // IonIcon,
             // IonToolbar,
             // IonFooter,

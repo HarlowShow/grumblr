@@ -236,6 +236,12 @@ p {
     font-size: 1.5rem;
 }
 
+@media(max-width: 576px) {
+         .snippet {
+             font-size: 1rem;
+         }
+}
+
 .angry {
     animation: angry-a 8s;
     /* color: var(--ion-color-angry); */

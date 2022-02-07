@@ -2,11 +2,19 @@
     <div 
     :class="gridClass"
     class="grid">
-        <div class="avatar start-bubble"> 
+        <div class="avatar start-bubble">
+            <div class="inner-bubble"
+            :class="{ response: responseClass}"
+            >
             <slot name="start"></slot>
+            </div>
         </div>
          <div class="end-bubble"> 
+            <div class="inner-bubble"
+            :class="{ response: responseClass}"
+            >
             <slot name="end"></slot>
+            </div>
         </div>
         <div class="responses">
             <slot name="responses"></slot>
@@ -16,7 +24,7 @@
 
 <script>
 export default {
-    props: ['gridClass']
+    props: ['gridClass', 'responseClass']
 }
 </script>
 
@@ -26,8 +34,7 @@ export default {
        
         grid-template-rows: auto;
         grid-column-gap: 1rem;
-        margin-bottom: 1rem;
-        
+        margin-bottom: 0.5rem;
     }
 
     .left {
@@ -39,19 +46,48 @@ export default {
     }
 
     .left .end-bubble {
-        background-color: rgb(218, 218, 218);
+        /* background-color: rgb(218, 218, 218);
         border-radius: 20px;
-        padding: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem; */
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    /* .left .avatar .inner-bubble{
+        background-color: red;
+    } */
+
+    .left .end-bubble .inner-bubble {
+        background-color: rgb(219, 219, 219);
+        border-radius: 20px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .right .start-bubble .inner-bubble {
+        background-color: rgb(219, 219, 219);
+        border-radius: 20px;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     .right .start-bubble {
-        background-color: rgb(218, 218, 218);
+        /* background-color: rgb(218, 218, 218);
         border-radius: 20px;
-        padding: 1rem;
+        padding-left: 1rem;
+        padding-right: 1rem; */
+        display: flex;
+        justify-content: flex-end;
     }
 
     .avatar {
         align-self: end;
+    }
+
+    .avatar.start-bubble {
+        display: flex;
+        justify-content: flex-end;
     }
 
     .responses {
