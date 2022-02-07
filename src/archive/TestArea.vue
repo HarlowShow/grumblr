@@ -32,7 +32,7 @@
 <script>
 
 import { IonButton } from '@ionic/vue';
-import TypewriterText from './TypewriterText.vue'
+import TypewriterText from '../sections/TypewriterText.vue'
 
 export default {
 

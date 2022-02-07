@@ -1,53 +1,36 @@
 <template>
 
-<area-title :title="'Oh dear. What did they do?'"
-:progress="0.75">
- <ion-icon @click="goBack" :icon="arrowBackOutline" ></ion-icon>
-</area-title>
+        <div class="options">
 
- <div class="button-area">
+        <ion-chip
+        color="success"
+        @click="[selected='dishes', , gripeIsCustom='false', activate(this.selected)]">
+            <ion-icon :icon="water"></ion-icon>
+        <ion-label>didn't do the washing up</ion-label>
+        </ion-chip>
 
-        <ion-button 
-        ion-activatable
-        @click="[activeBtn='one', selected='dishes', gripeIsCustom='false']"
-        class="btn-onboarding" :class="{ active: activeBtn === 'one' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="water"></ion-icon>Dishes in the sink
-        </ion-button>
+          <ion-chip
+        color="success"
+        @click="[selected='noise', , gripeIsCustom='false', activate(this.selected)]">
+            <ion-icon :icon="musicalNotes"></ion-icon>
+        <ion-label>unecessarily noisy</ion-label>
+        </ion-chip>
 
-        <ion-button 
-        ion-activatable
-        @click="[activeBtn='two', selected='noise', gripeIsCustom='false']"
-        class="btn-onboarding" :class="{ active: activeBtn === 'two' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="musicalNotes"></ion-icon>Unreasonable noise
-        </ion-button>
+        <ion-chip
+        color="success"
+        @click="[selected='rubbish', , gripeIsCustom='false', activate(this.selected)]">
+            <ion-icon :icon="trash"></ion-icon>
+        <ion-label>not taking the rubbish out</ion-label>
+        </ion-chip>
 
-        <ion-button 
-        ion-activatable
-        @click="[activeBtn='three', selected='rubbish', gripeIsCustom='false']"
-        class="btn-onboarding" :class="{ active: activeBtn === 'three' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="trash"></ion-icon>Not taking the rubbish out
-        </ion-button>
+        <ion-chip
+        color="success"
+        @click="[selected='other', , gripeIsCustom='true', activate(this.selected)]">
+            <ion-icon :icon="addCircle"></ion-icon>
+        <ion-label>something else</ion-label>
+        </ion-chip>
 
-         <ion-button 
-        ion-activatable
-        @click="[activeBtn='four', selected='other', gripeIsCustom='true']"
-        class="btn-onboarding" :class="{ active: activeBtn === 'four' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="addCircle"></ion-icon>Other
-        </ion-button>
-
-</div>
-
-<!-- <ion-input 
-        v-if="gripeIsCustom===true"
-        type="text"
-        placeholder="they..."
-        @ionChange="customGripe=$event.target.value"
-        ></ion-input>
-        <span v-if="gripeIsCustom===true">.</span> -->
+        </div>
 
 
         <div v-if="gripeIsCustom===true">
@@ -75,9 +58,7 @@
         </div>
         <p v-if="invalidInput===true">Please enter a valid option</p>
           
-
-
-              <ion-button id="desktop"
+              <!-- <ion-button id="desktop"
                     class="btn-system"
                     expand="block"
                     @click="activate(this.selected)">Confirm</ion-button>
@@ -90,7 +71,7 @@
                     expand="full"
                     @click="activate(this.selected)">Confirm</ion-button>
             </ion-toolbar>
-    </ion-footer>
+    </ion-footer> -->
 
     <!-- <div class="form-area" page-default-back-link="/home">
 
@@ -117,20 +98,20 @@
 
 <script>
 import {
-    IonButton,
+    // IonButton,
+    IonChip,
     IonItem,
     IonLabel,
     IonTextarea,
     IonIcon,
-    IonToolbar,
-    IonRippleEffect,
-    IonFooter,
+    // IonToolbar,
+    // IonFooter,
 
 } from '@ionic/vue'
 
 import { helpCircle, musicalNotes, water, trash, addCircle, arrowBackOutline  } from 'ionicons/icons';
 
-import AreaTitle from './AreaTitle.vue'
+// import AreaTitle from './AreaTitle.vue'
 
 import { ref } from 'vue'
 
@@ -138,15 +119,15 @@ import { ref } from 'vue'
 export default  {
 
     components: { 
-        IonButton,
+        // IonButton,
+        IonChip,
         IonTextarea,
-        AreaTitle,
+        // AreaTitle,
         IonIcon,
         IonItem,
         IonLabel,
-        IonToolbar,
-        IonRippleEffect,
-        IonFooter,
+        // IonToolbar,
+        // IonFooter,
     },
 
     props: {

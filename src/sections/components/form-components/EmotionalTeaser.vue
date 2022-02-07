@@ -102,7 +102,7 @@ import {
     // IonFooter,
 
 } from '@ionic/vue'
-import AreaTitle from './AreaTitle.vue'
+import AreaTitle from '../AreaTitle.vue'
 
 import      {    
             // helpCircle,

@@ -82,10 +82,10 @@
 <script>
 
 import { useStore } from 'vuex'
-import TextSnippet from './TextSnippet.vue'
-import TheSliders from './TheSliders.vue'
-import ChatBubble from './components/ChatBubble.vue'
-import TheIcons from './components/TheIcons.vue'
+import TextSnippet from '../sections/components/TextSnippet.vue'
+import TheSliders from '../sections/components/TheSliders.vue'
+import ChatBubble from '../sections/components/ChatBubble.vue'
+import TheIcons from '../sections/components/TheIcons.vue'
 // import { addCircle, removeCircle } from 'ionicons/icons'
 
 // import TextArea from './TextArea.vue';

@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 
-import HomePage from '../sections/HomePage.vue';
-import FormArea from '../sections/FormArea.vue';
-import GripeInput from '../sections/components/GripeInput.vue';
-import PlayGround from '../sections/PlayGround.vue';
+import HomePage from '../views/HomePage.vue'
+import FormArea from '../views/FormArea.vue';
+
+import PlayGround from '../views/PlayGround.vue';
 // import TheBottomMenu from '../components/base/TheBottomMenu.vue';
-import TestArea from '../sections/TestArea.vue';
-import EndPage from '../sections/EndPage.vue';
+
+import EndPage from '../views/EndPage.vue';
 // import { menuController } from '@ionic/vue';
 
 // const afterRoute = (to, from) => {
@@ -36,14 +36,7 @@ const router = createRouter({
 
       props: true
     },
-    {
-      path: '/test',
-      component: TestArea,
-    },
-    {
-      path: '/home/gripe',
-      component: GripeInput
-    },
+  
     { path: '/playground',
       component: PlayGround,
     },

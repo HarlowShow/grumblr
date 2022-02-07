@@ -72,7 +72,7 @@
       //  IonMenuToggle
   } from '@ionic/vue';
 
-  import TheIcons from './components/TheIcons.vue'
+  import TheIcons from '../sections/components/TheIcons.vue'
   // import TheSliders from './TheSliders.vue'
 
   import { heart, logoFacebook, logoTwitter, logoReddit, logoWhatsapp } from 'ionicons/icons';

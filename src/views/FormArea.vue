@@ -23,7 +23,7 @@
             <chat-bubble 
              :gridClass="'right'"
              :responseClass="true"
-             v-if="this.formPosition>0">
+             v-if="this.formPosition>0&&this.testMode===false">
                 <template v-slot:start>
                     <p> {{ pronounResponse }}</p>
                 </template>
@@ -52,7 +52,7 @@
 
              <chat-bubble 
              :gridClass="'right'"
-             v-if="this.formPosition>1">
+             v-if="this.formPosition>1&&this.testMode===false">
                 <template v-slot:start>
                     <p>{{ personmateResponse }}</p>
                 </template>
@@ -81,7 +81,7 @@
 
              <chat-bubble 
              :gridClass="'right'"
-             v-if="this.formPosition>1">
+             v-if="this.formPosition>1&&this.testMode===false">
                 <template v-slot:start>
                     <p>{{ personmateResponse }}</p>
                 </template>
@@ -169,15 +169,15 @@
     // import PersonmateInput from './components/PersonmateInput.vue';
     // import GripeInput from './components/GripeInput.vue';
     // import PronounInput from './components/PronounInput.vue';
-    import SetPronouns from './components/SetPronouns.vue'
-    import SetPersonmate from './components/SetPersonmate.vue'
-    import SetGripe from './components/SetGripe.vue'
-    import ReviewSelection from './components/ReviewSelection.vue'
-    import ConfirmSelection from './components/ConfirmSelection.vue'
+    import SetPronouns from '../sections/components/form-components/SetPronouns.vue'
+    import SetPersonmate from '../sections/components/form-components/SetPersonmate.vue'
+    import SetGripe from '../sections/components/form-components/SetGripe.vue'
+    import ReviewSelection from '../sections/components/form-components/ReviewSelection.vue'
+    import ConfirmSelection from '../sections/components/form-components/ConfirmSelection.vue'
     // import InputSummary from './components/InputSummary.vue';
-    import EmotionalTeaser from './components/EmotionalTeaser.vue';
-    import TheIcons from './components/TheIcons.vue';
-    import ChatBubble from './components/ChatBubble.vue'
+    import EmotionalTeaser from '../sections/components/form-components/EmotionalTeaser.vue';
+    import TheIcons from '../sections/components/TheIcons.vue';
+    import ChatBubble from '../sections/components/ChatBubble.vue'
 
     // import { IonMenuToggle } from '@ionic/vue'
     // import MobileFooter from '../components/base/MobileFooter.vue'
@@ -207,6 +207,8 @@
 
         data() {
             return {
+
+                testMode: true,
 
                 questions: ['So, ', 'who has a complaint?'],
                 nextQuestions: ['about your'],

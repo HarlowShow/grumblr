@@ -48,7 +48,7 @@ import {
 } from '@ionic/vue';
 
 import { person, people, arrowBackOutline } from 'ionicons/icons';
-import AreaTitle from './AreaTitle.vue'
+import AreaTitle from '../sections/components/AreaTitle.vue'
 // import MobileFooter from '../../components/base/MobileFooter.vue';
 
 export default {

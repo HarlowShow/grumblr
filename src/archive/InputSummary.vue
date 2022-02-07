@@ -59,7 +59,7 @@ import {
 
 } from '@ionic/vue'
 
-import AreaTitle from './AreaTitle.vue'
+import AreaTitle from '../sections/components/AreaTitle.vue'
 import { arrowBackOutline } from 'ionicons/icons'
 export default {
 

@@ -1,51 +1,76 @@
 <template>
 
-    <div class="options">
-        <ion-chip
-        color="success"
-        @click="[tempPersonmate='flatmate', submitPersonmate(this.tempPersonmate, this.customNamed)]"
-        >
-        <ion-icon :icon="business"></ion-icon>
-        <ion-label>a flatmate</ion-label>
-        </ion-chip>
+<area-title :title="'And who dunnit?'"
+:progress="0.5">
+        <ion-icon @click="goBack" :icon="arrowBackOutline" ></ion-icon>
+</area-title>
 
-        <ion-chip
-        color="success"
-        @click="[tempPersonmate='housemate', submitPersonmate(this.tempPersonmate, this.customNamed)]"
-        >
-        <ion-icon :icon="home"></ion-icon>
-        <ion-label>a housemate</ion-label>
-        </ion-chip>
+    <div class="button-area container">
 
-        <ion-chip
-        color="success"
-        @click="[tempPersonmate='neighbour', submitPersonmate(this.tempPersonmate, this.customNamed)]"
-        >
-        <ion-icon :icon="storefront"></ion-icon>
-        <ion-label>a neighbour</ion-label>
-        </ion-chip>
+        <ion-button 
+        ion-activatable
+        @click="[activeBtn='one', tempPersonmate='flatmate']"
+        class="btn-onboarding" :class="{ active: activeBtn === 'one' }">
+        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
+        <ion-icon slot="start" :icon="business"></ion-icon>A flatmate
+        </ion-button>
 
-        
-        <ion-chip
-        color="success"
-        @click="[tempPersonmate='landlord', submitPersonmate(this.tempPersonmate, this.customNamed)]"
-        >
-        <ion-icon :icon="hammer"></ion-icon>
-        <ion-label>a landlord</ion-label>
-        </ion-chip>
+                <ion-button 
+        ion-activatable
+        @click="[activeBtn='two', tempPersonmate='housemate']"
+        class="btn-onboarding" :class="{ active: activeBtn === 'two' }">
+        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
+        <ion-icon slot="start" :icon="home"></ion-icon>A housemate
+        </ion-button>
 
-         
-        <ion-chip
-        color="success"
-        @click="[tempPersonmate='other', submitPersonmate(this.tempPersonmate, this.customNamed)]"
-        >
-        <ion-icon :icon="man"></ion-icon>
-        <ion-label>someone else</ion-label>
-        </ion-chip>
+                <ion-button 
+        ion-activatable
+        @click="[activeBtn='three', tempPersonmate='neighbour']"
+        class="btn-onboarding" :class="{ active: activeBtn === 'three' }">
+        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
+        <ion-icon slot="start" :icon="storefront"></ion-icon>A neighbour
+        </ion-button>
 
-    </div>
+                <ion-button 
+        ion-activatable
+        @click="[activeBtn='four', tempPersonmate='landlord']"
+        class="btn-onboarding" :class="{ active: activeBtn === 'four' }">
+        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
+        <ion-icon slot="start" :icon="hammer"></ion-icon>A landlord
+        </ion-button>
+
+                <ion-button 
+        ion-activatable
+        @click="[activeBtn='five', tempPersonmate='someone else']"
+        class="btn-onboarding" :class="{ active: activeBtn === 'five' }">
+        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
+        <ion-icon slot="start" :icon="man"></ion-icon>Someone else
+        </ion-button>
+
+       <!-- <ion-select 
+        placeholder="Select One"
+        v-model="tempPersonmate"
+        @ionChange="validateLength(tempPersonmate)"
+        >
+            <ion-select-option value="flatmate">A flatmate
+            </ion-select-option>
+
+            <ion-select-option value="housemate">A housemate
+            </ion-select-option>
+
+            <ion-select-option value="neighbour">A neighbour
+            </ion-select-option>
+
+            <ion-select-option value="stinky landlord">A stinky landlord
+            </ion-select-option>
+
+            <ion-select-option value="someone else">Someone else
+            </ion-select-option>
+        </ion-select> -->
+            </div>
+
       
-    <div v-if="personmateIsCustom===true">
+        <div v-if="personmateIsCustom===true">
             <ion-label>Who was it?</ion-label>
       
             <ion-item lines="none" id="input">
@@ -64,9 +89,9 @@
             </ion-item>
               </div>
 
-    <p v-if="this.invalidInput === true">Please enter a valid option</p>
+        <p v-if="this.invalidInput === true">Please enter a valid option</p>
 
-        <!-- <div id="desktop" class="flex ion-justify-content-center">
+        <div id="desktop" class="flex ion-justify-content-center">
         <ion-button
         class="btn-system"
         expand="block"
@@ -81,7 +106,7 @@
                     expand="full"
                     @click="submitPersonmate(this.tempPersonmate, this.customNamed)">NEXT</ion-button>
             </ion-toolbar>
-    </ion-footer> -->
+    </ion-footer>
 
 </template>
 
@@ -89,21 +114,20 @@
 
 <script>
 
-// import AreaTitle from './AreaTitle.vue'
+import AreaTitle from '../sections/components/AreaTitle.vue'
 
 import {
     // IonSelect,
     // IonSelectOption,
-    // IonButton,
+    IonButton,
     IonInput,
     IonLabel,
     IonIcon,
     IonItem,
-    // IonRippleEffect,
-    // IonFooter,
-    // IonToolbar,
-    IonCheckbox,
-    IonChip,
+    IonRippleEffect,
+    IonFooter,
+    IonToolbar,
+    IonCheckbox
  
     // actionSheetController
 } from '@ionic/vue'
@@ -116,16 +140,15 @@ export default {
     components: { 
         // IonSelect,
         // IonSelectOption,
-        // IonButton,
+        IonButton,
         IonInput,
-        // AreaTitle,
+        AreaTitle,
         IonLabel,
-        IonChip,
         IonIcon,
         IonItem,
-
-        // IonFooter,
-        // IonToolbar,
+        IonRippleEffect,
+        IonFooter,
+        IonToolbar,
         IonCheckbox
     },
 
@@ -212,7 +235,7 @@ export default {
     watch: {
 
         tempPersonmate(value) {
-        if (value==="other") {
+        if (value==="someone else") {
             this.personmateIsCustom = true;
         } else {
             this.personmateIsCustom = false;
@@ -281,16 +304,6 @@ ion-toolbar {
     display: flex;
     margin-left: -2.5rem;
     margin-right: -2.5rem;
-}
-
-.options {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: space-evenly;
-}
-
-.options > ion-chip {
-    white-space: nowrap;
 }
 
 /* #arrow {
