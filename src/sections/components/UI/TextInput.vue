@@ -12,8 +12,30 @@
                 <ion-icon 
                 :icon="checkmarkCircle"
                 color="success"
-                @click="$emit('outputValue')"
-                slot="end"
+                @click="setVal(outputValue)"
+                ></ion-icon>
+    </ion-chip>
+
+
+    <ion-chip 
+            class="input"
+            color="success"
+            outline="true">
+                <ion-textarea
+                    class="input"
+                    :class="[{ hidePlaceholder : focus==='true'},{ showPlaceholder : focus==='false'}]"
+                    type="text"
+                    @ionChange="outputValue=$event.target.value"
+                    @ionFocus="focus='true'"
+                    @ionBlur="resetPlaceholders"
+                    auto-grow="true"
+                    inputmode="text"
+                    :placeholder="placeholderArray">
+                </ion-textarea>
+                <ion-icon 
+                :icon="checkmarkCircle"
+                color="success"
+                @click="setVal(outputValue)"
                 ></ion-icon>
             </ion-chip>
 </template>
@@ -22,7 +44,8 @@
 import {
     IonChip,
     IonInput,
-    IonIcon
+    IonIcon,
+    IonTextarea
 } from '@ionic/vue';
 
 import { checkmarkCircle } from 'ionicons/icons'
@@ -32,23 +55,36 @@ export default {
     components: {
         IonChip,
         IonInput,
-        IonIcon
+        IonIcon,
+        IonTextarea
     },
 
-    // props: {
+    props: {
 
-    //     personmate: {
-    //         type: String,
-    //         required: true
-    //     }
-    // },
+        placeholders: {
+            type: Array,
+            required: false
+        },
 
-    emits: ['outputValue'],
+        speeds: {
+            type: Object,
+            required: false
+        }
+    },
+
+    emits: ['update:value'],
 
     setup() {
 
         return {
             checkmarkCircle
+        }
+    },
+
+    methods: {
+
+        setVal(value) {
+             this.$emit('update:value', value)
         }
     }
 

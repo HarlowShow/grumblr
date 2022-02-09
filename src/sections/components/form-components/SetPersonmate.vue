@@ -47,7 +47,7 @@
       
     <div v-if="personmateIsCustom===true">
             <text-input
-            @update:custom="set"
+            @update:value="setCustom"
             ></text-input>
 
             <!-- <ion-label>Who was it?</ion-label> -->
@@ -189,12 +189,17 @@ export default {
 
         validateSubmission() {
             console.log("function happened")
-                if (this.personmateIsCustom === true) {
-                    this.selectedPersonmate = this.otherPersonmate;
-                } else {
-                this.selectedPersonmate = this.tempPersonmate;
+                if (this.personmateIsCustom === false) {
+                    this.selectedPersonmate = this.tempPersonmate;
                 }
                 this.validateLength(this.selectedPersonmate);
+        },
+
+        setCustom(value) {
+            this.selectedPersonmate = value;
+            console.log('custom emit is: ' + this.selectedPersonmate)
+            this.submitPersonmate(value)
+
         },
 
         submitPersonmate(personmate, custom) {

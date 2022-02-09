@@ -7,6 +7,15 @@
       <div class="content">
            <h1>Gripe Generator</h1>
           <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/input">Start</ion-button>
+          <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/testing">Test Area</ion-button>
+      </div>
+      <div>
+
+      <!-- <text-input
+      :placeholders="placeholderArray"
+      :speeds="speeds">
+
+      </text-input> -->
       </div>
 
       <div class="sharing-icons">
@@ -65,6 +74,7 @@
 
 <script>
 
+  // import TextInput from '../sections/components/UI/TextInput.vue'
   // import TheTopMenu from '../components/base/TheTopMenu.vue';
   import {
        IonButton,
@@ -82,6 +92,7 @@ export default {
       IonButton,
       IonIcon,
       TheIcons,
+      // TextInput
       // TheSliders,
       // IonMenuToggle,
       },
@@ -103,7 +114,7 @@ export default {
         angryTracker: 0,
         noActivated: false,
         start: false,
-        test: 'it be test'
+        test: 'it be test',
       }
     },
 

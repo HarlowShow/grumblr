@@ -7,6 +7,7 @@ import PlayGround from '../views/PlayGround.vue';
 // import TheBottomMenu from '../components/base/TheBottomMenu.vue';
 
 import EndPage from '../views/EndPage.vue';
+import TestingArea from '../views/TestingArea.vue'
 // import { menuController } from '@ionic/vue';
 
 // const afterRoute = (to, from) => {
@@ -39,6 +40,11 @@ const router = createRouter({
   
     { path: '/playground',
       component: PlayGround,
+    },
+
+    {
+      path: '/testing',
+      component: TestingArea
     },
 
     {

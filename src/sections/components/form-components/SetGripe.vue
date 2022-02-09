@@ -58,42 +58,6 @@
         </div>
         <p v-if="invalidInput===true">Please enter a valid option</p>
           
-              <!-- <ion-button id="desktop"
-                    class="btn-system"
-                    expand="block"
-                    @click="activate(this.selected)">Confirm</ion-button>
-            
-
-  <ion-footer class="ion-no-border" id="mobile">
-            <ion-toolbar class="ion-no-padding">
-                    <ion-button
-                    class="btn-system ion-no-margin"
-                    expand="full"
-                    @click="activate(this.selected)">Confirm</ion-button>
-            </ion-toolbar>
-    </ion-footer> -->
-
-    <!-- <div class="form-area" page-default-back-link="/home">
-
-        <ion-select v-model="selected"
-        placeholder="choose your gripe">
-            <ion-select-option @click="notCustom" value="dishes">
-                Dishes in the sink
-            </ion-select-option>
-            
-            <ion-select-option @click="notCustom" value="noise">
-                Unreasonable noise
-            </ion-select-option>
-            
-            <ion-select-option @click="notCustom" value="rubbish">
-                Not taking the rubbish out
-            </ion-select-option>
-            
-            <ion-select-option @click="setCustom" value="other">Something else</ion-select-option>
-        </ion-select>
-        
-              
-    </div> -->
 </template>
 
 <script>
