@@ -3,14 +3,16 @@ import { ref, reactive, watch, computed } from 'vue'
 export default function useTypewriter(chosenString = 'default string', chosenMode = 'static') {
         // mode - looping, segment
         const string = ref(chosenString.value)
+        const trackLimit = ref(0)
+        const mode = ref(chosenMode.value)
         const dText = ref([])
         const stringArray = ref([])
         const emote = ref(false)
         const speeds = reactive({
         pause: 500,
-        slow: 120,
-        normal: 70,
-        fast: 40
+        slow: 70,
+        normal: 40,
+        fast: 20
         })
         const status = reactive({
             pushing: false,
@@ -65,6 +67,17 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
 
        const characters = [];
 
+       const setSpeed = (() => {
+             //set speed
+             if(length.value<20) {
+                chosenSpeed.value = speeds.slow
+            } else if (length.value>=20&&length.value<50) {
+                chosenSpeed.value = speeds.normal
+            } else {
+                chosenSpeed.value = speeds.fast
+            }
+       })
+
         const addString = ((string) => {
             {
                 dText.value.push(string)
@@ -73,13 +86,19 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
         })
 
         const setString = ((string, direction) => {
+            // console.log('setting string, chosen mode is: ' + mode.value)
+
+           
+            console.log('chosen speed is: ' + chosenSpeed.value)
+
             if(direction==='push') {
                 stringArray.value=[...string]
-                console.log('stringArray is now: ' + stringArray.value)
+                setSpeed()
+                // console.log('stringArray is now: ' + stringArray.value)
                 status.pushing=true
                 startPush(string)
             } else if(direction==='pull') {
-                console.log('stringArray is now: ' + stringArray.value)
+                // console.log('stringArray is now: ' + stringArray.value)
                 status.pulling=true
                 tracking.idx=stringArray.value.length
                 startPull()
@@ -93,6 +112,12 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             //set string array val to start initial push
             if(typingControl.value==='off') {
                 setString(string, 'push')
+                console.log('string is: ' + string)
+            } else if(status.resetted===true){
+                dText.value = [];
+                tracking.optionItem = 0;
+                status.resetted = false;
+                startPush(string)
             } else {
 
             // check to see letters need pushing
@@ -101,14 +126,15 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
                 pushLetter()
                 }, chosenSpeed.value)
             // if mode is looping, assign delete string and start pulling
-            } else if (length.value===tracking.optionItem && chosenMode.value==='looping') {
+            } else if (length.value===tracking.optionItem && mode.value==='looping') {
                
                 console.log('change direction!')
+                console.log('mode is: ' + mode.value)
                 status.pushing=false
                  //do a little pause before changing
                 setTimeout(() =>{
                     setString('new string!', 'pull')
-                }, 200)
+                }, 50)
                
     
             } else {
@@ -123,11 +149,12 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             if( typingControl.value===!'on') {
                 return
             } else {
-            console.log('push letter started')
-            console.log(dText.value + 'is the dText value')
+            // console.log('push letter started')
+            // console.log(dText.value + 'is the dText value')
             dText.value.push(stringArray.value[tracking.optionItem])
             tracking.optionItem++;
-            console.log('letter pushed')
+            trackLimit.value = tracking.optionItem
+            // console.log('letter pushed')
             startPush();
             }
         })
@@ -137,7 +164,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
                 setTimeout(() =>{
                     pullLetter();
                 }, chosenSpeed.value)
-                } else if(chosenMode.value==='looping'){
+                } else if(mode.value==='looping'){
                 console.log('change direction!')
                 status.pulling=false
                  //do a little pause before changing
@@ -185,6 +212,13 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             console.log(val)
         })
 
+        watch(trackLimit, function(newVal){
+            if (newVal===length.value) {
+                status.pushing = false;
+                status.resetted = true;
+            }
+        })
+
         return {
             
             placeholderOptions,
@@ -195,15 +229,17 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             length,
             string,
             chosenSpeed,
-            chosenMode,
+            mode,
             chosenString,
             slowString,
+            trackLimit,
             displayText,
             placeholderLength,
             emote,
             status,
             tracking,
             typingControl,
+            setSpeed,
             setString,
             startPush,
             startPull,

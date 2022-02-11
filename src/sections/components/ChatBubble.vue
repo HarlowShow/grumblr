@@ -60,7 +60,7 @@ export default {
 
     .left .end-bubble .inner-bubble {
         background-color: rgb(219, 219, 219);
-        border-radius: 20px;
+        border-radius: 30px;
         padding-left: 1rem;
         padding-right: 1rem;
     }

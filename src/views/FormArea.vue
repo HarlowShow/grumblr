@@ -9,7 +9,9 @@
                     <the-icons :name="'raccoon-shifty'"></the-icons>
                 </template>
                  <template v-slot:end>
-                    <p>Pssst... hey. This is gonna feel like a real conversation when I can be bothered to write it. Now, how many of you schmuckos have a complaint today?</p>
+                   <chat-typer
+                   :chatString="this.pandaChats[0].string"
+                   ></chat-typer>
                 </template>
                 <template  v-slot:responses>
                      <set-pronouns
@@ -23,9 +25,11 @@
             <chat-bubble 
              :gridClass="'right'"
              :responseClass="true"
-             v-if="this.formPosition>0&&this.testMode===false">
+             v-if="this.formPosition>0">
                 <template v-slot:start>
-                    <p> {{ pronounResponse }}</p>
+                    <chat-typer
+                   :chatString="this.demoPronoun"
+                   ></chat-typer>
                 </template>
                  <template v-slot:end>
                       <the-icons :name="'user'"></the-icons>
@@ -39,7 +43,9 @@
                     <the-icons :name="'raccoon-shifty'"></the-icons>
                     </template>
                     <template v-slot:end>
-                        <p>I see. Who did this then?</p>
+                       <chat-typer
+                        :chatString="this.pandaChats[0].stringTwo"
+                        ></chat-typer>
                     </template>
                       <template  v-slot:responses>
                     <set-personmate
@@ -54,7 +60,7 @@
              :gridClass="'right'"
              v-if="this.formPosition>1&&this.testMode===false">
                 <template v-slot:start>
-                    <p>{{ personmateResponse }}</p>
+                    <p>{{ pronounResponse }}</p>
                 </template>
                  <template v-slot:end>
                       <the-icons :name="'user'"></the-icons>
@@ -166,9 +172,6 @@
 
 <script>
 
-    // import PersonmateInput from './components/PersonmateInput.vue';
-    // import GripeInput from './components/GripeInput.vue';
-    // import PronounInput from './components/PronounInput.vue';
     import SetPronouns from '../sections/components/form-components/SetPronouns.vue'
     import SetPersonmate from '../sections/components/form-components/SetPersonmate.vue'
     import SetGripe from '../sections/components/form-components/SetGripe.vue'
@@ -178,6 +181,12 @@
     import EmotionalTeaser from '../sections/components/form-components/EmotionalTeaser.vue';
     import TheIcons from '../sections/components/TheIcons.vue';
     import ChatBubble from '../sections/components/ChatBubble.vue'
+    import ChatTyper from '../sections/components/ChatTyper.vue'
+
+
+    import speakTrashPanda from '../composables/trashpandachat'
+    import usePronouns from '../composables/pronouns'
+
 
     // import { IonMenuToggle } from '@ionic/vue'
     // import MobileFooter from '../components/base/MobileFooter.vue'
@@ -186,10 +195,7 @@
     export default {
 
         components: {
-            // PersonmateInput,
-            // GripeInput,
-            // PronounInput,
-            // InputSummary,
+            ChatTyper,
             EmotionalTeaser,
             TheIcons,
             ChatBubble,
@@ -198,11 +204,28 @@
             SetGripe,
             ReviewSelection,
             ConfirmSelection
-            // IonMenuToggle
-            // IonFooter,
-            // IonToolbar
-            // MobileFooter
-            // FormSummary
+        },
+
+        setup() {
+            
+            const pandaChat = speakTrashPanda()
+            const pandaChats = pandaChat.chats.value
+         
+            const pronouns = usePronouns()
+
+
+            return {
+                pandaChat,
+                pandaChats,
+
+                pronouns,
+                setPronouns: pronouns.setPronouns,
+                demoPronoun: pronouns.demoPronoun,
+            }
+        },
+
+        mounted(){
+            console.log(this.pandaChats[0]);
         },
 
         data() {
@@ -436,127 +459,30 @@
 
         methods: {
 
-            animateOne() {
-
-                this.pronounSet = ! this.pronounSet
-                this.isInline = !this.isInline
-                this.questions.pop()
-                
-                    // setTimeout(()=> {
-                    this.questions.push("have a complaint.")
-                    this.questions[0]='   '
-                    // }, 30);
-
-                    setTimeout(()=> {
-                    this.questions.unshift(this.samplePronoun)
-                    }, 50);
-
-                    this.questions.shift();   
-                
-
-               
-                this.runOne = true;
-            },
-
-            animateTwo() {
-                this.questions.pop()
-                this.questions.push("have a complaint")
-            
-           
-                this.nextQuestions.push(this.samplePersonmate)
-                this.arr=this.questions.concat(this.nextQuestions)
-                console.log(this.arr)
-
-                this.runTwo = true;
-
-            },
-
-            animateThree() {
-
-                const newString = this.samplePersonmate.slice(0, -1)
-                this.nextQuestions.pop()
-                this.nextQuestions.push(newString)
-                this.thirdQuestions.push(this.chosen.demoGripe)
-            },
-
             getPronoun(pronoun) {
                 this.chosen.chosenPronoun = pronoun;
                 this.formPosition++;
-                this.pronounSet = !this.pronounSet
 
                 if(this.chosen.chosenPronoun==="me") {
                     this.samplePronoun = "You"
+                    this.demoPronoun = 'Just me'
                 }
                 if (this.chosen.chosenPronoun==="we") {
                     this.samplePronoun = "Several of you"
+                    this.demoPronoun = 'Several of us'
                 }
-                this.animateOne()
+               
             },
             getPersonmate(personmate) {
                 this.chosen.chosenPersonmate = personmate;
                 this.samplePersonmate = personmate + '.'
                 this.formPosition++;
-                this.animateTwo()
+        
             },
             getGripe(gripe) {
                 this.chosen.chosenGripe = gripe;
                 this.gripeChange=!this.gripeChange;
                 this.formPosition++;
-                
-            },
-            setPronouns() {
-                if(this.chosen.chosenPronoun === "me") {
-
-                this.$store.state.chosenPronouns = {
-                subjectP: "I",
-                subjectPCap: "I",
-                objectP: "me",
-                objectPCap: "Me",
-                posessiveDeterminerP: "my",
-                posessiveDeterminerPCap: "My",
-                possessiveP: "mine",
-                possessivePCap: "Mine",
-                reflexiveP: "myself", 
-                reflexivePCap: "Myself", 
-                toBePresent: "am",
-                toBePast: "was",
-                toBeContracted: "I'm",
-                toBeContractedCap: "I'm",
-                toBePastContracted: "I've",
-                toBePastContractedCap: "I've",
-                pirateTitle: "this old cap'n",
-                pirateTitleCap: "This old cap'n"
-
-               
-                };
-               
-                    } else if (this.chosen.chosenPronoun === "we") {
-                
-                this.$store.state.chosenPronouns = {
-                subjectP: "we",
-                subjectPCap: "We",
-                objectP: "us",
-                objectPCap: "Us",
-                posessiveDeterminerP: "our",
-                posessiveDeterminerPCap: "Our",
-                possessiveP: "ours",
-                possessivePCap: "Ours",
-                reflexiveP: "ourselves",
-                reflexivePCap: "Ourselves",
-                toBePresent: "are",
-                toBePast: "were",
-                toBeContracted: "we're",
-                toBeContractedCap: "We're",
-                toBePastContracted: "we've",
-                toBePastContractedCap: "We've",
-                pirateTitle: "these fine crewmates",
-                pirateTitleCap: "These fine crewmates"
-                };
-           
-            } else {
-                console.log("no pronouns chosen");
-                }
-                console.log("sample pronoun is" + this.samplePronoun)
                 
             },
 
@@ -594,7 +520,7 @@
                     this.chosen.demoGripe = chosenGripe + '. ';
                 }
                  this.output.of0 = this.chosen.chosenOffense;
-                 this.animateThree()
+              
             },
 
             setConsequence(consequence) {
@@ -621,7 +547,7 @@
             generateGripe() {
                 this.tempChosen = this.chosen;
                 console.log(this.tempChosen)
-                this.setPronouns();
+                this.setPronouns(this.chosenPronoun);
                 this.setTempOpen(this.tempOpens);
                 this.setGripe(this.chosen.chosenGripe);
                 this.setConsequence(this.consequences);

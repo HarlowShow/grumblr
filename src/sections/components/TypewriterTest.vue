@@ -1,4 +1,11 @@
 <template>
+    <chat-typer
+    v-for="(chat, index) in chats"
+    :key="index"
+    :propIdx="index"
+    :pandaString="chat.string"
+    >
+    </chat-typer>
     <p>here we go</p>
     <ion-segment
     v-model="active">
@@ -20,13 +27,14 @@
         <p>speeds: {{ speeds }}</p>
         <p>speeds: {{ slowString }}</p>
         <p>length: {{ length }}</p>
+        <p> status: {{ status}} </p>
         <p>status: {{ typingControl }}</p>
         <p>tracking: {{ tracking }}</p>
         <p v-if="emote===true">😱</p>
           <ion-button @click="startPush('hey stringy', 'looping')">Add String</ion-button>
+            <ion-button @click="[startPush(currentString), nextChat()]">Talk Panda</ion-button>
           <!-- <ion-button @click="runStuff">test stuff</ion-button> -->
     </div>
-
 
 
 
@@ -125,6 +133,9 @@ import {
 } from '@ionic/vue'
 
 import useTypewriter from '../../composables/typewriter'
+import speakTrashPanda from '../../composables/trashpandachat'
+import ChatTyper from './ChatTyper.vue'
+
 import { ref } from 'vue'
 
 export default {
@@ -133,12 +144,20 @@ export default {
 
     setup() {
         const chosenString = ref('default string!')
-        const chosenMode = ref('looping')
+        const chosenMode = ref('static')
         const typewriterEl = useTypewriter(chosenString, chosenMode)
+      
+        const trashpandaChat = speakTrashPanda()
 
         console.log(typewriterEl)
 
         return {
+            trashpandaChat,
+            nextChat: trashpandaChat.nextChat,
+            chatLength: trashpandaChat.chatLength,
+            currentString: trashpandaChat.currentString,
+            chats: trashpandaChat.chats,
+
             typewriterEl,
             chosenMode: chosenMode.value,
             chosenString: chosenString.value,
@@ -151,7 +170,6 @@ export default {
             length: typewriterEl.length,
             placeholderOptions: typewriterEl.placeholderOptions,
             characters: typewriterEl.characters,
-            idx: typewriterEl.idx,
             chosenSpeed: ref(500),
             placeholderLength: typewriterEl.placeholderLength,
             status: typewriterEl.status,
@@ -170,7 +188,7 @@ export default {
 
     methods: {
         tryThis() {
-            console.log(useTypewriter)
+            console.log(this.currentString)
         }
     },
     // setup() {
@@ -218,7 +236,8 @@ export default {
         IonCard,
         IonCardHeader,
         IonChip,
-        IonButton
+        IonButton,
+        ChatTyper
     },
 
     data() {
