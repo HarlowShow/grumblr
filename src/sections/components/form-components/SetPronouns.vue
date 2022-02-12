@@ -18,26 +18,9 @@
 
 
     </div>
-<!-- <div class="button-area container flex">
-
-    <ion-button 
-    ion-activatable
-    @click="[activeBtn='one', selectedPronoun='me']"
-    class="btn-onboarding" :class="{ active: activeBtn === 'one' }">
-    <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-    <ion-icon slot="start" :icon="person"></ion-icon>Just me
-    </ion-button>
-
-    <ion-button 
-     @click="[activeBtn='two', selectedPronoun='we']"
-    class="btn-onboarding" :class="{ active: activeBtn === 'two' }">
-     <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-    <ion-icon slot="start" :icon="people"></ion-icon>Several of us
-    </ion-button>
-</div> -->
 
 <p v-if="invalidInput">Please select an option</p>
-
+<!-- 
 <div class="flex ion-justify-content-center">
  <ion-button id="desktop" class="btn-system" expand="block" @click="submitPronoun(selectedPronoun)">NEXT</ion-button>
 </div>
@@ -46,7 +29,7 @@
             <ion-toolbar class="ion-no-padding">
                  <ion-button class="btn-system ion-no-margin" expand="full" @click="submitPronoun(selectedPronoun)">NEXT</ion-button>
             </ion-toolbar>
-    </ion-footer>
+    </ion-footer> -->
 
 
 </template>
@@ -54,11 +37,10 @@
 
 <script>
 import {
-    IonButton,
+ 
     IonIcon,
     // IonRippleEffect,
-    IonFooter,
-    IonToolbar,
+
     IonChip,
     IonLabel
 } from '@ionic/vue';
@@ -76,11 +58,11 @@ export default {
     },
 
     components: {
-        IonButton,
+        // IonButton,
         IonIcon,
         // IonRippleEffect,
-        IonFooter,
-        IonToolbar,
+        // IonFooter,
+        // IonToolbar,
         IonChip,
         IonLabel
         // MobileFooter,

@@ -1,6 +1,10 @@
 <template>
         <slot></slot>
-        <p>{{ displayText }}</p>
+        <div 
+        class="typechat"
+        @click="finishTyping">  
+        <p>{{ displayText }}</p></div>
+      
 </template>
 
 <script>
@@ -18,22 +22,19 @@ export default {
        chatString: {
            type: String,
            required: true,
+       },
+
+       mode: {
+           type: String,
+           required: false,
        }
    },
 
     setup(props) {
     
         const chosenString = ref(props.chatString)
-        const chosenMode = ref('static')
+        const chosenMode = ref(props.mode)
         const typewriterEl = useTypewriter(chosenString, chosenMode)
-        // const trashpandaChat = speakTrashPanda(startingIdx)
-
-
-        // const allChats = trashpandaChat.chats
-        // console.log(allChats)
-        // console.log(allChats.value)
-        // const chosenChat = allChats.value.find(obj => obj.idx === startingIdx.value)
-        // console.log('chosen chat is: ' + chosenChat)
 
         console.log(typewriterEl)
 
@@ -70,6 +71,7 @@ export default {
             startPush: typewriterEl.startPush,
             pushLetter: typewriterEl.pushLetter,
             pullLetter: typewriterEl.pullLetter,
+            finishTyping: typewriterEl.finishTyping,
             
             doNext: typewriterEl.doNext,
             resetPlaceholders: typewriterEl.resetPlaceholders,
@@ -79,7 +81,14 @@ export default {
 
     mounted(){
         this.startPush(this.chosenString)
-    }
+    },
 
 }
 </script>
+
+<style scoped>
+.typechat  {
+    height: 100%;
+    width: 100%;
+}
+</style>

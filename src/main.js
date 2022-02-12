@@ -41,7 +41,8 @@ const store = createStore({
       add: 0,
       sub: 0,
       oldAdd: 0,
-      oldSub: 0
+      oldSub: 0,
+      starterTones: [],
     };
   },
 });

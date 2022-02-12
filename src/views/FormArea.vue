@@ -1,10 +1,11 @@
 <template>
     <base-layout page-title="Gripe Deets">
 
-        <div class="chat">
 
-             <chat-bubble
-             :gridClass="'left'">
+        <div class="chat">
+            <!-- enter pronoun -->
+            <chat-bubble
+            :gridClass="'left'">
                  <template v-slot:start>
                     <the-icons :name="'raccoon-shifty'"></the-icons>
                 </template>
@@ -27,9 +28,7 @@
              :responseClass="true"
              v-if="this.formPosition>0">
                 <template v-slot:start>
-                    <chat-typer
-                   :chatString="this.demoPronoun"
-                   ></chat-typer>
+                    <p> {{ demoPronoun }}</p>
                 </template>
                  <template v-slot:end>
                       <the-icons :name="'user'"></the-icons>
@@ -58,9 +57,9 @@
 
              <chat-bubble 
              :gridClass="'right'"
-             v-if="this.formPosition>1&&this.testMode===false">
+             v-if="this.formPosition>1">
                 <template v-slot:start>
-                    <p>{{ pronounResponse }}</p>
+                    <p>{{  this.chosen.chosenPersonmate }}</p>
                 </template>
                  <template v-slot:end>
                       <the-icons :name="'user'"></the-icons>
@@ -75,7 +74,9 @@
                     <the-icons :name="'raccoon-disappointed'"></the-icons>
                     </template>
                     <template v-slot:end>
-                        <p>Aw naw mate. What did this bugger do then?</p>
+                          <chat-typer
+                        :chatString="this.pandaChats[2].string"
+                        ></chat-typer>
                     </template>
                       <template  v-slot:responses>
                           <set-gripe
@@ -87,15 +88,50 @@
 
              <chat-bubble 
              :gridClass="'right'"
-             v-if="this.formPosition>1&&this.testMode===false">
+             v-if="this.formPosition>2">
                 <template v-slot:start>
-                    <p>{{ personmateResponse }}</p>
+                    <p>{{ this.chosen.demoGripe }}</p>
                 </template>
                  <template v-slot:end>
                       <the-icons :name="'user'"></the-icons>
                 </template>
             </chat-bubble>
 
+             <chat-bubble :gridClass="'left'"
+             v-if="this.formPosition>2"
+             >
+                    <template v-slot:start>
+                    <the-icons :name="'raccoon-disappointed'"></the-icons>
+                    </template>
+                    <template v-slot:end>
+                        <div>
+                        <chat-typer
+                        :chatString="this.pandaChats[3].string"
+                        ></chat-typer>
+                        </div>
+                    </template>
+                       <template  v-slot:responses>
+                    <emotional-teaser
+                        :step="1"
+                        @update:starters="getStarterTones"
+                        v-if="this.formPosition >2">  
+                    </emotional-teaser>
+                </template>
+                </chat-bubble>
+
+                 <chat-bubble 
+                :gridClass="'right'"
+                v-if="this.formPosition>2">
+                <template v-slot:start>
+                    <p>{{ this.chosen.demoGripe }}</p>
+                </template>
+                 <template v-slot:end>
+                      <the-icons :name="'user'"></the-icons>
+                </template>
+                </chat-bubble>
+
+
+<!-- 
               <chat-bubble :gridClass="'left'"
              v-if="this.formPosition>2"
              >
@@ -103,11 +139,15 @@
                     <the-icons :name="'raccoon-disappointed'"></the-icons>
                     </template>
                     <template v-slot:end>
-                       <p>Oh deary me.</p>
-                    <review-selection
-                     :tempSelection="tempChosen"
-                     >
-                    </review-selection>
+                        <div>
+                       <chat-typer
+                        :chatString="'Oh deary me'"
+                        ></chat-typer>
+                        <review-selection
+                        :tempSelection="tempChosen"
+                        >
+                        </review-selection>
+                        </div>
                     </template>
                        <template  v-slot:responses>
                     <confirm-selection
@@ -115,55 +155,11 @@
                     ></confirm-selection>
                 </template>
                 </chat-bubble>
-             
+              -->
         </div>
 
-        <!-- <pronoun-input
-        @update:pronoun="getPronoun"
-        v-if="this.formPosition === 0">
-        </pronoun-input> -->
 
-        <!-- <personmate-input
-     
-        @update:personmate="getPersonmate"
-        @backClick="prevForm"
-        v-if="this.formPosition === 1"
-        ></personmate-input> -->
-
-        <!-- <gripe-input 
-        @update:gripe="getGripe"
-        @backClick="prevForm"
-        v-if="this.formPosition === 2">
-        </gripe-input> -->
-
-        <!-- <input-summary
-        @backClick="prevForm"
-        v-if="this.formPosition === 3"
-        :tempSelection="tempChosen"
-        >
-        </input-summary> -->
-
-        <emotional-teaser
-        @backClick="prevForm"
-        v-if="this.formPosition === 4"
-        >  
-        </emotional-teaser>
-
-    <!-- <template v-slot:footer>
-        <div id="footer-bg">
-            <p>example :)</p>
-        </div>
-    </template> -->
-
-<!-- <mobile-footer :content="'five'"></mobile-footer> -->
-
-      <!-- <ion-footer class="ion-no-border">
-    <ion-toolbar>
-
-        <ion-button>footer button</ion-button>
-      
-      </ion-toolbar>
-  </ion-footer> -->
+       
 
     </base-layout>
 
@@ -175,8 +171,8 @@
     import SetPronouns from '../sections/components/form-components/SetPronouns.vue'
     import SetPersonmate from '../sections/components/form-components/SetPersonmate.vue'
     import SetGripe from '../sections/components/form-components/SetGripe.vue'
-    import ReviewSelection from '../sections/components/form-components/ReviewSelection.vue'
-    import ConfirmSelection from '../sections/components/form-components/ConfirmSelection.vue'
+    // import ReviewSelection from '../sections/components/form-components/ReviewSelection.vue'
+    // import ConfirmSelection from '../sections/components/form-components/ConfirmSelection.vue'
     // import InputSummary from './components/InputSummary.vue';
     import EmotionalTeaser from '../sections/components/form-components/EmotionalTeaser.vue';
     import TheIcons from '../sections/components/TheIcons.vue';
@@ -186,11 +182,6 @@
 
     import speakTrashPanda from '../composables/trashpandachat'
     import usePronouns from '../composables/pronouns'
-
-
-    // import { IonMenuToggle } from '@ionic/vue'
-    // import MobileFooter from '../components/base/MobileFooter.vue'
-    // import FormSummary from './components/FormSummary.vue'   
 
     export default {
 
@@ -202,8 +193,8 @@
             SetPronouns,
             SetPersonmate,
             SetGripe,
-            ReviewSelection,
-            ConfirmSelection
+            // ReviewSelection,
+            // ConfirmSelection
         },
 
         setup() {
@@ -220,7 +211,6 @@
 
                 pronouns,
                 setPronouns: pronouns.setPronouns,
-                demoPronoun: pronouns.demoPronoun,
             }
         },
 
@@ -232,11 +222,6 @@
             return {
 
                 testMode: true,
-
-                questions: ['So, ', 'who has a complaint?'],
-                nextQuestions: ['about your'],
-                thirdQuestions: ['because they'],
-                test: false,
                 
                 arr: [],
                 runOne: false,
@@ -249,38 +234,6 @@
            
                 formPosition: 0,
                 gripeChange: false,
-
-                    personmates: [ 
-                { 
-                    id: 0,
-                    text: "a flatmate",
-                    value: "flatmate"
-                },
-                    
-                { 
-                    id: 1,
-                    text: "a housemate",
-                    value: "housemate"
-                },
-
-                { 
-                    id: 3,
-                    text: "a neighbour",
-                    value: "neighbour"
-                },
-
-                                { 
-                    id: 4,
-                    text: "a stinky landlord",
-                    value: "stinky landlord"
-                },
-
-                { 
-                    id: 5,
-                    text: "someone else",
-                    value: "other"
-                },
-            ],
             
 
                     offenses: [
@@ -486,6 +439,12 @@
                 
             },
 
+            getStarterTones(tone) {
+                this.$store.state.starterTones.push(tone)
+                console.log(this.$store.state.starterTones)
+                this.formPosition++;
+            },
+
             setTempOpen(array) {
                 this.randomize(array);
                 this.chosen.chosenTempOpen = array[0];
@@ -547,7 +506,7 @@
             generateGripe() {
                 this.tempChosen = this.chosen;
                 console.log(this.tempChosen)
-                this.setPronouns(this.chosenPronoun);
+                this.setPronouns(this.chosen.chosenPronoun);
                 this.setTempOpen(this.tempOpens);
                 this.setGripe(this.chosen.chosenGripe);
                 this.setConsequence(this.consequences);

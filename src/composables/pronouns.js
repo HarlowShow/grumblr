@@ -1,12 +1,13 @@
 import { ref } from 'vue'
 
-export default function usePronouns(selectedPronoun = 'error'){
+export default function usePronouns(){
 
 
-    const pronoun = ref(selectedPronoun)
+    const pronoun = ref('')
   
 
     const setPronouns = function(pronoun) {
+        console.log('set pronoun function happening with pronoun: ' + pronoun)
         if(pronoun === "me") {
 
         this.$store.state.chosenPronouns = {

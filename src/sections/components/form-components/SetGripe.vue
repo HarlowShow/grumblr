@@ -25,7 +25,7 @@
 
         <ion-chip
         color="success"
-        @click="[selected='other', , gripeIsCustom='true', activate(this.selected)]">
+        @click="[selected='other', , gripeIsCustom='true']">
             <ion-icon :icon="addCircle"></ion-icon>
         <ion-label>something else</ion-label>
         </ion-chip>
@@ -36,9 +36,15 @@
         <div v-if="gripeIsCustom===true">
 
             <ion-label>What did they do?</ion-label>
-      
+
+            
             <ion-item lines="none">
-                <span class="pretext">they...</span>
+         
+                <div class="first">
+                <p 
+                class="pretext">They...</p>
+                </div>
+                <div class="second">
             <ion-textarea 
             class="input"
             :class="[{ hidePlaceholder : focus==='true'},{ showPlaceholder : focus==='false'}]"
@@ -50,7 +56,19 @@
             inputmode="text"
             :placeholder="placeholderArray"
             >
+               
             </ion-textarea>
+            </div>
+            
+                <div class="third">
+                <ion-icon 
+               
+                :icon="checkmarkCircle"
+                color="success"
+                @click="activate(this.selected)"
+                ></ion-icon>
+            
+            </div>
               </ion-item>
 
               <ion-label class="sublabel">*for best results, keep your description simple and avoid unnecessary punctuation, e.g. "had sex on the sofa", "kicked a baby", "ignored the mould problem".
@@ -73,7 +91,7 @@ import {
 
 } from '@ionic/vue'
 
-import { helpCircle, musicalNotes, water, trash, addCircle, arrowBackOutline  } from 'ionicons/icons';
+import { helpCircle, musicalNotes, water, trash, addCircle, arrowBackOutline, checkmarkCircle  } from 'ionicons/icons';
 
 // import AreaTitle from './AreaTitle.vue'
 
@@ -134,7 +152,8 @@ export default  {
             characters,
             idx,
             displayText,
-            arrowBackOutline
+            arrowBackOutline,
+            checkmarkCircle
         }
     },
 
@@ -345,10 +364,18 @@ ion-icon {
     } */
 
     ion-item {
-         border: 3px solid black;
-        border-radius: 0.25rem;
-        --padding-start: 10px !important;
-        overflow: visible;
+        --border-radius: 40px;
+        --background: rgb(238,249,242);
+        align-items: center;
+    
+    }
+
+    ion-textarea {
+        --padding-top: 21px;
+    }
+
+    .second {
+        width: 100%
     }
 
 .hidePlaceholder {
@@ -360,8 +387,8 @@ ion-icon {
 }
 
 .pretext {
-    padding-top: 1rem;
-    padding-right: 0.2rem;
+   font-size: 1rem;
+   text-align: end;
 }
 
 ion-toolbar {

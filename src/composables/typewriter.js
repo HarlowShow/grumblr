@@ -10,9 +10,9 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
         const emote = ref(false)
         const speeds = reactive({
         pause: 500,
-        slow: 70,
-        normal: 40,
-        fast: 20
+        slow: 60,
+        normal: 30,
+        fast: 15
         })
         const status = reactive({
             pushing: false,
@@ -21,6 +21,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             startedPulling: false,
             resetted: false,
             focus: false,
+            autocomplete: false,
         })
         const tracking = reactive({
             optionItem: 0,
@@ -88,7 +89,11 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
         const setString = ((string, direction) => {
             // console.log('setting string, chosen mode is: ' + mode.value)
 
-           
+            if(status.autocomplete===true) {
+                status.resetted=true
+                return;
+            }
+
             console.log('chosen speed is: ' + chosenSpeed.value)
 
             if(direction==='push') {
@@ -109,6 +114,11 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
 
         const startPush = ((string) => {
 
+            if(status.autocomplete===true) {
+                status.resetted=true
+                return;
+            }
+
             //set string array val to start initial push
             if(typingControl.value==='off') {
                 setString(string, 'push')
@@ -117,6 +127,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
                 dText.value = [];
                 tracking.optionItem = 0;
                 status.resetted = false;
+                status.autocomplete = false;
                 startPush(string)
             } else {
 
@@ -146,6 +157,10 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
         const pushLetter = (() => {
 
             //check to see if letters need pulling
+            if(status.autocomplete===true) {
+                status.resetted=true
+                return;
+            }
             if( typingControl.value===!'on') {
                 return
             } else {
@@ -182,6 +197,15 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             tracking.optionItem--
             startPull(string)
             })
+
+        const finishTyping = (() => {
+           
+            status.pushing=false;
+            status.pulling=false;
+            status.autocomplete=true;
+            dText.value = []
+            dText.value.push(string.value)
+        })
 
         const doNext = (()=> {
             if(tracking.idx<placeholderLength.value-1) {
@@ -247,6 +271,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             pullLetter,
             addString,
             doNext,
-            resetPlaceholders
+            resetPlaceholders,
+            finishTyping
         };
     }

@@ -5,7 +5,6 @@
         min="0"
         max="9"
         step="1"
-        debounce="100"
         @ionChange="rangeChange($event)">
 
          <ion-icon 

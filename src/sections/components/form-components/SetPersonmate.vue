@@ -3,7 +3,7 @@
     <div class="options">
         <ion-chip
         color="success"
-        @click="[tempPersonmate='flatmate', submitPersonmate(this.tempPersonmate, this.customNamed)]"
+        @click="[tempPersonmate='flatmate', validateSubmission()]"
         >
         <ion-icon :icon="business"></ion-icon>
         <ion-label>a flatmate</ion-label>
@@ -11,7 +11,7 @@
 
         <ion-chip
         color="success"
-        @click="[tempPersonmate='housemate', submitPersonmate(this.tempPersonmate, this.customNamed)]"
+        @click="[tempPersonmate='housemate', validateSubmission()]"
         >
         <ion-icon :icon="home"></ion-icon>
         <ion-label>a housemate</ion-label>
@@ -19,7 +19,7 @@
 
         <ion-chip
         color="success"
-        @click="[tempPersonmate='neighbour', submitPersonmate(this.tempPersonmate, this.customNamed)]"
+        @click="[tempPersonmate='neighbour', validateSubmission()]"
         >
         <ion-icon :icon="storefront"></ion-icon>
         <ion-label>a neighbour</ion-label>
@@ -28,7 +28,7 @@
         
         <ion-chip
         color="success"
-        @click="[tempPersonmate='landlord', submitPersonmate(this.tempPersonmate, this.customNamed)]"
+        @click="[tempPersonmate='landlord', validateSubmission()]"
         >
         <ion-icon :icon="hammer"></ion-icon>
         <ion-label>a landlord</ion-label>
@@ -48,20 +48,8 @@
     <div v-if="personmateIsCustom===true">
             <text-input
             @update:value="setCustom"
+            :inputType="'short'"
             ></text-input>
-
-            <!-- <ion-label>Who was it?</ion-label> -->
-            <ion-chip 
-            class="input"
-            color="success"
-            outline="true">
-                   <ion-input 
-            type="text"
-            required="true"
-            @ionChange="otherPersonmate=$event.target.value"
-            >
-            </ion-input>
-            </ion-chip>
             </div>
             <!-- <div>
             <ion-checkbox @ionChange="isChecked($event.target.checked)"></ion-checkbox>
@@ -98,20 +86,10 @@
 import TextInput from '../UI/TextInput.vue'
 
 import {
-    // IonSelect,
-    // IonSelectOption,
-    // IonButton,
-    IonInput,
     IonLabel,
     IonIcon,
-    // IonItem,
-    // IonRippleEffect,
-    // IonFooter,
-    // IonToolbar,
-    // IonCheckbox,
     IonChip,
  
-    // actionSheetController
 } from '@ionic/vue'
 
 import { helpCircle, business, home, storefront, man, hammer, arrowBackOutline  } from 'ionicons/icons';
@@ -121,19 +99,9 @@ export default {
 
     components: { 
         TextInput,
-        // IonSelect,
-        // IonSelectOption,
-        // IonButton,
-        IonInput,
-        // AreaTitle,
         IonLabel,
         IonChip,
         IonIcon,
-        // IonItem,
-
-        // IonFooter,
-        // IonToolbar,
-        // IonCheckbox
     },
 
     setup() {
@@ -155,7 +123,7 @@ export default {
             tempPersonmate: 'none yet',
             selectedPersonmate: 'none yet',
             otherPersonmate: 'none yet',
-            personmateIsCustom: 'false',
+            personmateIsCustom: false,
             invalidInput: false,
             activeBtn: '',
             customNamed: false,
@@ -177,14 +145,17 @@ export default {
         },
 
         validateLength(choice) {
+            //currently only does a check on the custom option
                 console.log(choice);
-                if (choice.length < 1 || choice === 'none yet') {
+                if (choice.length < 1 && this.personmateIsCustom === true) {
                     this.invalidInput = true;
                     console.log("invalid input");
                     return this.choice;
                 } else {
                 this.invalidInput = false;
                 }
+                console.log('temp personmate is ' + this.tempPersonmate)
+                this.submitPersonmate(this.tempPersonmate, this.customNamed)
         },
 
         validateSubmission() {
@@ -203,11 +174,13 @@ export default {
         },
 
         submitPersonmate(personmate, custom) {
-                this.validateSubmission();
+
+                
 
                 if(this.invalidInput === false) {
                     console.log("input was valid")
                     personmate = this.selectedPersonmate;
+                console.log('personmate chosen is ' + personmate)
 
                 this.$emit('update:personmate', personmate)
 

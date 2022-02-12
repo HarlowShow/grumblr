@@ -10,12 +10,10 @@ import EndPage from '../views/EndPage.vue';
 import TestingArea from '../views/TestingArea.vue'
 // import { menuController } from '@ionic/vue';
 
-// const afterRoute = (to, from) => {
+// const afterRoute = (to) => {
 //   if(to.path === '/home') {
 //     console.log("you are home!")
-//     console.log("you came from" + from.path)
-//   } else {
-//     console.log('you are not going home!')
+//     this.$router.go
 //   }
 // }
 
@@ -24,11 +22,13 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/home'
+      redirect: '/home',
+ 
     },
     {
       path: '/home',
       component: HomePage,
+
 
     },
     {
@@ -66,9 +66,5 @@ const router = createRouter({
 //       }
 //     }, 100);
 //   })
-
-// router.afterEach(() => {
-
-// })
 
 export default router

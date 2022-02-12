@@ -1,212 +1,162 @@
 <template>
-    <area-title :title="'Just awful. And how do you feel about that?'"
-    :progress="1">
-    <ion-icon @click="goBack" :icon="arrowBackOutline" ></ion-icon>
-</area-title>
 
 
-    <div class="button-area"
-    v-if="chosen===false"
+    <div
+    v-if="step===1||submitted===true"
     >
-    <ion-button 
-        ion-activatable
-        @click="[activeBtn='one', chosen=true]"
-        class="btn-onboarding" :class="{ active: activeBtn === 'one' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="water"></ion-icon>...I'm annoyed
-    </ion-button>
 
-    <ion-button 
-     
-        ion-activatable
-        @click="[activeBtn='two', chosen=true]"
-        class="btn-onboarding" :class="{ active: activeBtn === 'two' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="water"></ion-icon>...I'm pretty ok with it
-    </ion-button>
+    <ion-chip
+        color="success"
+        @click="pushTone['polite']">
+        <ion-label>😅</ion-label>
+    </ion-chip>
 
-    <ion-button 
-     
-        ion-activatable
-        @click="[activeBtn='three', chosen=true]"  
-        class="btn-onboarding" :class="{ active: activeBtn === 'three' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="water"></ion-icon>...I'm quietly seething
-    </ion-button>
+    <ion-chip
+        color="success"
+        @click="pushTone['angry']">
+        <ion-label>😡</ion-label>
+    </ion-chip>
 
-    <ion-button 
-      
-        ion-activatable
-        @click="[activeBtn='four', chosen=true]"  
-        class="btn-onboarding" :class="{ active: activeBtn === 'four' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="water"></ion-icon>...I'm swarthy AF
-    </ion-button>
-    </div>
+    <ion-chip
+        color="success"
+        @click="pushTone['paggro']">
+        <ion-label>🙄</ion-label>
+    </ion-chip>
 
-    <div>
-        <p>  <span v-if="chosen===true">{{ firstChoice }} {{displayConnector}}</span>
-        <span v-if="chosenTwo===true">{{ secondChoice }}</span></p>
-    </div>
+    <ion-chip
+        color="success"
+       @click="pushTone['pirate']">
+        <ion-label>🦜</ion-label>
+    </ion-chip>
 
+  </div>
 
-    <div v-if="chosen===true">
-        <ion-button 
-    
-        ion-activatable
-        @click="[activeBtnTwo='one', chosenTwo=true]"
-        class="btn-onboarding" :class="{ active: activeBtnTwo === 'one' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="water"></ion-icon>{{ connector }} they need to know that this is NOT ON.
-    </ion-button>
+      <div
+    v-if="step===2"
+    >
 
-    <ion-button 
-   
-        ion-activatable
-        @click="[activeBtnTwo='two', chosenTwo=true]"
-        class="btn-onboarding" :class="{ active: activeBtnTwo === 'two' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="water"></ion-icon>{{ connector }} I'm going to make sure this doesn't ruin our relationship.
-    </ion-button>
+    <ion-chip
+        color="success"
+        @click="pushTone['angry']">
+        <ion-label>they need to know that this is NOT ON.</ion-label>
+    </ion-chip>
 
-    <ion-button 
-   
-        ion-activatable
-        @click="[activeBtnTwo='three', chosenTwo=true]"  
-        class="btn-onboarding" :class="{ active: activeBtnTwo === 'three' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="water"></ion-icon>{{ connector }} I will be leaving them a note about it.
-    </ion-button>
+    <ion-chip
+        color="success"
+        @click="pushTone['paggro']">
+        <ion-label> I will be leaving them a strongly worded post-it note.</ion-label>
+    </ion-chip>
 
-    <ion-button 
-   
-        ion-activatable
-        @click="[activeBtnTwo='four', chosenTwo=true]"  
-        class="btn-onboarding" :class="{ active: activeBtnTwo === 'four' }">
-        <ion-ripple-effect type="unbounded"> </ion-ripple-effect>
-        <ion-icon slot="start" :icon="water"></ion-icon>{{ connector }} I'll need to consult my parrot before taking any further action.
-    </ion-button>
-    </div>
+    <ion-chip
+        color="success"
+       @click="pushTone['pirate']">
+        <ion-label>I'll need to consult my parrot before taking any further action.</ion-label>
+    </ion-chip>
+
+    <ion-chip
+        color="success"
+        @click="pushTone['polite']">
+        <ion-label>I'm going to make sure this doesn't ruin our relationship.</ion-label>
+    </ion-chip>
+
+  </div>
 
 </template>
 
 <script>
 import {
-    IonButton,
-    // IonItem,
-    // IonLabel,
-    // IonTextarea,
-    IonIcon,
-    // IonToolbar,
-    IonRippleEffect,
-    // IonFooter,
+    
+    // IonIcon,
+    IonChip,
+    IonLabel,
+
 
 } from '@ionic/vue'
-import AreaTitle from '../AreaTitle.vue'
 
-import      {    
-            // helpCircle,
-            // musicalNotes,
-            water,
-            // trash,
-            // addCircle,
-            arrowBackOutline  
-            } from 'ionicons/icons';
 
 export default {
     components: {
-        AreaTitle,
-        IonIcon,
-        IonRippleEffect,
-        IonButton,
+        IonChip,
+        IonLabel,
     },
-    
-    setup() {
 
-        return {
-            arrowBackOutline,
-            water
+    props: {
+        step: {
+            type: Number,
+            required: true
         }
     },
 
     data() {
 
         return {
-            activeBtn: null,
-            activeBtnTwo: null,
-            chosen: false,
-            chosenTwo: false,
+           submitted: false,
+        //    starterTones: [],
         }
     },
 
-    emits: ['backClick'],
+    emits: ['update:starters'],
 
     methods: {
-          goBack() {
-              if(this.chosen===true&&this.chosenTwo===true) {
-                  this.chosenTwo=false
-              } else if (this.chosen===true) {
-                  this.chosenTwo=false
-                  this.chosen=false
-              } else {
-            console.log('goback')
-            this.$emit('backClick')
-              }
-        },
+
+         pushTone(tone){
+             this.$emit('update:starters', tone)
+             this.submitted=true
+         },
     },
 
-    computed: {
+    // computed: {
 
-        connector() {
-        return 'and'
-        },
+    //     connector() {
+    //     return 'and'
+    //     },
 
-        firstChoice() {
-            let choice = ''
-            switch(this.activeBtn) {
-                case 'one':
-                    choice = "I'm annoyed"
-                    break;
-                case 'two':
-                    choice = "I'm pretty ok with it"
-                    break;
-                case 'three':
-                    choice = "I'm quietly seething"
-                    break;
-                case 'four':
-                    choice = "I'm swarthy AF"
-            }
-            return choice
-        },
+    //     firstChoice() {
+    //         let choice = ''
+    //         switch(this.activeBtn) {
+    //             case 'one':
+    //                 choice = "I'm annoyed"
+    //                 break;
+    //             case 'two':
+    //                 choice = "I'm pretty ok with it"
+    //                 break;
+    //             case 'three':
+    //                 choice = "I'm quietly seething"
+    //                 break;
+    //             case 'four':
+    //                 choice = "I'm swarthy AF"
+    //         }
+    //         return choice
+    //     },
 
-        secondChoice() {
-            let choice = ''
-            switch(this.activeBtnTwo) {
-                case 'one':
-                    choice = "they need to know that this is NOT ON."
-                    break;
-                case 'two':
-                    choice = "I'm going to make sure this doesn't ruin our relationship."
-                    break;
-                case 'three':
-                    choice = "I will be leaving them a note about it."
-                    break;
-                case 'four':
-                    choice = "I'll need to consult my parrot before taking any further action."
-            }
-            return choice
-        },
+    //     secondChoice() {
+    //         let choice = ''
+    //         switch(this.activeBtnTwo) {
+    //             case 'one':
+    //                 choice = "they need to know that this is NOT ON."
+    //                 break;
+    //             case 'two':
+    //                 choice = "I'm going to make sure this doesn't ruin our relationship."
+    //                 break;
+    //             case 'three':
+    //                 choice = "I will be leaving them a note about it."
+    //                 break;
+    //             case 'four':
+    //                 choice = "I'll need to consult my parrot before taking any further action."
+    //         }
+    //         return choice
+    //     },
 
-        displayConnector() {
-            let choice = ''
-            if (this.chosen===true&&this.chosenTwo===true) {
-                choice = 'and '
-            } else {
-                choice = '...'
-            }
-            return choice
-        }
-    },
+    //     displayConnector() {
+    //         let choice = ''
+    //         if (this.chosen===true&&this.chosenTwo===true) {
+    //             choice = 'and '
+    //         } else {
+    //             choice = '...'
+    //         }
+    //         return choice
+    //     }
+    // },
 }
 </script>
 

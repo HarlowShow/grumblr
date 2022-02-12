@@ -10,7 +10,8 @@ export default function speakTrashPanda(startingIdx = 0) {
         type: 'formQ',
         idx: 0},
         { string: 'I see. Who did this then?', type: 'formQ', idx: 1},
-        { string: 'Aw naw mate. What did this bugger do then?',type: 'formQ', idx: 2}
+        { string: 'Aw naw mate. What did this bugger do then?',type: 'formQ', idx: 2},
+        { string: 'Yikes. And how do you feel about that?', type: 'formQ'}
     ])
     const chatLength = chats.value.length
     const currentChat = ref(chats.value[chatIdx.value])

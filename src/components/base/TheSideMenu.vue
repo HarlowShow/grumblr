@@ -14,7 +14,7 @@
             </ion-item> -->
 
                  <ion-menu-toggle menu="main">
-                     <ion-button router-link="/home">Home</ion-button>
+                     <ion-button router-link="/">Home</ion-button>
             <!-- <ion-item @click="route('home')">
               <ion-label>Home</ion-label>
             </ion-item> -->
