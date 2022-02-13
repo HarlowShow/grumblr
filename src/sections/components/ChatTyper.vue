@@ -13,7 +13,7 @@
 import useTypewriter from '../../composables/typewriter'
 // import speakTrashPanda from '../../composables/trashpandachat'
 
-import { ref, onMounted } from 'vue'
+import { ref, watch} from 'vue'
 
 export default {
 
@@ -27,20 +27,33 @@ export default {
        mode: {
            type: String,
            required: false,
+       },
+
+       scrollType: {
+           type: String,
+           required: false
        }
    },
 
-    setup(props) {
+    setup(props, context) {
+
     
         const chosenString = ref(props.chatString)
         const chosenMode = ref(props.mode)
         const typewriterEl = useTypewriter(chosenString, chosenMode)
+        const isFinished = typewriterEl.isFinished
+        console.log(context)
 
-        console.log(typewriterEl)
+        //scroll emit
+          watch(isFinished, function(newVal){
+              console.log('new val is: ' + newVal)
+            if(newVal===true&&!props.scrollType) {
+                console.log('chat typer emitted')
+                context.emit('scroll')
+            }
+        })
 
-            onMounted(() => {
-            console.log('mounted')
-            })
+        // console.log(typewriterEl)
 
         return {
             // trashpandaChat,
@@ -65,9 +78,9 @@ export default {
             idx: typewriterEl.idx,
             chosenSpeed: ref(500),
             placeholderLength: typewriterEl.placeholderLength,
-            status: typewriterEl.status,
             typingControl: typewriterEl.typingControl,
             tracking: typewriterEl.tracking,
+            isFinished,
             startPush: typewriterEl.startPush,
             pushLetter: typewriterEl.pushLetter,
             pullLetter: typewriterEl.pullLetter,
@@ -79,10 +92,13 @@ export default {
 
     },
 
+    emits: ['scroll'],
+
+
     mounted(){
         this.startPush(this.chosenString)
+        console.log('is finished: ' + this.isFinished)
     },
-
 }
 </script>
 

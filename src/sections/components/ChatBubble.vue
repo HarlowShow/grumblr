@@ -2,20 +2,26 @@
     <div 
     :class="gridClass"
     class="grid">
-        <div class="avatar start-bubble">
+        <div class="avatar start-bubble box">
             <div class="inner-bubble"
             :class="{ response: responseClass}"
             >
             <slot name="start"></slot>
             </div>
         </div>
-         <div class="end-bubble"> 
+
+         <div class="end-bubble box"> 
             <div class="inner-bubble"
             :class="{ response: responseClass}"
             >
             <slot name="end"></slot>
             </div>
         </div>
+
+        <div class="box">
+             <slot name="third"></slot>
+        </div>
+        
         <div class="responses">
             <slot name="responses"></slot>
         </div>
@@ -38,11 +44,25 @@ export default {
     }
 
     .left {
-         grid-template-columns: 1fr 3fr;
+         grid-template-columns: min-content auto 3rem;
     }
 
+    /* .right:nth-child(1){
+        order: 3
+    }
+
+    .right:nth-child(2){
+        order: 2
+    }
+
+    .right:nth-child(3){
+        order: 1
+        } */
+
+
+
     .right {
-        grid-template-columns: 3fr 1fr;
+        grid-template-columns: 3rem auto min-content;
     }
 
     .left .end-bubble {
@@ -58,21 +78,21 @@ export default {
         background-color: red;
     } */
 
-    .left .end-bubble .inner-bubble {
+   .end-bubble .inner-bubble {
         background-color: rgb(219, 219, 219);
         border-radius: 30px;
         padding-left: 1rem;
         padding-right: 1rem;
     }
 
-    .right .start-bubble .inner-bubble {
+    /* .right .end-bubble .inner-bubble {
         background-color: rgb(219, 219, 219);
         border-radius: 20px;
         padding-left: 1rem;
         padding-right: 1rem;
-    }
+    } */
 
-    .right .start-bubble {
+    .right .end-bubble {
         /* background-color: rgb(218, 218, 218);
         border-radius: 20px;
         padding-left: 1rem;

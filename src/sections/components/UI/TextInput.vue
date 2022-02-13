@@ -112,7 +112,7 @@ export default {
 
         resetPlaceholders(){
             this.focus=false
-            console.log('reset placeholders')
+            // console.log('reset placeholders')
         }
     },
 

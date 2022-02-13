@@ -22,7 +22,9 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             resetted: false,
             focus: false,
             autocomplete: false,
+            finished: false,
         })
+        const isFinished = ref(false)
         const tracking = reactive({
             optionItem: 0,
             idx: 0,
@@ -94,7 +96,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
                 return;
             }
 
-            console.log('chosen speed is: ' + chosenSpeed.value)
+            // console.log('chosen speed is: ' + chosenSpeed.value)
 
             if(direction==='push') {
                 stringArray.value=[...string]
@@ -122,7 +124,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             //set string array val to start initial push
             if(typingControl.value==='off') {
                 setString(string, 'push')
-                console.log('string is: ' + string)
+                // console.log('string is: ' + string)
             } else if(status.resetted===true){
                 dText.value = [];
                 tracking.optionItem = 0;
@@ -137,8 +139,9 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
                 pushLetter()
                 }, chosenSpeed.value)
             // if mode is looping, assign delete string and start pulling
+           
             } else if (length.value===tracking.optionItem && mode.value==='looping') {
-               
+                
                 console.log('change direction!')
                 console.log('mode is: ' + mode.value)
                 status.pushing=false
@@ -147,7 +150,10 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
                     setString('new string!', 'pull')
                 }, 50)
                
-    
+             // set variable that will let you look at other things like scroll behaviour
+            } else if (length.value===tracking.optionItem){
+               isFinished.value=true
+               console.log('is finished is now: ' + isFinished.value)
             } else {
                 console.log('else')
             }
@@ -203,6 +209,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             status.pushing=false;
             status.pulling=false;
             status.autocomplete=true;
+            status.finished=true;
             dText.value = []
             dText.value.push(string.value)
         })
@@ -232,9 +239,9 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
              })
 
 
-        watch(emote, function(val){
-            console.log(val)
-        })
+        // watch(emote, function(val){
+        //     console.log(val)
+        // })
 
         watch(trackLimit, function(newVal){
             if (newVal===length.value) {
@@ -263,6 +270,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             status,
             tracking,
             typingControl,
+            isFinished,
             setSpeed,
             setString,
             startPush,

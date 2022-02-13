@@ -2,8 +2,10 @@
     <base-layout page-title="Gripe Deets">
 
 
-        <div class="chat">
+        <div class="chat scrollable"
+        ref="msgContainer">
             <!-- enter pronoun -->
+            <button @click="getElPosition">scroll to bottom</button>
             <chat-bubble
             :gridClass="'left'">
                  <template v-slot:start>
@@ -12,30 +14,38 @@
                  <template v-slot:end>
                    <chat-typer
                    :chatString="this.pandaChats[0].string"
+                   @scroll="scrollToBottom(this.content)"
                    ></chat-typer>
                 </template>
-                <template  v-slot:responses>
-                     <set-pronouns
-                     v-if="this.formPosition===0"
+                <template  v-slot:responses
+              
+                >
+                <div ref="el">
+                    <set-pronouns
+                    v-if="this.formPosition===0"
                     @update:pronoun="getPronoun"
                     >
                     </set-pronouns>
+                </div>
                 </template>
-             </chat-bubble>
+            </chat-bubble>
 
-            <chat-bubble 
+            <!-- pronoun response -->
+            <chat-bubble
              :gridClass="'right'"
              :responseClass="true"
              v-if="this.formPosition>0">
-                <template v-slot:start>
+                <template v-slot:end>
                     <p> {{ demoPronoun }}</p>
                 </template>
-                 <template v-slot:end>
+                 <template v-slot:third>
                       <the-icons :name="'user'"></the-icons>
                 </template>
             </chat-bubble>
 
-            <chat-bubble :gridClass="'left'"
+            <!-- enter personmate -->
+            <chat-bubble
+            :gridClass="'left'"
             v-if="this.formPosition>0"
             >
                     <template v-slot:start>
@@ -43,6 +53,7 @@
                     </template>
                     <template v-slot:end>
                        <chat-typer
+                         @scroll="scrollToBottom(this.content)"
                         :chatString="this.pandaChats[0].stringTwo"
                         ></chat-typer>
                     </template>
@@ -55,18 +66,19 @@
                     </template>
             </chat-bubble>
 
-             <chat-bubble 
+            <!-- personmate response -->
+            <chat-bubble 
              :gridClass="'right'"
              v-if="this.formPosition>1">
-                <template v-slot:start>
+                <template v-slot:end>
                     <p>{{  this.chosen.chosenPersonmate }}</p>
                 </template>
-                 <template v-slot:end>
+                 <template v-slot:third>
                       <the-icons :name="'user'"></the-icons>
                 </template>
             </chat-bubble>
 
-
+            <!-- enter gripe -->
             <chat-bubble :gridClass="'left'"
              v-if="this.formPosition>1"
              >
@@ -75,6 +87,7 @@
                     </template>
                     <template v-slot:end>
                           <chat-typer
+                            @scroll="scrollToBottom(this.content)"
                         :chatString="this.pandaChats[2].string"
                         ></chat-typer>
                     </template>
@@ -84,20 +97,23 @@
                             @update:gripe="getGripe"
                           ></set-gripe>
                     </template>
-                </chat-bubble>
+            </chat-bubble>
 
-             <chat-bubble 
+            <!-- gripe response -->
+            <chat-bubble 
              :gridClass="'right'"
              v-if="this.formPosition>2">
-                <template v-slot:start>
+                <template v-slot:end>
                     <p>{{ this.chosen.demoGripe }}</p>
                 </template>
-                 <template v-slot:end>
+                 <template v-slot:third>
                       <the-icons :name="'user'"></the-icons>
                 </template>
             </chat-bubble>
 
-             <chat-bubble :gridClass="'left'"
+            <!-- emotional teaser step 1 -->
+            <chat-bubble 
+            :gridClass="'left'"
              v-if="this.formPosition>2"
              >
                     <template v-slot:start>
@@ -106,6 +122,7 @@
                     <template v-slot:end>
                         <div>
                         <chat-typer
+                         @scroll="scrollToBottom(this.content)"
                         :chatString="this.pandaChats[3].string"
                         ></chat-typer>
                         </div>
@@ -114,52 +131,122 @@
                     <emotional-teaser
                         :step="1"
                         @update:starters="getStarterTones"
-                        v-if="this.formPosition >2">  
+                       
+                        v-if="this.formPosition===3">  
                     </emotional-teaser>
                 </template>
-                </chat-bubble>
+            </chat-bubble>
 
-                 <chat-bubble 
+            <!-- teaser 1 response -->
+            <chat-bubble
                 :gridClass="'right'"
-                v-if="this.formPosition>2">
-                <template v-slot:start>
-                    <p>{{ this.chosen.demoGripe }}</p>
+                v-if="this.formPosition>3">
+                <template v-slot:end>
+                    <p>{{ starterOneResponse }}</p>
                 </template>
-                 <template v-slot:end>
+                 <template v-slot:third>
                       <the-icons :name="'user'"></the-icons>
                 </template>
-                </chat-bubble>
+            </chat-bubble>
 
-
-<!-- 
-              <chat-bubble :gridClass="'left'"
-             v-if="this.formPosition>2"
+            <!-- emotional teaser step 2 -->
+            <chat-bubble
+             :gridClass="'left'"
+             v-if="this.formPosition>3"
              >
                     <template v-slot:start>
                     <the-icons :name="'raccoon-disappointed'"></the-icons>
                     </template>
                     <template v-slot:end>
                         <div>
-                       <chat-typer
-                        :chatString="'Oh deary me'"
+                        <chat-typer
+                         @scroll="scrollToBottom(this.content)"
+                        :chatString="this.pandaChats[4].string"
                         ></chat-typer>
-                        <review-selection
-                        :tempSelection="tempChosen"
-                        >
-                        </review-selection>
                         </div>
                     </template>
                        <template  v-slot:responses>
-                    <confirm-selection
-                      v-if="this.formPosition===3"
-                    ></confirm-selection>
+                    <emotional-teaser
+                        :step="2"
+                        @update:starters="getStarterTones"
+                        v-if="this.formPosition===4">  
+                    </emotional-teaser>
                 </template>
-                </chat-bubble>
-              -->
+            </chat-bubble>
+
+            <!-- teaser 2 response -->
+            <chat-bubble
+                :gridClass="'right'"
+                v-if="this.formPosition>4">
+                <template v-slot:end>
+                    <p>{{ starterTwoResponse }}</p>
+                </template>
+                 <template v-slot:third>
+                      <the-icons :name="'user'"></the-icons>
+                </template>
+            </chat-bubble>
+
+            <!-- exit teaser -->
+            <chat-bubble
+                :gridClass="'left'"
+             v-if="this.formPosition>4"
+             >
+                    <template v-slot:start>
+                    <the-icons :name="'raccoon-disappointed'"></the-icons>
+                    </template>
+                    <template v-slot:end>
+                        <div>
+                        <chat-typer
+                        :chatString="this.pandaChats[5].string"
+                         @scroll="scrollToBottom(this.content)"
+                         :scrollType="setScroll"
+                        ></chat-typer>
+                        </div>
+                    </template>
+                       <template  v-slot:responses>
+                    <emotional-teaser
+                        :step="3"
+                        v-if="this.formPosition===5"
+                        @update:starters="getStarterTones"
+                        > 
+                    </emotional-teaser>
+                </template>
+            </chat-bubble>
+
+            <!-- optional exit teaser response -->
+               <chat-bubble 
+                :gridClass="'right'"
+                v-if="this.formPosition>5">
+                <template v-slot:end>
+                    <p>No.</p>
+                </template>
+                 <template v-slot:third>
+                      <the-icons :name="'user'"></the-icons>
+                </template>
+            </chat-bubble>
+
+            <!-- optional exit raccoon chat -->
+                 <chat-bubble :gridClass="'left'"
+             v-if="this.formPosition>5"
+             >
+                    <template v-slot:start>
+                    <the-icons :name="'raccoon-disappointed'"></the-icons>
+                    </template>
+                    <template v-slot:end>
+                        <div>
+                        <chat-typer
+                        :chatString="this.pandaChats[6].string"
+                         @scroll="scrollToBottom(this.content)"
+                        ></chat-typer>
+                        </div>
+                    </template>
+            </chat-bubble>
+
+            <div class="buffer">
+
+            </div>
+
         </div>
-
-
-       
 
     </base-layout>
 
@@ -183,6 +270,8 @@
     import speakTrashPanda from '../composables/trashpandachat'
     import usePronouns from '../composables/pronouns'
 
+    import { ref } from 'vue';
+
     export default {
 
         components: {
@@ -200,12 +289,15 @@
         setup() {
             
             const pandaChat = speakTrashPanda()
-            const pandaChats = pandaChat.chats.value
+            const pandaChats = pandaChat.formChats.value
          
             const pronouns = usePronouns()
 
+            const msgContainer = ref(HTMLDivElement)
+
 
             return {
+                msgContainer,
                 pandaChat,
                 pandaChats,
 
@@ -214,14 +306,18 @@
             }
         },
 
-        mounted(){
-            console.log(this.pandaChats[0]);
+        mounted() {
+           console.log(this.msgContainer)
+           this.content = this.msgContainer.parentElement
+           console.log(this.content)
         },
 
         data() {
             return {
 
-                testMode: true,
+                setScroll: '',
+                content: null,
+                currentEl: null,
                 
                 arr: [],
                 runOne: false,
@@ -287,19 +383,6 @@
                     custom: ''
                 },
             ],
-
-                // pronouns: [
-                //     {
-                //     id: 0,
-                //     text:"just me",
-                //     value: "me"
-                //     },
-                //     {
-                //     id: 1,
-                //     text:"myself and others",
-                //     value: "we"
-                //     },
-                // ],
                     
                  tempOpens: [
                     "Hey mate, ",
@@ -355,8 +438,9 @@
                         {chosenGripe:'none yet', area: 'offense', chosenOffense: '', offenseActive: '', offenseBadThing: '', areaIndex: '0', type: 'starter'},
                         {chosenText: '', area: 'offense', areaIndex: '1', type: 'addon'},
                         {chosenText: '', area: 'offense', areaIndex: '2', type: 'addon'},
-
                     ],
+
+                    starterTones: [],
 
                     output: {
                         op0: '',
@@ -405,12 +489,69 @@
             personmateResponse() {
                 let response = 'confirmation text will go here'
                 return response
+            },
+
+            starterOneResponse() {
+                let arg = this.starterTones[0]
+                let response = ''
+                switch(arg) {
+                    case 'angry':
+                        response = '😡'
+                        break;
+                    case 'polite':
+                        response = '😅'
+                        break;
+                    case 'paggro':
+                        response = '🙄'
+                        break;
+                    case 'pirate':
+                        response = '🦜'
+                }
+                return response
+            },
+
+             starterTwoResponse() {
+                let arg = this.starterTones[1]
+                let response = ''
+                switch(arg) {
+                    case 'angry':
+                        response = "they need to know that this is NOT ON."
+                        break;
+                    case 'polite':
+                        response = "I'm going to make sure this doesn't ruin our relationship."
+                        break;
+                    case 'paggro':
+                        response = "I will be leaving them a strongly worded post-it note."
+                        break;
+                    case 'pirate':
+                        response = "I'll need to consult my parrot before taking any further action."
+                }
+                return response
             }
 
-        
+         
         },
 
         methods: {
+//tbc here on the scroll thing
+            getElPosition(){
+                let currentEl = this.$refs.el
+                let rect = currentEl.getBoundingClientRect()
+                console.log(currentEl)
+                let right  = rect.right + window.scrollY
+                let height = window.innerHeight
+                let pos = right/height*100
+                pos = pos.toFixed(2)
+
+                // console.log('left is: ' + left)
+                // console.log('right is: ' + right)
+                // console.log('content inner height: ' + height)
+                // console.log('position is: ' + pos)
+
+                if (pos>75) {
+                    this.setScroll = 'instant'
+                }
+            },
 
             getPronoun(pronoun) {
                 this.chosen.chosenPronoun = pronoun;
@@ -440,8 +581,10 @@
             },
 
             getStarterTones(tone) {
+                this.starterTones.push(tone)
                 this.$store.state.starterTones.push(tone)
-                console.log(this.$store.state.starterTones)
+                // console.log(this.$store.state.starterTones)
+                // console.log(tone)
                 this.formPosition++;
             },
 
@@ -449,12 +592,11 @@
                 this.randomize(array);
                 this.chosen.chosenTempOpen = array[0];
                 this.output.op1 = this.chosen.chosenTempOpen;
-                console.log(array[0]);
+                // console.log(array[0]);
             },
 
             setGripe(chosenGripe) {
                 if(chosenGripe === 'dishes') {
-                    console.log('it was dishes');
                     this.chosen.chosenOffense = " you didn't do your washing up. ";
                     this.chosen.offenseActive = "use the kitchen ";
                     this.chosen.offenseBadThing = "your dirty plates ";
@@ -505,7 +647,7 @@
 
             generateGripe() {
                 this.tempChosen = this.chosen;
-                console.log(this.tempChosen)
+                // console.log(this.tempChosen)
                 this.setPronouns(this.chosen.chosenPronoun);
                 this.setTempOpen(this.tempOpens);
                 this.setGripe(this.chosen.chosenGripe);
@@ -517,7 +659,12 @@
 
             prevForm() {
                 this.formPosition--;
-                console.log('went back')
+                // console.log('went back')
+            },
+
+            scrollToBottom(el) {
+               el.scrollToBottom(150)
+             
             },
         },
 
@@ -525,12 +672,19 @@
 
             gripeChange() {
                 this.generateGripe();
-            }
-        }
+            },
+
+            // formPosition() {
+               
+            //         this.scrollToBottom(this.content);
+                
+            // }
+        },
     }
 </script>
 
 <style>
+
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 1s ease;
@@ -683,5 +837,9 @@
 .container {
     margin-top: 1rem;
     margin-bottom: 1rem;
+}
+
+.buffer {
+    height: 1rem;
 }
 </style>

@@ -15,7 +15,9 @@
          </ion-toolbar>
       </ion-header>
       
-      <ion-content class="ion-align-self-center" id="main-page">
+      <ion-content class="ion-align-self-center" id="main-page"
+      :scroll-events="true"
+      ref="content">
 
                    <slot />
              
@@ -24,6 +26,7 @@
     <ion-footer>
         <ion-toolbar>
             <ThePithyQuote id="desktop"/>
+            <slot name="footer"></slot>
         </ion-toolbar>
     </ion-footer>
    </ion-page>

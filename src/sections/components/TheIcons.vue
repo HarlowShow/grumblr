@@ -95,8 +95,8 @@ export default {
     align-items: center;
 }
 .avatar {
-    height: 5rem;
-    width: 5rem;
+    height: 4rem;
+    width: 4rem;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat

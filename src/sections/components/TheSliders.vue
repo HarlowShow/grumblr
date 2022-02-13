@@ -32,6 +32,8 @@
 
 import { IonRange, IonIcon } from '@ionic/vue';
 import { addCircle, removeCircle } from 'ionicons/icons'
+import { useStore } from 'vuex'
+import { ref } from 'vue'
 
 export default {
 
@@ -43,21 +45,54 @@ export default {
         IonIcon
     },
 
-    setup() {
+    setup(props) {
+
+        const initVal = ref(0)
+        const store = useStore()
+        const firstTone = store.state.starterTones[0]
+        const secondTone = store.state.starterTones[1]
+            if (firstTone===props.tone) {
+                console.log('first tone match! tone: ' + firstTone)
+                initVal.value++
+                console.log('first tone match! initval: ' + initVal.value)
+            }
+            if (secondTone===props.tone) {
+                console.log('second tone match! tone: ' +  secondTone)
+                initVal.value++
+                console.log('second tone match! initval: ' + initVal.value)
+            }
 
         return {
             addCircle, 
             removeCircle,
+            firstTone,
+            secondTone,
+            initVal: initVal.value,
         }
     },
 
     data() {
         return {
-            rangeVal: 0,
+            rangeVal: this.initVal,
             subIsDisabled: true,
             addIsDisabled: false,
         }
     },
+
+//    mounted(){
+
+//         if(this.initVal>0){
+//                 setTimeout(()=>{
+
+//                       this.$emit('update:moodCount', this.rangeVal
+                      
+//                 )},100)
+             
+//                console.log('emitted from tone: ' + this.tone)
+//                console.log('emitted with value: ' + this.rangeVal)
+//         }
+
+//     },
 
     methods: {
 

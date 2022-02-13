@@ -2,30 +2,30 @@
 
 
     <div
-    v-if="step===1||submitted===true"
+    v-if="step===1"
     >
 
     <ion-chip
         color="success"
-        @click="pushTone['polite']">
+        @click="pushTone('polite')">
         <ion-label>😅</ion-label>
     </ion-chip>
 
     <ion-chip
         color="success"
-        @click="pushTone['angry']">
+        @click="pushTone('angry')">
         <ion-label>😡</ion-label>
     </ion-chip>
 
     <ion-chip
         color="success"
-        @click="pushTone['paggro']">
+        @click="pushTone('paggro')">
         <ion-label>🙄</ion-label>
     </ion-chip>
 
     <ion-chip
         color="success"
-       @click="pushTone['pirate']">
+       @click="pushTone('pirate')">
         <ion-label>🦜</ion-label>
     </ion-chip>
 
@@ -37,26 +37,50 @@
 
     <ion-chip
         color="success"
-        @click="pushTone['angry']">
+        @click="pushTone('angry')">
         <ion-label>they need to know that this is NOT ON.</ion-label>
     </ion-chip>
 
     <ion-chip
         color="success"
-        @click="pushTone['paggro']">
+        @click="pushTone('paggro')">
         <ion-label> I will be leaving them a strongly worded post-it note.</ion-label>
     </ion-chip>
 
     <ion-chip
         color="success"
-       @click="pushTone['pirate']">
+       @click="pushTone('pirate')">
         <ion-label>I'll need to consult my parrot before taking any further action.</ion-label>
     </ion-chip>
 
     <ion-chip
         color="success"
-        @click="pushTone['polite']">
+        @click="pushTone('polite')">
         <ion-label>I'm going to make sure this doesn't ruin our relationship.</ion-label>
+    </ion-chip>
+
+  </div>
+
+   <div
+    v-if="step===3"
+    >
+
+    <ion-chip
+        color="success"
+        @click="routin">
+        <ion-label>sure</ion-label>
+    </ion-chip>
+
+    <ion-chip
+        color="success"
+        @click="routin">
+        <ion-label>whip me up sump'n real good</ion-label>
+    </ion-chip>
+
+    <ion-chip
+        color="success"
+       @click="routin(false)">
+        <ion-label>no.</ion-label>
     </ion-chip>
 
   </div>
@@ -87,22 +111,28 @@ export default {
         }
     },
 
-    data() {
-
-        return {
-           submitted: false,
-        //    starterTones: [],
-        }
-    },
-
     emits: ['update:starters'],
 
     methods: {
 
          pushTone(tone){
-             this.$emit('update:starters', tone)
-             this.submitted=true
+            if(tone){
+            this.$emit('update:starters', tone)
+            }
          },
+
+        routin(arg) {
+            this.$emit('update:starters')
+            if(arg===false) {
+                setTimeout(()=>{
+                    arg=true
+                    this.routin(arg)
+                }, 3000)
+            } else {
+            this.$router.push('playground')
+            }
+        },
+
     },
 
     // computed: {
@@ -159,34 +189,3 @@ export default {
     // },
 }
 </script>
-
-<style scoped>
-    .active {
-        --background: #B89EDF;
-        --border-style: solid;
-        --border-color: #9876BA;
-    }
-
-        .button-area {
-        display: flex;
-        align-items: stretch;
-        flex-wrap: wrap;
-        padding-bottom: 1rem;
-    }
-
-    .button-area > button {
-        flex: 50%;
-    }
-
-    .btn-onboarding {
-        --background: #C7CEEA;
-        text-transform: none;
-        --color: #2C2E32;
-        overflow: hidden;
-        --background-activated: #C7CEEA;
-        --background-hover: #B89EDF;
-        --background-hover-opacity: 80%;
-        --border-radius: 0.25rem;
-        width: 100%;
-    }
-</style>
