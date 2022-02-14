@@ -143,7 +143,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             } else if (length.value===tracking.optionItem && mode.value==='looping') {
                 
                 console.log('change direction!')
-                console.log('mode is: ' + mode.value)
+                // console.log('mode is: ' + mode.value)
                 status.pushing=false
                  //do a little pause before changing
                 setTimeout(() =>{
@@ -153,7 +153,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
              // set variable that will let you look at other things like scroll behaviour
             } else if (length.value===tracking.optionItem){
                isFinished.value=true
-               console.log('is finished is now: ' + isFinished.value)
+            //    console.log('is finished is now: ' + isFinished.value)
             } else {
                 console.log('else')
             }
@@ -186,14 +186,14 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
                     pullLetter();
                 }, chosenSpeed.value)
                 } else if(mode.value==='looping'){
-                console.log('change direction!')
+                // console.log('change direction!')
                 status.pulling=false
                  //do a little pause before changing
                 setTimeout(() =>{
                     setString(string.value, 'push')
                 }, 200)
                 } else {
-                console.log('finished deleting')
+                // console.log('finished deleting')
             }
         })
 

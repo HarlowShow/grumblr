@@ -1,6 +1,10 @@
 <template>
 
-    <base-layout page-default-back-link="/input" page-title="Edit your gripe">
+    <base-layout page-default-back-link="/input" page-title="Edit your gripe"
+    v-if="this.rendered"
+    >
+    <p> moodcount total: {{ moodTotal }}</p>
+    <p> moodcount object: {{ moodcount }} </p>
     <!-- <p> {{ this.selectedPhrases }} </p>
     <p>active moods: {{ activeTones }}</p>
     <p>active index length: {{ activeIndexLength }}</p>
@@ -11,7 +15,6 @@
     <!-- <p>delete options: {{ deleteOptions }}</p>
     <p>used phrases: {{ usedPhrases }}</p> -->
 <!-- <p>prior phrases: {{ priorPhrases }}</p> -->
-
 
     <div class="snippets">
         <text-snippet v-for="(value, name, index) in gripeObject"
@@ -55,24 +58,28 @@
     </div>
 
             <chat-bubble
+                    id="mobilefooter"
                     :gridClass="'left'">
                         <template v-slot:start>
                             <the-icons :name="'raccoon-shifty'"></the-icons>
                         </template>
                         <template v-slot:end>
-                            <p>How about this?</p>
+                              <chat-typer
+                                :chatString="this.backchat"
+                                ></chat-typer>
                         </template>
                         <template  v-slot:responses>
-                            
-
+                            <button @click="testOne()">test one</button>
+                            <button @click="isConfirmed=true">CONFIRM YES</button>
+                            <button @click="isConfirmed=false">DON'T YOU DARE</button>
                         </template>
             </chat-bubble>
 
     
 
 
-        <!-- <p> moodcount object: {{ moodcount }} </p>
-        <p> moodcount computed: {{ moodTotal }}</p> -->
+        <!-- 
+         -->
 
          <!-- <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/finish">Finish</ion-button> -->
 
@@ -86,9 +93,12 @@
 import TextSnippet from '../sections/components/TextSnippet.vue'
 import TheSliders from '../sections/components/TheSliders.vue'
 import ChatBubble from '../sections/components/ChatBubble.vue'
+import ChatTyper from '../sections/components/ChatTyper.vue'
+
 import TheIcons from '../sections/components/TheIcons.vue'
 
 import speakPhrases from '../composables/phrases'
+import speakTrashPanda from '../composables/trashpandachat'
 // import {
 //     IonFooter
 // } from '@ionic/vue'
@@ -100,6 +110,7 @@ export default {
 
     components: {
         ChatBubble,
+        ChatTyper,
         TheIcons,
         TextSnippet,
         TheSliders,
@@ -108,17 +119,45 @@ export default {
 
     setup() {
         //set imports for phrases and selections
+        //main phrases
         const phraseObject = speakPhrases()
         const store = useStore()
         const gripeObject = store.state.baseOutput
+
+        //panda backchat
+        const trashPandaObject = speakTrashPanda()
+        const backchat = ref('')
+        backchat.value = trashPandaObject.backtalkChat
 
         //set initial moods
         const initVal = ref(0)
         const firstTone = store.state.starterTones[0]
         const secondTone = store.state.starterTones[1]
+
+        //promise for confirmation
+        //come back to this
+        const confirmFirst = (val) => {
+            return new Promise((resolve) => {
+                console.log('promise resolved')
+                setTimeout(() => {
+                    if (val===true) {
+                        resolve(true)
+                    } else if (val===false) {
+                        resolve(false)
+                    } else {
+                        resolve(false)
+                    }
+                }, 10000)
+                    
+            });
+        }
            
 
         return {
+            confirmFirst,
+            trashPandaObject,
+            backchat: backchat.value,
+            setChat: trashPandaObject.setChat,
             phraseObject,
             gripeObject,
             phrases: phraseObject.phrases,
@@ -131,13 +170,14 @@ export default {
 
     
     mounted(){
+            this.rendered=true
             this.priorPhrases = Object.assign({}, this.$store.state.baseOutput);
             this.phraseHistory = Object.assign({}, this.$store.state.baseOutput)
             this.updatedPhrases = this.phrases;
 
             
-            console.log('first tone is ' + this.firstTone)
-            console.log('second tone is ' + this.secondTone)
+            // console.log('first tone is ' + this.firstTone)
+            // console.log('second tone is ' + this.secondTone)
             this.addingInit = true
             this.addInit(this.firstTone, 'first')
           
@@ -171,6 +211,8 @@ export default {
         
         // phrase: position, status (boolean), phrase, tone
         return {
+            isConfirmed: false,
+            rendered: null,
             addingInit: false,
             reAddPhrase: null,
             sliderVal: {
@@ -188,6 +230,14 @@ export default {
             hasPolite: false,
             hasPaggro: false,
             hasPirate: false,
+            chatted: {
+                angry: false,
+                polite: false,
+                paggro: false,
+                pirate: false,
+                confused: 0,
+                confusedReset: false,
+            },
             activePronouns: {},
             activePersonmate: '',
             activeGripe: '',
@@ -258,6 +308,16 @@ export default {
                     this.activeMoods = this.activeMoods.filter(mood => mood !=='angry')
                     this.hasAngry = false;
                 }
+
+                if(newValue>=3&&this.chatted.angry===false) {
+                    this.setBackchat('medium', 'angry')
+                    this.chatted.angry=true
+                }
+
+                if(newValue>=9&&this.chatted.angry===false) {
+                    this.setBackchat('max', 'angry')
+                    this.chatted.angry=true
+                }
            
             if (this.removingFirst===true) {
                 console.log('doing nothing about that')
@@ -295,6 +355,18 @@ export default {
                     this.activeMoods = this.activeMoods.filter(mood => mood !=='polite')
                     this.hasPolite=false
                 }
+
+            
+                if(newValue>=3&&this.chatted.polite===false) {
+                    this.setBackchat('medium', 'polite')
+                    this.chatted.polite=true
+                }
+
+                if(newValue>=9&&this.chatted.polite===false) {
+                    this.setBackchat('max', 'polite')
+                    this.chatted.polite=true
+                }
+           
 
             if (this.removingFirst===true) {
                 console.log('doing nothing about that')
@@ -334,6 +406,16 @@ export default {
                     this.hasPaggro=false;
                 }
 
+              if(newValue>=3&&this.chatted.paggro===false) {
+                    this.setBackchat('medium', 'paggro')
+                    this.chatted.paggro=true
+                }
+
+                if(newValue>=9&&this.chatted.paggro===false) {
+                    this.setBackchat('max', 'paggro')
+                    this.chatted.paggro=true
+                }
+
             if (this.removingFirst===true) {
                 console.log('doing nothing about that')
                  setTimeout (() =>{
@@ -369,6 +451,16 @@ export default {
                 } else if (newValue<=0) {
                     this.activeMoods = this.activeMoods.filter(mood => mood !=='pirate')
                     this.hasPirate=false;
+                }
+
+                if(newValue>=3&&this.chatted.pirate===false) {
+                    this.setBackchat('medium', 'pirate')
+                    this.chatted.pirate=true
+                }
+
+                if(newValue>=9&&this.chatted.pirate===false) {
+                    this.setBackchat('max', 'pirate')
+                    this.chatted.pirate=true
                 }
            
             if (this.removingFirst===true) {
@@ -406,11 +498,48 @@ export default {
                     }  
                 },
                 deep: true
+            },
+
+        activeMoodLength(newVal) {
+            if(newVal>=3&&this.chatted.confused===0) {
+                  this.setBackchat('confused', 'one')
+                  this.chatted.confused++
+            }  else if(newVal>=3&&this.chatted.confused===1&&this.chatted.confusedReset===true) {
+                  this.setBackchat('confused', 'two')
+                  this.chatted.confused++
             }
+            
+            if(this.chatted.confused===1&&newVal<3) {
+                this.chatted.confusedReset=true;
+            }
+           
+        },
+
+        moodTotal(newVal){
+            //if they're trying to add beyong the mood limit, warn that there will be a delete first
+              if(newVal>this.moodLimit) {
+                    this.setBackchat('alerts', 'moodTotalReached')
+                }
+        }
         
     },
 
     methods: {
+
+        // setChat(objKey, innerKey){
+        //     let newBackchat = 
+        // },
+
+        testOne() {
+            // this.backchat = 'who, this is new!'
+            // console.log('backchat default is: ' + this.backchat)
+            this.setBackchat('max', 'angry')
+        },
+
+        setBackchat(obj, inner) {
+              let testVar = this.setChat(obj, inner)
+            this.backchat = testVar
+        },
 
         addInit(tone, pos){
             if (pos==='first') {
@@ -526,9 +655,18 @@ export default {
         addPhrase() {
 
 
-            if(this.moodTotal>=this.moodLimit) {
+            if(this.moodTotal>this.moodLimit) {
                 console.log('moodcount too high, beginning swapsies')
-                this.removeFirst()
+                //here's where i'll whack in an alert dialogue until it's decided
+                 this.confirmFirst(this.isConfirmed)
+                    .then(() => {
+                        console.log('it happened!')
+                        this.removeFirst()
+                    })
+                    .then(() => {
+                        console.log('sad sad did not happen')
+                    })
+               
             }
 
             // if(this.activeIndexes.length>0) {
@@ -620,6 +758,9 @@ export default {
         },
         activeTones() {
             return this.activeMoods
+        },
+        activeMoodLength() {
+            return this.activeMoods.length
         },
         currentTone() {
             return this.selectedTone
@@ -731,5 +872,13 @@ export default {
         /* grid-template-rows: repeat(3, min-content); */
         /* grid-template-columns: minmax(min-content, 1.5fr) 8fr minmax(min-content, 1.5fr); */
     }
+    
+    #mobilefooter {
+        position: absolute;
+        bottom: 0px;
+        width: 100vw;
+    }
+   
+
 </style>
 

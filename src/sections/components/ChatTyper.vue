@@ -42,13 +42,12 @@ export default {
         const chosenMode = ref(props.mode)
         const typewriterEl = useTypewriter(chosenString, chosenMode)
         const isFinished = typewriterEl.isFinished
-        console.log(context)
 
         //scroll emit
           watch(isFinished, function(newVal){
-              console.log('new val is: ' + newVal)
+            //   console.log('new val is: ' + newVal)
             if(newVal===true&&!props.scrollType) {
-                console.log('chat typer emitted')
+                // console.log('chat typer emitted')
                 context.emit('scroll')
             }
         })
@@ -97,8 +96,22 @@ export default {
 
     mounted(){
         this.startPush(this.chosenString)
-        console.log('is finished: ' + this.isFinished)
+        // console.log('is finished: ' + this.isFinished)
+        if(this.scrollType==='instant') {
+            this.$emit('scroll')
+            // this isn't hooked up yet, come back to it
+            // console.log('instant scroll emitted!')
+        }
     },
+
+    watch: {
+
+        chatString(newVal){
+            // console.log('backchat changed in chat typer component')
+            this.chosenString = newVal
+            this.startPush(this.chosenString)
+        }
+    }
 }
 </script>
 

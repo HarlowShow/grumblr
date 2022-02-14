@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, reactive} from 'vue'
 
 export default function speakTrashPanda(startingIdx = 0) {
 
@@ -20,6 +20,52 @@ export default function speakTrashPanda(startingIdx = 0) {
     const currentChat = ref(formChats.value[chatIdx.value])
     const currentString = ref(currentChat.value.string)
 
+    const backtalkChats = reactive({
+
+        starter: {
+            one: 'welcome to this exciting time with default one',
+            two: 'default two! It is here for you'
+        },
+
+        medium: {
+            angry: 'you just got medium angry',
+            polite: 'you just got medium polite',
+            paggro: 'you just got medium paggro',
+            pirate: 'you just got medium pirate',
+        },
+
+        max: {
+            angry: 'you just got max angry',
+            polite: 'you just got max polite',
+            paggro: 'you just got max paggro',
+            pirate: 'you just got max pirate',
+        },
+
+        confused: {
+            one: 'I am confused',
+            two: 'I am confused number two'
+        },
+
+        alerts: {
+            moodTotalReached: 'whoa there, your mood total is reached!'
+        }
+
+    })
+    const backtalkChat = ref(backtalkChats.starter.one)
+
+    const setChat = ((objKey = '', innerKey = '') => {
+
+        console.log('objKey is: ' + objKey)
+        console.log('inner key is: ' + innerKey)
+        console.log('backtalkChats starter one is: ' + backtalkChats.starter.one)
+        let newChat = backtalkChats[objKey]
+        let newChatString = newChat[innerKey]
+    
+        console.log('new chat string is: ' + newChatString)
+        return newChatString
+        // console.log('new chat string is: ' + newChatString.value)
+    })
+
     function nextChat() {
         let length = formChats.value.length
         let limit = length - 1;
@@ -39,13 +85,17 @@ export default function speakTrashPanda(startingIdx = 0) {
     }
 
     return {
-       
+        
+        backtalkChat,
+        backtalkChats,
+
         currentChat,
         chatLength,
         currentString,
         chatIdx,
         formChats,
         length,
+        setChat,
         nextChat,
     }
 }

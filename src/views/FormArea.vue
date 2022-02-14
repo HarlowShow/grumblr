@@ -5,7 +5,7 @@
         <div class="chat scrollable"
         ref="msgContainer">
             <!-- enter pronoun -->
-            <button @click="getElPosition">scroll to bottom</button>
+            <button @click="getElPosition">get el position</button>
             <chat-bubble
             :gridClass="'left'">
                  <template v-slot:start>
@@ -15,6 +15,7 @@
                    <chat-typer
                    :chatString="this.pandaChats[0].string"
                    @scroll="scrollToBottom(this.content)"
+                    :scrollType="setScroll"
                    ></chat-typer>
                 </template>
                 <template  v-slot:responses
@@ -54,6 +55,7 @@
                     <template v-slot:end>
                        <chat-typer
                          @scroll="scrollToBottom(this.content)"
+                        :scrollType="setScroll"
                         :chatString="this.pandaChats[0].stringTwo"
                         ></chat-typer>
                     </template>
@@ -88,6 +90,7 @@
                     <template v-slot:end>
                           <chat-typer
                             @scroll="scrollToBottom(this.content)"
+                             :scrollType="setScroll"
                         :chatString="this.pandaChats[2].string"
                         ></chat-typer>
                     </template>
@@ -123,6 +126,7 @@
                         <div>
                         <chat-typer
                          @scroll="scrollToBottom(this.content)"
+                          :scrollType="setScroll"
                         :chatString="this.pandaChats[3].string"
                         ></chat-typer>
                         </div>
@@ -161,6 +165,7 @@
                         <div>
                         <chat-typer
                          @scroll="scrollToBottom(this.content)"
+                          :scrollType="setScroll"
                         :chatString="this.pandaChats[4].string"
                         ></chat-typer>
                         </div>
@@ -237,6 +242,7 @@
                         <chat-typer
                         :chatString="this.pandaChats[6].string"
                          @scroll="scrollToBottom(this.content)"
+                          :scrollType="setScroll"
                         ></chat-typer>
                         </div>
                     </template>
