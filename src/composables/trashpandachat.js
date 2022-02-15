@@ -55,13 +55,13 @@ export default function speakTrashPanda(startingIdx = 0) {
 
     const setChat = ((objKey = '', innerKey = '') => {
 
-        console.log('objKey is: ' + objKey)
-        console.log('inner key is: ' + innerKey)
-        console.log('backtalkChats starter one is: ' + backtalkChats.starter.one)
+        // console.log('objKey is: ' + objKey)
+        // console.log('inner key is: ' + innerKey)
+        // console.log('backtalkChats starter one is: ' + backtalkChats.starter.one)
         let newChat = backtalkChats[objKey]
         let newChatString = newChat[innerKey]
     
-        console.log('new chat string is: ' + newChatString)
+        // console.log('new chat string is: ' + newChatString)
         return newChatString
         // console.log('new chat string is: ' + newChatString.value)
     })
@@ -73,12 +73,12 @@ export default function speakTrashPanda(startingIdx = 0) {
         currentChat.value = formChats.value[chatIdx.value]
         currentString.value = currentChat.value.string
         // console.log('current string is ' + currentString.value)
-        console.log('length is: ' + length)
-        console.log('idx is: ' + chatIdx.value)
+        // console.log('length is: ' + length)
+        // console.log('idx is: ' + chatIdx.value)
         chatIdx.value++
         } else {
             //reset index
-            console.log('index reset')
+            // console.log('index reset')
             chatIdx.value = 0;
             nextChat()
         }

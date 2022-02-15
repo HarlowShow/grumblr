@@ -135,31 +135,31 @@ export default {
     methods: {
 
         goBack() {
-            console.log('goback')
+            // console.log('goback')
             this.$emit('backClick')
         },
 
         isChecked(event) {
             this.customNamed = event;
-            console.log(this.customNamed)
+            // console.log(this.customNamed)
         },
 
         validateLength(choice) {
             //currently only does a check on the custom option
-                console.log(choice);
+                // console.log(choice);
                 if (choice.length < 1 && this.personmateIsCustom === true) {
                     this.invalidInput = true;
-                    console.log("invalid input");
+                    // console.log("invalid input");
                     return this.choice;
                 } else {
                 this.invalidInput = false;
                 }
-                console.log('temp personmate is ' + this.tempPersonmate)
+                // console.log('temp personmate is ' + this.tempPersonmate)
                 this.submitPersonmate(this.tempPersonmate, this.customNamed)
         },
 
         validateSubmission() {
-            console.log("function happened")
+            // console.log("function happened")
                 if (this.personmateIsCustom === false) {
                     this.selectedPersonmate = this.tempPersonmate;
                 }
@@ -168,7 +168,7 @@ export default {
 
         setCustom(value) {
             this.selectedPersonmate = value;
-            console.log('custom emit is: ' + this.selectedPersonmate)
+            // console.log('custom emit is: ' + this.selectedPersonmate)
             this.submitPersonmate(value)
 
         },
@@ -178,9 +178,9 @@ export default {
                 
 
                 if(this.invalidInput === false) {
-                    console.log("input was valid")
+                    // console.log("input was valid")
                     personmate = this.selectedPersonmate;
-                console.log('personmate chosen is ' + personmate)
+                // console.log('personmate chosen is ' + personmate)
 
                 this.$emit('update:personmate', personmate)
 

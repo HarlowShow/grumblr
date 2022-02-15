@@ -31,27 +31,46 @@
     <div id="sliders">
 
                     <the-sliders
-                    :tone="'angry'"
-                    :sliderVal="sliderVal['angry']"
-                    @update:moodCount="updateMoodAngry"
+                        :tone="'angry'"
+                        :sliderVal="sliderVal['angry']"
+                        :moodLimit="moodLimit"
+                        :moodTotal="moodTotal"
+                        :reverse="reverse['angry']"
+                        :cache="cache"
+                        @update:moodCount="updateMood"
                     >
                     </the-sliders>
                     <the-sliders
-                    :tone="'polite'"
-                     :sliderVal="sliderVal['polite']"
-                    @update:moodCount="updateMoodPolite"
+                        :tone="'polite'"
+                        :sliderVal="sliderVal['polite']"
+                        :moodLimit="moodLimit"
+                        :moodTotal="moodTotal"
+                        :reverse="reverse['polite']"
+                        :updateFromCache="updateFromCache"
+                        :cache="cache"
+                        @update:moodCount="updateMood"
                     >
                     </the-sliders>
                     <the-sliders
                         :tone="'paggro'"
                         :sliderVal="sliderVal['paggro']"
-                        @update:moodCount="updateMoodPaggro"
+                        :moodLimit="moodLimit"
+                        :moodTotal="moodTotal"
+                        :reverse="reverse['paggro']"
+                        :updateFromCache="updateFromCache"
+                        :cache="cache"
+                        @update:moodCount="updateMood"
                         >
                     </the-sliders>
                     <the-sliders
-                    :tone="'pirate'"
-                    :sliderVal="sliderVal['pirate']"
-                    @update:moodCount="updateMoodPirate"
+                        :tone="'pirate'"
+                        :sliderVal="sliderVal['pirate']"
+                        :moodLimit="moodLimit"
+                        :moodTotal="moodTotal"
+                        :reverse="reverse['pirate']"
+                        :updateFromCache="updateFromCache"
+                        :cache="cache"
+                        @update:moodCount="updateMood"
                     >
                     </the-sliders>
                   
@@ -72,6 +91,8 @@
                             <button @click="testOne()">test one</button>
                             <button @click="isConfirmed=true">CONFIRM YES</button>
                             <button @click="isConfirmed=false">DON'T YOU DARE</button>
+                            <button @click="moodTotalHit.dontAskAgain=true">yes, don't ask me this again</button>
+                            <button @click="updateFromCache=true">make update from cache var true</button>
                         </template>
             </chat-bubble>
 
@@ -133,28 +154,9 @@ export default {
         const initVal = ref(0)
         const firstTone = store.state.starterTones[0]
         const secondTone = store.state.starterTones[1]
-
-        //promise for confirmation
-        //come back to this
-        const confirmFirst = (val) => {
-            return new Promise((resolve) => {
-                console.log('promise resolved')
-                setTimeout(() => {
-                    if (val===true) {
-                        resolve(true)
-                    } else if (val===false) {
-                        resolve(false)
-                    } else {
-                        resolve(false)
-                    }
-                }, 10000)
-                    
-            });
-        }
            
 
         return {
-            confirmFirst,
             trashPandaObject,
             backchat: backchat.value,
             setChat: trashPandaObject.setChat,
@@ -170,7 +172,7 @@ export default {
 
     
     mounted(){
-            this.rendered=true
+        
             this.priorPhrases = Object.assign({}, this.$store.state.baseOutput);
             this.phraseHistory = Object.assign({}, this.$store.state.baseOutput)
             this.updatedPhrases = this.phrases;
@@ -180,6 +182,7 @@ export default {
             // console.log('second tone is ' + this.secondTone)
             this.addingInit = true
             this.addInit(this.firstTone, 'first')
+            this.rendered=true
           
                
 
@@ -211,7 +214,11 @@ export default {
         
         // phrase: position, status (boolean), phrase, tone
         return {
-            isConfirmed: false,
+            
+            removedFirst: false,
+            awaitingConfirmation: false,
+          
+            isConfirmed: null,
             rendered: null,
             addingInit: false,
             reAddPhrase: null,
@@ -221,9 +228,25 @@ export default {
                 'paggro': false,
                 'pirate': false
             },
+            reverse: {
+                'angry': false,
+                'polite': false,
+                'paggro': false,
+                'pirate': false
+            },
+            cache: {
+                cachedMoodcount: null,
+                cachedTone: '',
+            },
+            deleteThisTone: '',
+            moodTotalHit: {
+                dontAskAgain: false,
+                justCached: false,
+            },
+            updateFromCache: null,
             removingFirst: false,
             sacrificialTone: '',
-            cahchedTone: '',
+            tempTone: '',
          
             activeMoods: [],
             hasAngry: false,
@@ -298,9 +321,10 @@ export default {
 
     watch: 
     {
-
+        //* this one has the comments
         'moodcount.angry': function(newValue, oldValue) {
 
+                //* tracking for active phrases (though this probs should have been a computed)
              if(newValue>0&&this.hasAngry===false) {
                     this.activeMoods.push('angry')
                     this.hasAngry = true;
@@ -309,26 +333,28 @@ export default {
                     this.hasAngry = false;
                 }
 
+                //* tracking for the backchat ui stuff
                 if(newValue>=3&&this.chatted.angry===false) {
                     this.setBackchat('medium', 'angry')
                     this.chatted.angry=true
                 }
-
                 if(newValue>=9&&this.chatted.angry===false) {
                     this.setBackchat('max', 'angry')
                     this.chatted.angry=true
                 }
-           
-            if (this.removingFirst===true) {
-                console.log('doing nothing about that')
-                setTimeout (() =>{
-                      this.removingFirst = false;
-                }, 400)
-              
-            } else {
- 
+
+                // *if this add is one subsequent to removing first, set the tone to the initial cached tone
+                // if(this.removedFirst===true) {
+                //     this.selectedTone = this.cachedTone
+                //     console.log('cached tone set as: ' + this.selectedTone)
+                //     this.removedFirst = false
+                // } else {
+                //     this.selectedTone = 'angry'
+                //     }
+
                 this.selectedTone = 'angry'
-        
+
+                //* trigger the function that makes the changes, pass the difference thorough so it knows how many times to add/remove    
                 let difference = 0
 
                 if(newValue>oldValue) {
@@ -343,7 +369,13 @@ export default {
                     this.runChanges(difference, type);
 
                 }
-            }
+                //! changes here need to be applied to other watched moods
+                //* if we've just removed one, add one a few seconds after that, then set the timeout to false
+                if(this.removingFirst===true) {
+                    console.log('removing first is true, about to add one... or not')
+                    this.readd()
+                    this.removingFirst=false
+                }
         },
 
          'moodcount.polite': function(newValue, oldValue) {
@@ -366,14 +398,6 @@ export default {
                     this.setBackchat('max', 'polite')
                     this.chatted.polite=true
                 }
-           
-
-            if (this.removingFirst===true) {
-                console.log('doing nothing about that')
-                 setTimeout (() =>{
-                      this.removingFirst = false;
-                }, 400)
-            } else {
                 
                 this.selectedTone = 'polite'
                 
@@ -392,7 +416,12 @@ export default {
                     this.runChanges(difference, type);
 
                 }
-            }
+
+                  if(this.removingFirst===true) {
+                    console.log('removing first is true, about to add one... or not')
+                    this.readd()
+                    this.removingFirst=false
+                }
             
         },
 
@@ -416,13 +445,6 @@ export default {
                     this.chatted.paggro=true
                 }
 
-            if (this.removingFirst===true) {
-                console.log('doing nothing about that')
-                 setTimeout (() =>{
-                      this.removingFirst = false;
-                }, 400)
-            } else {
-
                  this.selectedTone = 'paggro'
                
 
@@ -440,11 +462,17 @@ export default {
                     this.runChanges(difference, type);
 
                 }
-            }
+
+                 if(this.removingFirst===true) {
+                    console.log('removing first is true, about to add one... or not')
+                    this.readd()
+                    this.removingFirst=false
+                }
+            
         },
 
             'moodcount.pirate': function(newValue, oldValue) {
-
+                
                if(newValue>0&&this.hasPirate===false) {
                     this.activeMoods.push('pirate')
                     this.hasPirate=true;
@@ -463,12 +491,6 @@ export default {
                     this.chatted.pirate=true
                 }
            
-            if (this.removingFirst===true) {
-                console.log('doing nothing about that')
-                  setTimeout (() =>{
-                      this.removingFirst = false;
-                }, 400)
-            } else {
                 this.selectedTone = 'pirate'
              
 
@@ -486,15 +508,21 @@ export default {
                     this.runChanges(difference, type);
 
                 }
-            }
+
+                if(this.removingFirst===true) {
+                    console.log('removing first is true, about to add one... or not')
+                    this.readd()
+                    this.removingFirst=false
+                }
+    
         },
 
         activeIndexLength: {
                 handler() {
-                console.log('watcher triggered, length is' + this.activeIndexes.length)
+                // console.log('watcher triggered, length is' + this.activeIndexes.length)
                     if(this.activeIndexes.length===0) {
                             this.activeIndexes = this.allIndexes;
-                            console.log('indexes reset')
+                            // console.log('indexes reset')
                     }  
                 },
                 deep: true
@@ -515,25 +543,79 @@ export default {
            
         },
 
+        //related to backchat UI
         moodTotal(newVal){
             //if they're trying to add beyong the mood limit, warn that there will be a delete first
               if(newVal>this.moodLimit) {
                     this.setBackchat('alerts', 'moodTotalReached')
                 }
+        },
+
+        isConfirmed() {
+            this.getConfirmation().then((val) => {
+                this.awaitingConfirmation=false
+               
+                console.log('promise resolved as: ' + val)
+                    if(val===true) {
+                        this.deleteThisTone = this.selectedTone
+                        console.log('delete tone is... ' + this.deleteThisTone)
+                    this.removeFirst()
+                    } else {
+                    return;
+                    }
+            })
         }
         
     },
 
     methods: {
 
-        // setChat(objKey, innerKey){
-        //     let newBackchat = 
-        // },
+        readd() {
+           
+                        //* instead of doing a thingy here do another prop thingy that sends the cached moodcount back down to the parent component
+                        //* so it loops back through the original sequence instead of forcing another awkward slider change without value change
+                        this.updateFromCache = true;
+                        let newCachedVal = this.moodcount[this.$store.state.cache.cachedTone]
+                        newCachedVal++
+                        this.$store.state.cache.cachedRangeVal = newCachedVal
+                        this.moodcount[this.$store.state.cache.cachedTone] = newCachedVal   
+                        console.log('starting readd, will be adding to: ' + this.$store.state.cache.cachedTone)
+                        console.log('new cached val should be... ' + newCachedVal)
+                        
+                        // this.addingPhrase()
+        },
+
+        updateMood({val, tone, fromCache}) {
+
+            // console.log(val, tone)
+            this.moodTotalHit.justCached = fromCache
+           
+           
+            //* check if we need to get confirmation before updating the value
+            if(this.confirmReverse === true) {
+                    //* pass reverse down to child component so it undoes the slider thing
+                    this.$store.state.cache.cachedTone = tone
+                    this.$store.state.cache.cachedMoodcount = val
+                    this.tempTone = tone
+                    this.reverse[tone] = true;
+                    this.awaitConfirmation()
+            } else if (this.confirmReverse===false&&this.moodTotalHit.justCached===true) {
+                this.moodTotalHit.justCached=false
+
+                this.moodcount[tone] =  this.$store.state.cache.cachedMoodcount
+                console.log('just started cached tone update')
+            } else {
+                this.moodcount[tone] = val
+            }
+
+            //* if the answer is no, revert? do i need a cached moodcount so it works for the sliders?
+        },
 
         testOne() {
             // this.backchat = 'who, this is new!'
             // console.log('backchat default is: ' + this.backchat)
             this.setBackchat('max', 'angry')
+            console.log(this.$store.state.cache)
         },
 
         setBackchat(obj, inner) {
@@ -541,6 +623,7 @@ export default {
             this.backchat = testVar
         },
 
+        //add initial two tones (tbu)
         addInit(tone, pos){
             if (pos==='first') {
              this.moodcount[tone]++
@@ -559,46 +642,26 @@ export default {
 
                 if (type==='add') {
                      if (this.reAddPhrase===true) {
-                        console.log("about to REadd phrase")
+                        // console.log("about to REadd phrase")
                      }
     
                     for(; difference>0; difference--) {
-                        console.log("about to add phrase")
+                        // console.log("about to add phrase")
                         setTimeout(() =>{
                             this.addPhrase()
                         },300)
                         
                     }
                 }
-
-                if (type==='sub') {
+                    if (type==='sub') {
                     for(; difference>0; difference--) {
-                        console.log("about to remove phrase")
+                        // console.log("about to remove phrase")
                         setTimeout(()=> {
                             this.reverseGripe(this.selectedTone)
+                            console.log('ran normal reverse gripe')
                         },300)
                     }
                 }
-        },
-
-        updateMoodAngry(moodCount) {
-            console.log('moodcount is' + moodCount)
-            this.moodcount['angry'] = moodCount 
-        },
-
-        updateMoodPolite(moodCount) {
-            console.log('moodcount is' + moodCount)
-            this.moodcount['polite'] = moodCount 
-        },
-
-         updateMoodPaggro(moodCount) {
-            console.log('moodcount is' + moodCount)
-            this.moodcount['paggro'] = moodCount 
-        },
-
-         updateMoodPirate(moodCount) {
-            console.log('moodcount is' + moodCount)
-            this.moodcount['pirate'] = moodCount 
         },
 
         setTone(tone) {
@@ -614,8 +677,11 @@ export default {
             //      this.deleteOptions = this.usedPhrases.filter(phrase => phrase.tone === tone && phrase.status === true);
             // }
             this.deleteOptions = this.usedPhrases.filter(phrase => phrase.tone === tone && phrase.status === true);
+
             if(this.deleteOptions.length===0){
-              console.log('something went wrong')
+              console.log('delete options: something went wrong')
+              //TODO: now the tone coming through is the cached one
+              console.log('you tried to delete at: ' + tone + 'from: ' + this.usedPhrases)
             }
             // let deleteThisPhrase = this.deleteOptions[0];
           
@@ -643,84 +709,139 @@ export default {
            
         },
 
-        removeFirst() {
-            this.removingFirst = true;
-            this.cachedTone = this.selectedTone;
-            let moodOptions = this.activeMoods.filter(mood => mood !==this.cachedTone)
 
+        removeFirst() {
+            console.log('removeFirst function triggered')
+            //*set var as true to avoid adding before this
+            this.removingFirst = true;
+          
+            let moodOptions = this.activeMoods.filter(mood => mood !==this.$store.state.cache.cachedTone)
+            //*pick a tone to remove from
             moodOptions.sort(() => {return 0.5 - Math.random()});
             this.sacrificialTone = moodOptions[0]
+            console.log('sacrificial tone is: ' + this.sacrificialTone)
+            this.addPhrase();
         },
 
+        awaitConfirmation() {
+
+            //* wait for them to confirm if they want to remove another phrase
+
+        
+            this.awaitingConfirmation = true;
+            console.log('waiting')
+
+            setTimeout(() => {
+                this.awaitingConfirmation = false;
+                console.log('finished waiting')
+                // no longer waiting - potentially do something else
+            }, 20000)
+
+                    //* change the reverse val back
+                    setTimeout(() => {
+                    this.reverse[this.tempTone]=false
+                }, 200)
+        },
+
+        getConfirmation() {
+            return new Promise((resolve) => {
+                //TODO: if they go down on their own needs to resolve as false, or if the max no. changes or w/e
+                //TODO: everything should be cancelled if the total goes down before that
+                if (this.isConfirmed===true) {
+                    resolve(true)
+                } else if (this.isConfirmed===false) {
+                    resolve(false)
+                } else {
+                    resolve(false)
+                }
+            });
+        },
+
+
         addPhrase() {
+                //* a space for bonus logic i guess
+                    this.addingPhrase()
 
+            },
 
-            if(this.moodTotal>this.moodLimit) {
-                console.log('moodcount too high, beginning swapsies')
-                //here's where i'll whack in an alert dialogue until it's decided
-                 this.confirmFirst(this.isConfirmed)
-                    .then(() => {
-                        console.log('it happened!')
-                        this.removeFirst()
-                    })
-                    .then(() => {
-                        console.log('sad sad did not happen')
-                    })
-               
-            }
+            //! FTR
+            //  addPhrase() {
+            //     //* if we're already about to remove, skip this bit
+            //     //? is it better to send the removing process through this first or send it straight to adding phrase?
+            //     //? are there any use cases for pushing it through the full loop again?
+            //     if(this.removingFirst===true) {
+            //         this.addingPhrase()
+            //     }
+            //     //* check if one needs to be bumped before adding, wait for comfirmation
+            //     else if(this.moodTotal>this.moodLimit&&this.dontAskAgain===false) {
+            //         //* pass reverse down to child component so it undoes the slider thing
+            //         this.tempTone = this.selectedTone
+            //         this.reverse[this.tempTone] = true;
+            //         this.awaitConfirmation()
+            //     }
+            //     else {
+            //         //* if nothing needs bumping first
+            //         this.addingPhrase()
+            //     }
 
-            // if(this.activeIndexes.length>0) {
+            // },
 
+        selectPhrase(){
+                //* get random index and pick index
                 this.randomize(this.activeIndexes);
                 let currentIndex = this.activeIndexes[0];
 
+                //* get your phrases based on tone
                 this.selectedPhrases = this.phrases.filter(phrase => phrase.tone === this.selectedTone && phrase.position === currentIndex && phrase.status === false);
-                console.log('current index is' + currentIndex)
-                //come back to this bit. where you left off, because you're trying to iterate through a non iterable
+                // console.log('current index is' + currentIndex)
+
+                //!shitty code that hopefully won't need to be triggered
                 if(this.selectedPhrases.length===0) {
-                    console.log('you ran out of fresh phrases, selected tone is: ' + this.selectedTone)
-                    console.log('current index is' + currentIndex)
-                 
+                    console.log('you ran out of fresh phrases, so your shitty code was triggered')
                     this.selectedPhrases = this.phrases.filter(phrase => phrase.tone === this.selectedTone && phrase.position === currentIndex);
                     this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
-                    console.log('selected phrases are' + this.selectedPhrases)
-    
-
-                const selectedOption = this.selectedPhrases[0];
-                this.selectedPhrase =  this.selectedPhrases[0].phrase;
-                // console.log(this.selectedPhrase);
-                this.$store.state.baseOutput[currentIndex] = this.selectedPhrase;
-                this.gripeObject[currentIndex] = this.selectedPhrase
-
-                this.selectedPhrases[0].status = true;
-                this.changeTracker[currentIndex]++;
-                this.activeIndexes.shift();
-                console.log('active indexes are: ' + this.activeIndexes)
-                this.changeLog(currentIndex, selectedOption);
+                    const selectedOption = this.selectedPhrases[0];
+                    this.selectedPhrase =  this.selectedPhrases[0].phrase;
+                    this.$store.state.baseOutput[currentIndex] = this.selectedPhrase;
+                    this.gripeObject[currentIndex] = this.selectedPhrase
+                    this.selectedPhrases[0].status = true;
+                    this.changeTracker[currentIndex]++;
+                    this.activeIndexes.shift();
+                    this.changeLog(currentIndex, selectedOption);
                 } else {
                 this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
 
+                //* update the selected phrase and vuex object
                 const selectedOption = this.selectedPhrases[0];
                 this.selectedPhrase =  this.selectedPhrases[0].phrase;
                 // console.log(this.selectedPhrase);
                 this.$store.state.baseOutput[currentIndex] = this.selectedPhrase;
                 this.gripeObject[currentIndex] = this.selectedPhrase
 
+                //* mark the phrase as selected/index tracking
                 this.selectedPhrases[0].status = true;
                 this.changeTracker[currentIndex]++;
                 this.activeIndexes.shift()
-                console.log('active indexes are: ' + this.activeIndexes)
+                // console.log('active indexes are: ' + this.activeIndexes)
                 this.changeLog(currentIndex, selectedOption);
                 }
+        },
 
+        addingPhrase() {
+
+                //* if removing first, remove first
+                //! needs mechanism for it to wait properly and not fuck it
                 if(this.removingFirst === true) {
-                this.moodcount[this.sacrificialTone]--
-                this.sliderVal[this.sacrificialTone]=!this.sliderVal[this.sacrificialTone];
-                } else {
-                this.$store.state.add++
-                this.moodcount.total++;
+                    // this.selectPhrase()
+                    console.log('removing first, chosen phrase is: ' + this.selectedPhrase)
+                    //this might need to wait first too
+                    this.moodcount[this.sacrificialTone]--
+                    this.sliderVal[this.sacrificialTone]=!this.sliderVal[this.sacrificialTone];
+                    } else {
+                    this.selectPhrase()
+                    this.$store.state.add++
+                    this.moodcount.total++;
                 }
-
         },
 
         changeLog(key, newPhrase) {
@@ -740,13 +861,26 @@ export default {
 
             beforeEnter(el){
             el.style.opacity = 0;
-            console.log('beforeEnter')
-            console.log(el);
+            // console.log('beforeEnter')
+            // console.log(el);
             },
 
     },
 
      computed: {
+        confirmReverse() {
+            let response = null
+            if (this.moodTotalHit.justCached===true) {
+                response = false
+            } else if (this.moodTotalHit.dontAskAgain===true){
+                response = false
+            } else if (this.moodTotal===this.moodLimit) {
+                response = true
+            } else {
+                response = false
+            }
+            return response 
+        },
         moodTotal(){
             return this.moodcount.angry+this.moodcount.polite+this.moodcount.paggro+this.moodcount.pirate;
         },

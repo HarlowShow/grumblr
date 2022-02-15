@@ -37,7 +37,35 @@ import { ref } from 'vue'
 
 export default {
 
-    props: ['tone', 'sliderVal'],
+    props: {
+        
+        tone: {
+            type: String,
+            required: true
+        },
+
+        sliderVal: {
+            type: Boolean,
+            required: true
+        },
+
+        moodLimit: {
+            type: Number,
+            required: true,
+        },
+
+        moodTotal: {
+            type: Number,
+            required: false
+        },
+
+        updateFromCache: {
+            type: Boolean,
+            required: false
+        },
+
+    
+    },
     emits: ['update:moodCount'],
 //you might need to look at the 'watcheffect' stuff
     components: {
@@ -47,20 +75,24 @@ export default {
 
     setup(props) {
 
+        // console.log('mood limit is: ' + props.moodLimit)
+      
         const initVal = ref(0)
         const store = useStore()
         const firstTone = store.state.starterTones[0]
         const secondTone = store.state.starterTones[1]
+        const cachedRangeVal = ref(0)
             if (firstTone===props.tone) {
-                console.log('first tone match! tone: ' + firstTone)
+                // console.log('first tone match! tone: ' + firstTone)
                 initVal.value++
-                console.log('first tone match! initval: ' + initVal.value)
+                // console.log('first tone match! initval: ' + initVal.value)
             }
             if (secondTone===props.tone) {
-                console.log('second tone match! tone: ' +  secondTone)
+                // console.log('second tone match! tone: ' +  secondTone)
                 initVal.value++
-                console.log('second tone match! initval: ' + initVal.value)
+                // console.log('second tone match! initval: ' + initVal.value)
             }
+        cachedRangeVal.value = initVal.value
 
         return {
             addCircle, 
@@ -68,51 +100,99 @@ export default {
             firstTone,
             secondTone,
             initVal: initVal.value,
+            cachedRangeVal
         }
     },
 
     data() {
         return {
+          
             rangeVal: this.initVal,
             subIsDisabled: true,
             addIsDisabled: false,
+            updatingCache: null,
+
         }
     },
 
-//    mounted(){
-
-//         if(this.initVal>0){
-//                 setTimeout(()=>{
-
-//                       this.$emit('update:moodCount', this.rangeVal
-                      
-//                 )},100)
-             
-//                console.log('emitted from tone: ' + this.tone)
-//                console.log('emitted with value: ' + this.rangeVal)
-//         }
-
-//     },
-
     methods: {
 
+
+        //* could put a kind of intermediary var in there, and it will check before emitting more
+        //* properly, and it can have a cached ranged value to revert to if it doesn't go ahead
         rangeChange(event) {
-                this.rangeVal = event.target.value;
-                this.$emit('update:moodCount', this.rangeVal);
-                
-                // console.log(this.rangeVal);
+
+              if( this.$store.state.doNotEmit===true) {
+                  this.$store.state.doNotEmit=false
+                  console.log('did not emit, changing dNE var back to false')
+                  return;
+              } else {
+
+                let sendThisTone = ''
+                if(this.updatingCache === 1){
+                    //* if this is happening as the readd, take the value from the cached val
+                        this.rangeVal = this.$store.state.cache.cachedRangeVal
+                        sendThisTone = this.$store.state.cache.cachedTone
+                        console.log('range val updated with cached range val, val of: ' + this.$store.state.cache.cachedRangeVal)
+                    } else {
+                        sendThisTone = this.tone
+                        this.rangeVal = event.target.value;
+                        console.log('normal range val change, val is: ' + this.rangeVal)
+                    }
+                        this.emitMoodchange(sendThisTone)
+                    }
             },
+
+            emitMoodchange(receivedTone) {
+                    this.$emit('update:moodCount', {
+                    val: this.rangeVal,
+                    tone: receivedTone,
+                    fromCache: this.updatingCache
+                    });
+                    console.log('emitted, sent: val: ' + this.rangeVal + 'tone: ' + receivedTone + 'from cache?: ' + this.updatingCache)
+
+                    setTimeout(() => {
+                        if(this.updatingCache>=1) {
+                        this.updatingCache--
+                        'updating cache val reset'
+                    }
+                    }, 200)
+                  
+            },
+
 
         buttonRangeChange(type) {
 
-        if(type==="add") {
-            this.rangeVal++
-        } else if (type==="sub") {
-            this.rangeVal--
-        } else {
-            console.log('rangeval, something went wrong')
-        }
+            //!works for buttons only atm
+            //* if the limit is hit and we're waiting for confirmation, bounce them out of the update
+            //!this won't work, got to put the promise logic in this component
+            //TODO: whack all the logic in vuex, transfer most of it to this component, has some kind of confirmation emit/provide
+            //TODO: fuck the previous stuff, just send an event down that reverses it
+            if(this.moodLimit===this.laggingTotal&&this.$store.state.pause === true) {
+                //* probs gonna delete and do it another way
+                console.log('bounce')
+                return;
+            } else {
+                if(type==="add") {
+                    this.rangeVal++
+                    console.log('(lagging) mood total is: ' + this.laggingTotal)
+                } else if (type==="sub") {
+                    this.rangeVal--
+                } else {
+                    console.log('rangeval, something went wrong')
+                }
+            }
+         
         },
+
+    },
+
+    computed: {
+
+        //* as mood total prop doesn't get updated until after, this represents the potential total essentially
+        laggingTotal() {
+            return this.moodTotal+1
+        }
     },
 
     watch: {
@@ -124,7 +204,7 @@ export default {
         rangeVal() {
              if(this.rangeVal<=0){
                 this.subIsDisabled=true
-                console.log('disabled style applied')
+                // console.log('disabled style applied')
             } else {
                 this.subIsDisabled=false
             }
@@ -134,8 +214,27 @@ export default {
                 } else {
                 this.addIsDisabled=false
                 }
-            },
         },
+        reverse(newVal) {
+            console.log('reverse prop noticed, value is: ' + newVal)
+            if(newVal===true) {
+                console.log('receive message to reverse')
+                this.$store.state.doNotEmit=true
+                this.rangeVal--
+            } else if(newVal===false) {
+                this.$store.state.doNotEmit=false
+            } else {
+                console.log('reverse prop, something went wrong')
+            }
+        },
+        updateFromCache(newVal) {
+            if(newVal===true&&this.$store.state.cachedTone===this.tone) {
+                console.log('slider received cache instructions at: ' + this.tone)
+                this.updatingCache++;
+                this.rangeChange()
+            }
+        }
+    },
 }
 </script>
 

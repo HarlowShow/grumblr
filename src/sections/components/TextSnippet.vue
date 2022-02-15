@@ -37,6 +37,7 @@ export default {
         const displayText = ref([])
         const optionLimit = snippetArray.length;
         const optionItem = 1;
+  
         // tbc here, need to sort the initreset thingy to get the accurate vals and all
         
         return {
@@ -117,7 +118,7 @@ export default {
                 this.snippetTwoActive = !this.snippetTwoActive
                 this.active = true
             
-                console.log('doing start add')
+                // console.log('doing start add')
                 // console.log('new value is' + newVal)
                 // console.log('old value is' + oldVal)
 
@@ -127,7 +128,7 @@ export default {
                 this.nextSnippet = newVal;
                 this.snippetArray = [...newVal]
                 this.optionLimit = this.snippetArray.length
-                console.log('snippet array is' + this.snippetArray + 'and option limit is ' + this.optionLimit)
+                // console.log('snippet array is' + this.snippetArray + 'and option limit is ' + this.optionLimit)
 
                 this.doing()
         }
@@ -136,7 +137,7 @@ export default {
     watch: {
 
         initReset(newValue) {
-            console.log('new init reset value is' + newValue)
+            // console.log('new init reset value is' + newValue)
             this.swapsies = newValue;
         },
         snippet(newValue, oldValue) {
@@ -151,7 +152,7 @@ export default {
                 } else {
 
                 if(this.$store.state.add>this.$store.state.oldAdd) {
-                    console.log('SNIPPET WATCH: ADDED START')
+                    // console.log('SNIPPET WATCH: ADDED START')
                     if(this.displayText.length>0){
                         this.displayText = [];
                         this.optionLimit = 0
@@ -163,7 +164,7 @@ export default {
                 }
 
                 if(this.$store.state.sub>this.$store.state.oldSub&&this.changeMade===true) {
-                    console.log('SNIPPET WATCH: REMOVE START')
+                    // console.log('SNIPPET WATCH: REMOVE START')
                     this.displayText = [];
                     this.optionItem = 0;
                     this.startAdd(newValue, oldValue);

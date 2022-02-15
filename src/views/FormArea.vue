@@ -313,9 +313,9 @@
         },
 
         mounted() {
-           console.log(this.msgContainer)
+        //    console.log(this.msgContainer)
            this.content = this.msgContainer.parentElement
-           console.log(this.content)
+        //    console.log(this.content)
         },
 
         data() {
@@ -543,7 +543,7 @@
             getElPosition(){
                 let currentEl = this.$refs.el
                 let rect = currentEl.getBoundingClientRect()
-                console.log(currentEl)
+                // console.log(currentEl)
                 let right  = rect.right + window.scrollY
                 let height = window.innerHeight
                 let pos = right/height*100

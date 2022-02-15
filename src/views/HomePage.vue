@@ -10,6 +10,17 @@
           <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/testing">Test Area</ion-button>
       </div>
       <div>
+          <ion-button @click="setOpen(true)">Show Modal</ion-button>
+        <ion-modal
+        :is-open="isOpenRef"
+        @didDismiss="setOpen(false)"
+        >
+        <div>
+          <ion-page>
+          <p>yea boi, welcome to this spicy modal!</p>
+          </ion-page>
+        </div>
+        </ion-modal>
 
       <!-- <text-input
       :placeholders="placeholderArray"
@@ -79,10 +90,13 @@
   import {
        IonButton,
        IonIcon,
+       IonModal,
+       IonPage
       //  IonMenuToggle
   } from '@ionic/vue';
 
   import TheIcons from '../sections/components/TheIcons.vue'
+  import { ref } from 'vue'
   // import TheSliders from './TheSliders.vue'
 
   import { heart, logoFacebook, logoTwitter, logoReddit, logoWhatsapp } from 'ionicons/icons';
@@ -92,6 +106,8 @@ export default {
       IonButton,
       IonIcon,
       TheIcons,
+      IonModal,
+      IonPage
       // TextInput
       // TheSliders,
       // IonMenuToggle,
@@ -99,7 +115,12 @@ export default {
 
   setup() {
 
+     const isOpenRef = ref(false);
+    const setOpen = (state) => (isOpenRef.value = state);
+
       return {
+        isOpenRef,
+        setOpen,
         heart,
         logoFacebook,
         logoTwitter,

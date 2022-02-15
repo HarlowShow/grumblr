@@ -43,6 +43,14 @@ const store = createStore({
       oldAdd: 0,
       oldSub: 0,
       starterTones: [],
+      pause: false,
+
+      cache: {
+        cachedMoodcount: null,
+        cachedTone: '',
+        cachedRangeVal: null,
+      },
+      doNotEmit: false,
     };
   },
 });

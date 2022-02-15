@@ -220,7 +220,7 @@ export default function speakPhrases() {
         {
             position: "of1",
             status: false,
-            phrase: `${activePronouns.subjectPCap} can't believe you've done  `,
+            phrase: `${activePronouns.subjectPCap} can't believe you've done this. `,
             tone: "angry",
 
         },
