@@ -49,24 +49,9 @@ export default {
             required: true
         },
 
-        moodLimit: {
-            type: Number,
-            required: true,
-        },
-
-        moodTotal: {
-            type: Number,
-            required: false
-        },
-
-        updateFromCache: {
-            type: Boolean,
-            required: false
-        },
-
     
     },
-    emits: ['update:moodCount'],
+    emits: ['update:getMoods'],
 //you might need to look at the 'watcheffect' stuff
     components: {
         IonRange,
@@ -100,7 +85,6 @@ export default {
             firstTone,
             secondTone,
             initVal: initVal.value,
-            cachedRangeVal
         }
     },
 
@@ -108,7 +92,8 @@ export default {
         return {
           
             rangeVal: this.initVal,
-            subIsDisabled: true,
+            //! fix subs not being disabled when initial moods go in
+            subIsDisabled: null,
             addIsDisabled: false,
             updatingCache: null,
 
@@ -120,80 +105,31 @@ export default {
 
         //* could put a kind of intermediary var in there, and it will check before emitting more
         //* properly, and it can have a cached ranged value to revert to if it doesn't go ahead
+        //! not sure about how this is structured
         rangeChange(event) {
-
-              if( this.$store.state.doNotEmit===true) {
-                  this.$store.state.doNotEmit=false
-                  console.log('did not emit, changing dNE var back to false')
-                  return;
-              } else {
-
-                let sendThisTone = ''
-                if(this.updatingCache === 1){
-                    //* if this is happening as the readd, take the value from the cached val
-                        this.rangeVal = this.$store.state.cache.cachedRangeVal
-                        sendThisTone = this.$store.state.cache.cachedTone
-                        console.log('range val updated with cached range val, val of: ' + this.$store.state.cache.cachedRangeVal)
-                    } else {
-                        sendThisTone = this.tone
-                        this.rangeVal = event.target.value;
-                        console.log('normal range val change, val is: ' + this.rangeVal)
-                    }
-                        this.emitMoodchange(sendThisTone)
-                    }
-            },
-
-            emitMoodchange(receivedTone) {
-                    this.$emit('update:moodCount', {
-                    val: this.rangeVal,
-                    tone: receivedTone,
-                    fromCache: this.updatingCache
-                    });
-                    console.log('emitted, sent: val: ' + this.rangeVal + 'tone: ' + receivedTone + 'from cache?: ' + this.updatingCache)
-
-                    setTimeout(() => {
-                        if(this.updatingCache>=1) {
-                        this.updatingCache--
-                        'updating cache val reset'
-                    }
-                    }, 200)
-                  
-            },
+                        console.log('range change')
+                        this.rangeVal = event.target.value
+                        this.$emit('update:getMoods', {
+                         val: this.rangeVal,
+                         tone: this.tone,   
+                        });
+                 },
 
 
         buttonRangeChange(type) {
 
-            //!works for buttons only atm
-            //* if the limit is hit and we're waiting for confirmation, bounce them out of the update
-            //!this won't work, got to put the promise logic in this component
-            //TODO: whack all the logic in vuex, transfer most of it to this component, has some kind of confirmation emit/provide
-            //TODO: fuck the previous stuff, just send an event down that reverses it
-            if(this.moodLimit===this.laggingTotal&&this.$store.state.pause === true) {
-                //* probs gonna delete and do it another way
-                console.log('bounce')
-                return;
-            } else {
                 if(type==="add") {
                     this.rangeVal++
-                    console.log('(lagging) mood total is: ' + this.laggingTotal)
                 } else if (type==="sub") {
                     this.rangeVal--
                 } else {
                     console.log('rangeval, something went wrong')
                 }
-            }
          
         },
 
     },
 
-    computed: {
-
-        //* as mood total prop doesn't get updated until after, this represents the potential total essentially
-        laggingTotal() {
-            return this.moodTotal+1
-        }
-    },
 
     watch: {
 
@@ -201,39 +137,26 @@ export default {
             this.rangeVal--
         },
 
-        rangeVal() {
-             if(this.rangeVal<=0){
+        rangeVal: {
+
+            immediate: true,
+             handler(newVal) {
+             if(newVal<=0){
                 this.subIsDisabled=true
                 // console.log('disabled style applied')
             } else {
                 this.subIsDisabled=false
             }
 
-            if(this.rangeVal>=9){
+            if(this.newVal>=9){
                 this.addIsDisabled=true
                 } else {
                 this.addIsDisabled=false
                 }
-        },
-        reverse(newVal) {
-            console.log('reverse prop noticed, value is: ' + newVal)
-            if(newVal===true) {
-                console.log('receive message to reverse')
-                this.$store.state.doNotEmit=true
-                this.rangeVal--
-            } else if(newVal===false) {
-                this.$store.state.doNotEmit=false
-            } else {
-                console.log('reverse prop, something went wrong')
             }
+
         },
-        updateFromCache(newVal) {
-            if(newVal===true&&this.$store.state.cachedTone===this.tone) {
-                console.log('slider received cache instructions at: ' + this.tone)
-                this.updatingCache++;
-                this.rangeChange()
-            }
-        }
+       
     },
 }
 </script>

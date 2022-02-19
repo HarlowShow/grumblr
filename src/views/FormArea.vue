@@ -660,6 +660,8 @@
                 this.setConsequence(this.consequences);
                 this.setPlea(this.pleas);
                 this.$store.state.baseOutput = this.output;
+
+                
                 // this.formPosition++
             },
 

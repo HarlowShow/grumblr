@@ -43,14 +43,14 @@ const store = createStore({
       oldAdd: 0,
       oldSub: 0,
       starterTones: [],
-      pause: false,
-
-      cache: {
-        cachedMoodcount: null,
-        cachedTone: '',
-        cachedRangeVal: null,
+      moodcount: {
+        angry: 0,
+        polite: 0,
+        paggro: 0,
+        pirate: 0,
       },
-      doNotEmit: false,
+      moodcountTotal: null,
+      replace: null,
     };
   },
 });
