@@ -67,8 +67,8 @@ export default {
     methods: {
             doing() {
             
-            // console.log('snippet array is' + this.snippetArray)
-            // console.log('display text is' + this.displayText)
+            console.log('snippet array is' + this.snippetArray)
+            console.log('display text is' + this.displayText)
             this.stopped = false;
                 if (this.initPush === false) {
                         this.displayText.push(this.snippetArray[0]);
@@ -108,6 +108,8 @@ export default {
         },
         
         startAdd(newVal){
+                //! set it here so that if a snippet is being added another process can't start yet
+
                 this.snippetOneActive = !this.snippetOneActive
                 this.snippetTwoActive = !this.snippetTwoActive
                 this.active = true
