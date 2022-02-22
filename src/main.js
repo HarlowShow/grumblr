@@ -51,6 +51,18 @@ const store = createStore({
       },
       moodcountTotal: null,
       replace: null,
+      changeTracker: {
+        'op1': 0,
+        'op2': 0,
+        'of1': 0,
+        'of2': 0,
+        'co0': 0,
+        'co2': 0,
+        'pl0': 0,
+        'pl1': 0,
+        'pl2': 0
+      },
+      activeMood: '',
     };
   },
 });

@@ -26,7 +26,7 @@
 import { toRefs, ref } from 'vue'
 export default {
     
-    props: ['snippet', 'value', 'name', 'index', 'addCount', 'subtractCount', 'initReset', 'tone'],
+    props: ['snippet', 'value', 'name', 'index', 'addCount', 'subtractCount', 'initReset', 'tone', 'subTrigger'],
     setup(props) {
         const { snippet } = toRefs(props)
         const snippetValue = snippet.value
@@ -35,7 +35,7 @@ export default {
         // console.log(snippetArray)
         const displayText = ref([])
         const optionLimit = snippetArray.length;
-        const optionItem = 1;
+        const optionItem = 0;
   
         // tbc here, need to sort the initreset thingy to get the accurate vals and all
         
@@ -61,7 +61,8 @@ export default {
             stopped: false,
             changeMade: false,
             oldAddCount: 0,
-            oldSubtractCount: 0
+            oldSubtractCount: 0,
+            isSub: false,
         }
     },
     methods: {
@@ -69,26 +70,20 @@ export default {
             
             console.log('snippet array is' + this.snippetArray)
             console.log('display text is' + this.displayText)
-            this.stopped = false;
-                if (this.initPush === false) {
-                        this.displayText.push(this.snippetArray[0]);
-                        this.initPush = true
-                    } else if (this.paused === true) {
-                        this.startStop = true;
-                        this.paused=!this.paused
-                    }
-                this.dostuff();
+            //? honestly not sure if any of this matters
+            this.dostuff();
                 
         },
         doOther() {
                 // console.log('reached do other')
                 // console.log('option item is' + this.optionItem)
                 // console.log('option limit is' + this.optionLimit)
+
             if (this.optionItem < this.optionLimit) {
                 // console.log('doing do other')
             // console.log('doing stuff:' + this.optionItem)
             this.displayText.push(this.snippetArray[this.optionItem])
-            // console.log(this.displayText)
+            // console.log('pushed text at: ' + this.optionItem)
             this.optionItem++
             this.dostuff();
             } else {
@@ -97,65 +92,78 @@ export default {
             }
         },
         dostuff() {
-            if (this.startStop===true){
-                    // console.log('dostuff: setting timeout')
                     setTimeout(()=> {
                         this.doOther();
-                    }, 30);
-            } else {
-                console.log('no, stop!')
-            }
+                    }, 40);
+        },
+
+        wait(){
+            return new Promise ((resolve) => {
+                if(this.active===false){
+                    resolve('snippet ready')
+                }
+            })
         },
         
-        startAdd(newVal){
+        async startAdd(newVal){
                 //! set it here so that if a snippet is being added another process can't start yet
-
+                try {
+                const checkStatus = await this.wait()
+                console.log(checkStatus)
+                this.active=true
+                //* set active p to use to allow reloading
                 this.snippetOneActive = !this.snippetOneActive
                 this.snippetTwoActive = !this.snippetTwoActive
-                this.active = true
-            
-                // console.log('doing start add')
-                // console.log('new value is' + newVal)
-                // console.log('old value is' + oldVal)
-                // console.log('add count is' + this.addCount)
-                // console.log('old add count is' + this.oldAddCount)
+               
+
+                //* set new snippet array and option limit (determines no. of characters to push)
                 this.nextSnippet = newVal;
                 this.snippetArray = [...newVal]
                 this.optionLimit = this.snippetArray.length
-                // console.log('snippet array is' + this.snippetArray + 'and option limit is ' + this.optionLimit)
                 this.doing()
+                } catch(e) {
+                    console.log(e)
+                }
+            
         }
     },
     watch: {
         initReset(newValue) {
-            // console.log('new init reset value is' + newValue)
-            this.swapsies = newValue;
+            console.log('new init reset value is' + newValue)
+            // this.swapsies = newValue;
         },
+        subTrigger(newValue) {
+            console.log('new sub general val is')
+            this.isSub = newValue
+        },
+
         snippet(newValue, oldValue) {
+            // * change made var for tracking init change from default to showing non default snippets
+            // * only important for first change made
             this.changeMade = true;
-            if(this.swapsies===true) {
-                console.log('swapsies instead')
-                this.displayText = [];
-                this.optionItem = 0;
-                this.startAdd(newValue, oldValue);
-                } else {
+          
                 if(this.$store.state.add>this.$store.state.oldAdd) {
-                    // console.log('SNIPPET WATCH: ADDED START')
+                    console.log('SNIPPET WATCH: ADDED START')
                     if(this.displayText.length>0){
                         this.displayText = [];
                         this.optionLimit = 0
-                        this.optionItem = 0
+                        this.optionItem = -1
                     }
                     this.startAdd(newValue, oldValue);
                     this.$store.state.oldAdd++
                 }
                 if(this.$store.state.sub>this.$store.state.oldSub&&this.changeMade===true) {
-                    // console.log('SNIPPET WATCH: REMOVE START')
+
+                    console.log('SNIPPET WATCH: REMOVE START')
                     this.displayText = [];
                     this.optionItem = 0;
                     this.startAdd(newValue, oldValue);
                     this.$store.state.oldSub++
-                }
+
+                    //      if(this.$store.state.changeTracker[this.name]>=1){
+                    //     console.log('skip sub')
+                    //     return
+                    // } else {
                 }
         }
     },
@@ -228,18 +236,18 @@ p {
     }
     @keyframes angry-a {
         0% { color: var(--ion-color-angry);}
-        100% { color: black;}
+        100% { color: var(--ion-color-angry);}
     }
     @keyframes polite-a {
         0% { color: var(--ion-color-polite);}
-        100% { color: black;}
+        100% { color: var(--ion-color-polite);}
     }
     @keyframes paggro-a {
         0% { color: var(--ion-color-paggro);}
-        100% { color: black;}
+        100% { color: var(--ion-color-paggro);}
     }
     @keyframes pirate-a {
         0% { color: var(--ion-color-pirate);}
-        100% { color: black;}
+        100% { color: var(--ion-color-pirate);}
     }
 </style>

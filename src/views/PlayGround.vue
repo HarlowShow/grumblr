@@ -1,7 +1,26 @@
 <template>
 
     <base-layout page-default-back-link="/input" page-title="Edit your gripe">
+    <p>{{this.$store.state.changeTracker}}</p>
 
+    <ion-chip> <p> add: {{ this.$store.state.add}} </p></ion-chip>
+    <ion-chip>    <p> sub: {{ this.$store.state.sub }} </p></ion-chip>
+    <ion-chip>    <p>old add: {{ this.$store.state.oldAdd }} </p></ion-chip>
+    <ion-chip>  <p>old sub: {{ this.$store.state.oldSub }} </p></ion-chip>
+
+    <h3> {{ this.$store.state.activeMood }}</h3>
+     <ion-chip
+            color="success"
+            v-for="(value, name) in queue"
+            :key="name">
+            {{ name }} {{ value}}
+    </ion-chip>
+      <ion-chip
+            color="success"
+            v-for="(value, name) in next"
+            :key="name">
+            {{ name }} {{ value}}
+    </ion-chip>
      <ion-chip
             color="success"
             v-for="(value, name) in moodcount"
@@ -10,12 +29,12 @@
     </ion-chip>
 
 
-     <ion-chip
+     <!-- <ion-chip
             color="success"
             v-for="(value, name) in usedPhrases"
             :key="name">
             {{ name }} {{ value}}
-    </ion-chip>
+    </ion-chip> -->
 
         <p> tracking count: {{ tracking.count }}</p>
         <p> tracking prevCount: {{ tracking.prevCount }}</p>
@@ -31,6 +50,7 @@
         :index="index"
         :snippet="gripeObject[name]"
         :tone="this.queue.tone"
+        :subTrigger="this.subTrigger"
         ></new-snippet>
     </div>   
 
@@ -39,12 +59,14 @@
                         v-for="mood in allMoods"
                         :key="mood"
                         :tone="mood"
+                        :isActive="activeSlider[mood]"
                         :sliderVal="sliderVal[mood]"
                         @update:getMoods="getMoods">
                     </the-sliders>
     </div>
 
             <chat-bubble
+                    v-if="testVar===false"
                     id="mobilefooter"
                     :gridClass="'left'">
                         <template v-slot:start>
@@ -135,10 +157,18 @@ export default {
         // phrase: position, status (boolean), phrase, tone
         return {
             
-            subFirst: null,
+            subFirst: false,
+            subTrigger: false,
             addingInit: false,
 
             sliderVal: {
+                'angry': false,
+                'polite': false,
+                'paggro': false,
+                'pirate': false
+            },
+
+            activeSlider: {
                 'angry': false,
                 'polite': false,
                 'paggro': false,
@@ -149,7 +179,8 @@ export default {
                 dontAskAgain: false,
                 justCached: false,
             },
-         
+
+            testVar: true,
             activeMoods: [],
             allMoods: [ 'angry', 'polite', 'paggro', 'pirate'],
             hasAngry: false,
@@ -282,6 +313,20 @@ export default {
                 }
             },
 
+            nextSliders: {
+                angry: null,
+                polite: null,
+                paggro: null,
+                pirate: null,
+            },
+
+            newSliders: {
+                angry: null,
+                polite: null,
+                paggro: null,
+                pirate: null,
+            },
+
             testing: {
                         afterVal: 0,
                         afterTone: 0,
@@ -305,9 +350,9 @@ export default {
 
              next: {
                 // track progress in the sequence
-                step: null,
+                step: '',
                 // boolean on whether subs need to be made before adds
-                subFirst: null,
+                subFirst: false,
                 // initial values pulled from sliders
                 init: {
                     tone: '',
@@ -318,9 +363,9 @@ export default {
                 // the leeway is the number of possible adds before hitting the limit
                 // to be used when the limit is hit
                 difference: {
-                    sub: null,
-                    add: null,
-                    leeway: null,
+                    sub: 0,
+                    add: 0,
+                    leeway: 0,
                     leewayTones: [],
                     subTones: [],
                     addTones: [],
@@ -345,6 +390,7 @@ export default {
                     doing: 'none',
                     removingFirst: false,
                     tone: '',
+                    val: null,
             }
         };
     },
@@ -517,21 +563,41 @@ export default {
             const getStarters = await this.initLoaded()
             console.log('resolved: ' + getStarters)
 
-            const sendFirst = {
-                val: 1,
-                tone: this.firstTone,   
+            if(this.firstTone===this.secondTone){
+                let sendDouble = {
+                    val: 2,
+                    tone: this.firstTone
                 }
+                this.getMoods(sendDouble)
+            } else {
 
-             const sendSecond = {
-                val: 1,
-                tone: this.secondTone,   
-                }
-        
-                this.getMoods(sendFirst)
-             setTimeout(() => {
-                this.getMoods(sendSecond)
-             })
+                const sendFirst = {
+                    val: 1,
+                    tone: this.firstTone,   
+                    }
+
+                const sendSecond = {
+                    val: 1,
+                    tone: this.secondTone,   
+                    }
+            
+                    this.getMoods(sendFirst)
+                setTimeout(() => {
+                    this.getMoods(sendSecond)
+                }, 800)
+            }
         },
+
+        // setActive(tone){
+        //     let keys = Object.keys(this.activeMoods)
+
+        //     keys.forEach((key) => {
+        //         if(key!==tone){
+        //             this.activeMoods[key] = false
+        //         }
+        //     })
+        //     this.activeMoods[tone] = true
+        // },
 
         //* testing function as a starting point so you can pass in test values needed later on
         getMoods({val, tone}){
@@ -539,19 +605,18 @@ export default {
             this.next.step='getMoodsTest'
             // console.log('starting step: ' + this.next.step)
             this.tracking.prevCount = { ...this.moodcount }
-            let initNum = 0
-            let initTone = ''
+            console.log('getting moods, prev count is: ' + this.tracking.prevCount)
 
                 this.next.init = {val, tone}
-                this.tracking.count[initTone] = initNum
+                this.tracking.count[tone] = val
 
             //! update hypothetical (tracking) total here, actual total later on
             //! pass in the object for the tracking total, then you can reuse the function when you want to update the live total
             
-            let total = this.updateTotal(this.tracking.count)
+            let total = this.updateTotal('tracking')
             this.tracking.count['total'] = total
            
-            this.createQueue(initNum, initTone)
+            this.createQueue(val, tone)
 
             
         },
@@ -578,16 +643,16 @@ export default {
                   //? update final count here, but useful to set init count somewhere else to decide on scenarios
                   console.log('all done! moving on')
                   this.resetNext()
-                  this.manageQueue()
-                  if(this.subFirst===true) {
-                      this.subFirst = false
-                  }
+                  this.manageQueue(val, tone)
+                 
                 
               }
 
         },
 
-        async manageQueue(){
+        async manageQueue(val, tone){
+            this.queue.val = val
+            this.queue.tone = tone
             this.next.step = 'manageQueue'
             console.log('starting step: ' + this.next.step)
 
@@ -600,12 +665,7 @@ export default {
             let toLeeway = this.queue.leeway.length
             let toAdd = this.queue.add.length
 
-             console.log('STARTING QUEUE, gonna do: ' + 'add' + toAdd + 'sub' + toSub + 'leeway' + toLeeway)
-            
-            //TODO: (all this...)
-            //! left with fuckery on removing first var, not sure how many versions you need. need to look at that var throughout WHOLE process
-            //! also deleted it from your stuff so need to re add it cleanly, starting from the next object etc. etc.
-            //! then add stuff that tracks what stage you're in, so the snippets don't get added too soon and overwrite each other
+            // console.log('STARTING QUEUE, gonna do: ' + 'add' + toAdd + 'sub' + toSub + 'leeway' + toLeeway)
  
             this.leeway(toLeeway)
             const leewayed = await this.nextQueue('leeway')
@@ -622,9 +682,13 @@ export default {
                 console.log('error in some part of the queue bit')
             } finally {
                 //* update total
-                let newTotal = this.updateTotal(this.moodcount)
+                let newTotal = this.updateTotal('base')
                 this.moodcount['total'] = newTotal
+                //! reset currently disabled
                 this.resetQueue()
+                if(this.subFirst===true) {
+                      this.subFirst = false
+                  }
                 this.updateTracking()
                 this.next.step = 'ready'
                
@@ -632,7 +696,7 @@ export default {
         },
 
         updateTracking() {
-             let update = {
+            let update = {
                 count: { ...this.moodcount },
                 prevCount: { ...this.moodcount },
             }
@@ -649,9 +713,10 @@ export default {
 
                         //* tracking that lets the snippet know when to be pushing/pulling
                     this.$store.state.add++
-
+                     
                     let tone = this.queue.leeway[0]
                     this.queue.tone = tone
+                    this.moodcount[tone]++
     
                        //* get random index and pick index
                     this.randomize(this.activeIndexes);
@@ -667,15 +732,19 @@ export default {
                     //* mark the phrase as selected/index tracking
                     this.selectedPhrases[0].status = true;
                     this.changeTracker[currentIndex]++;
+                    this.$store.state.changeTracker[currentIndex]++;
                     this.activeIndexes.shift()
+                    this.queue.leeway.shift()
                     // console.log('active indexes are: ' + this.activeIndexes)
                     this.changeLog(currentIndex, selectedObj);
-                    this.queue.leeway.shift()
-
+                   
+                    setTimeout(() => {
+                        this.$store.state.baseOutput[currentIndex] = selected
+                        this.gripeObject[currentIndex] = selected
+                       
+                           console.log('leeway, phrase sent to snippet')
+                    }, 200)
                     //* add to vuex tracking and the gripe object, which triggers the actual text change
-                    this.$store.state.baseOutput[currentIndex] = selected
-                    this.gripeObject[currentIndex] = selected
-                    this.moodcount[tone]++
 
                     if(this.queue.leeway.length===0) {
                         //! this could be a good place to update moodcount - after each step?
@@ -687,7 +756,7 @@ export default {
                 console.log('no leeway added')
                 setTimeout(() => {
                     this.nextQueue('leeway')
-                }, 100)
+                }, 200)
             }
           
         },
@@ -702,9 +771,12 @@ export default {
 
                         //* tracking that lets the snippet know when to be pushing/pulling
                     this.$store.state.add++
+                  
 
                     let tone = this.queue.add[0]
                     this.queue.tone = tone
+                    this.moodcount[tone]++
+                  
     
                        //* get random index and pick index
                     this.randomize(this.activeIndexes);
@@ -720,6 +792,7 @@ export default {
                     //* mark the phrase as selected/index tracking
                     this.selectedPhrases[0].status = true;
                     this.changeTracker[currentIndex]++;
+                    this.$store.state.changeTracker[currentIndex]++;
                     this.activeIndexes.shift()
                     this.queue.add.shift()
 
@@ -728,9 +801,13 @@ export default {
                    
 
                     //* add to vuex tracking and the gripe object, which triggers the actual text change
-                    this.$store.state.baseOutput[currentIndex] = selected
-                    this.gripeObject[currentIndex] = selected
-                    this.moodcount[tone]++
+                    setTimeout(() => {
+                           this.$store.state.baseOutput[currentIndex] = selected
+                           this.gripeObject[currentIndex] = selected
+                          
+                           console.log('add, phrase sent to snippet')
+                    }, 200)
+                 
 
                     if(this.queue.add.length===0) {
                         //! this could be a good place to update moodcount - after each step?
@@ -742,7 +819,7 @@ export default {
                 console.log('no add necessary')
                 setTimeout(() => {
                      this.nextQueue('add')
-                }, 100)
+                }, 200)
                
             }
           
@@ -753,13 +830,19 @@ export default {
                 this.queue.doing="sub"
 
             if(subQ>0) {
+
+                this.subTrigger = true;
+                setTimeout(() => {
+                    this.subTrigger = false
+                }, 50)
           
                  for(let i = 0; i < subQ; i++) {
-                    this.$store.state.sub++
 
                     let tone = this.queue.sub[0]
                     this.queue.tone = tone
+                    this.moodcount[tone]--
 
+                    console.log('for loop, sub first is: ' + this.subFirst)
                     //* get potential delete options
                     let deleteOptions = this.usedPhrases.filter(phrase => phrase.tone === tone && phrase.phrase.length>0)
 
@@ -774,7 +857,19 @@ export default {
                            position: deleteKey
                     } = deleteOptions[0]
 
+                     if(this.subFirst===true) {
+                                console.log('sub phrase skipped, gonna be replaced instead')
+                                this.sliderVal[tone]=!this.sliderVal[tone]
+                            } else {
+                    
+                    this.$store.state.sub++
                     this.activeIndexes.push(deleteKey)
+
+                    //* this tracking stuff is so it knows whether the remove first should be like an add replace, or like a normal sub
+                    if(this.subFirst===false) {
+                    this.$store.state.changeTracker[deleteKey]--
+                    }
+                    this.queue.sub.shift()
                     console.log('deletePhrase: ' + deletePhrase)
                     console.log('deleteTone: ' + deleteTone)
 
@@ -794,18 +889,25 @@ export default {
                     
 
                     //* add to vuex and trigger the actual change
-                    this.$store.state.baseOutput[deleteKey] = this.priorPhrases[deleteKey];
-                    this.gripeObject[deleteKey] =  this.priorPhrases[deleteKey];
-                    this.moodcount[tone]--
+                        setTimeout(() => {
+                                
+                                this.$store.state.baseOutput[deleteKey] = this.priorPhrases[deleteKey];
+                                this.gripeObject[deleteKey] =  this.priorPhrases[deleteKey];
+                                console.log('sub, phrase sent to snippet')
+                                this.$store.state.changeTracker[deleteKey]=0
 
-                    if(this.removingFirst===true){
-                        this.sliderVal=!this.sliderVal
+                        }, 200)
+
                     }
 
+                    
                     if(this.queue.sub.length===0) {
                         //! this could be a good place to update moodcount - after each step?
                         //! or do it at the end of everything?
-                        this.nextQueue('sub', subQ)
+                        setTimeout(() => {
+                            this.nextQueue('sub', subQ)
+                        }, 250)
+                       
                     }
 
                 }
@@ -813,28 +915,27 @@ export default {
                 console.log('no sub necessary')
                 setTimeout(() => {
                      this.nextQueue('sub')
-                }, 100)
+                }, 200)
             }
         },
 
-        nextQueue(status, val){
+        nextQueue(status){
             
             // console.log('just finished: ' + status)
             return new Promise((resolve, reject) => {
 
-                let tone = this.selectedTone
                   if(status==='leeway'){
-                      this.moodcount[tone]+=val
+                    
                       this.queue.doing = 'none'
                       this.queue.leewayed = true
                   resolve(status)
                   } else if (status==='sub'){
-                      this.moodcount[tone]-=val
+                    
                       this.queue.doing = 'none'
                       this.queue.subbed = true
                   resolve(status)
                   } else if(status==='add'){
-                      this.moodcount[tone]+=val
+                  
                       this.queue.doing = 'none'
                       this.queue.added = true
                   resolve(status)
@@ -860,7 +961,8 @@ export default {
                     this.next.subFirst = true
                     // * sets the property for the snippet phase
                     this.subFirst = true
-                    let leeway = this.moodLimit - this.tracking.prevCount.total
+                    let leeway = this.moodLimit - this.tracking.prevCount['total']
+                    console.log('leeway set at: ' + leeway)
                     // console.log('leeway: ' + leeway)
                     this.next.difference.leeway = leeway
                 } else {
@@ -873,15 +975,19 @@ export default {
         setDifference(val, tone){
             return new Promise ((resolve, reject) => {
 
+                    console.log('SET DIFFERENCE: tone is ' + tone)
+
                     this.next.step="setDifference"
                     console.log('starting step: ' + this.next.step)
 
                     let oldVal = this.tracking.prevCount[tone]
-                    console.log('prevcount: ' + this.tracking.prevCount)
+                
                     // console.log('old val is: ' + oldVal)
                     let newVal = val
                     let numType = Math.sign(newVal-oldVal)
                     let diff = null
+
+                    console.log(`DIFFERENCE: old val is ${oldVal}. new val is ${newVal}`)
                     // console.log('num type is: ' + numType)
                     // * this returns whether it's negative or positive, negative is -1 and positive is 1
                     if (numType===-1||newVal===0) {
@@ -896,12 +1002,17 @@ export default {
                         diff = newVal - oldVal
 
                         //* if leeway, set add to the val that will be added after leeway
-                        if(this.next.subFirst===true&&this.next.difference.leeway){
+                        if(this.next.subFirst===true&&this.next.difference.leeway>0){
                            this.next.difference.add = diff - this.next.difference.leeway
                            this.next.difference.sub = this.next.difference.add
-                        } else {
-                     
+                           console.log('outcome: add, sub and leeway')
+                        } else if(this.next.subFirst===true) {
                             this.next.difference.add = diff
+                            this.next.difference.sub = diff
+                                     console.log('outcome: sub then add')
+                            } else {
+                            this.next.difference.add = diff
+                                 console.log('outcome: just add')
                             }
 
                         resolve(diff)
@@ -919,7 +1030,8 @@ export default {
             return new Promise((resolve, reject) => {
                     
                     this.next.step="pushDifference"
-
+                    console.log(`at push difference step, vals are: sub, ${this.next.difference.sub} add, ${this.next.difference.add}  leeway, ${this.next.difference.leeway} `)
+            
                        //* if we're just adding
                         if (this.next.difference.add>0&&this.next.subFirst===false){
                             let addArr = Array.from({
@@ -1032,15 +1144,15 @@ export default {
             let reset = {
 
                 step: 'ready',
-                subFirst: null,
+                subFirst: false,
                 init: {
                     tone: '',
                     val: null,
                 },
                 difference: {
-                    sub: null,
-                    add: null,
-                    leeway: null,
+                    sub: 0,
+                    add: 0,
+                    leeway: 0,
                     leewayTones: [],
                     subTones: [],
                     addTones: [],
@@ -1071,13 +1183,26 @@ export default {
         },
 
         updateTotal(obj) {
-            let {
-                angry: a,
-                polite: b,
-                paggro: c,
-                pirate: d,
-            } = obj
-            let total = a + b + c + d
+            console.log('update total function triggered on: ' + obj)
+            let total
+            let angry, polite, paggro, pirate
+            if(obj==='tracking') {
+                angry = this.tracking.count['angry']
+                polite =  this.tracking.count['polite']
+                paggro = this.tracking.count['paggro']
+                pirate = this.tracking.count['pirate']
+            } else if(obj==='base') {
+                angry = this.moodcount['angry']
+                polite = this.moodcount['polite']
+                paggro = this.moodcount['paggro']
+                pirate = this.moodcount['pirate']
+            } else {
+                'something went wrong in update total function'
+            }
+
+            console.log(`angry: ${angry} polite: ${polite} paggro: ${paggro} pirate: ${pirate}`)
+            total = angry + polite + paggro + pirate
+            console.log('total should be: ' + total)
             return total
         },
 

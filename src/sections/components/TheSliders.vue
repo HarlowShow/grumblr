@@ -1,11 +1,17 @@
 <template>
      <ion-range :class="tone"
+       
         id="slider"
         :value="rangeVal"
         min="0"
         max="9"
         step="1"
-        @ionChange="rangeChange($event)">
+        ticks="true"
+        snaps="true"
+        @click="test($event)"
+        @ionChange="rangeChange($event)"
+       
+        @touchend="touchEvent('touchend')">
 
          <ion-icon 
                 v-if="subIsDisabled===false"
@@ -88,6 +94,12 @@ export default {
         }
     },
 
+    mounted(){
+        if(this.initVal){
+            this.setInit=true
+        }
+    },
+
     data() {
         return {
           
@@ -96,6 +108,7 @@ export default {
             subIsDisabled: null,
             addIsDisabled: false,
             updatingCache: null,
+            setInit: false,
 
         }
     },
@@ -106,17 +119,65 @@ export default {
         //* could put a kind of intermediary var in there, and it will check before emitting more
         //* properly, and it can have a cached ranged value to revert to if it doesn't go ahead
         //! not sure about how this is structured
-        rangeChange(event) {
-                        console.log('range change')
-                        this.rangeVal = event.target.value
-                        this.$emit('update:getMoods', {
-                         val: this.rangeVal,
-                         tone: this.tone,   
-                        });
-                 },
+
+
+        touchEvent(event){
+            this.rangeVal = event.target.value
+
+            if(this.setInit===true){
+                    let active = this.tone
+                    this.$store.state.activeMood=active
+            }
+           
+            //! will need to update to ignore the initthingy events
+        },
+
+        checkActive() {
+             return new Promise((resolve) => {
+                 if(this.$store.state.activeMood===this.tone){
+                     resolve(true)
+                     console.log('SLIDER: check active resolved at: ' + this.tone)
+                 } else {
+                     setTimeout(() => {
+                        resolve(false)
+                        console.log('SLIDER: check active rejected at: ' + this.tone)
+                     }, 1000)
+                 }
+            })
+        },
+
+        async rangeChange(event) {
+
+           
+            console.log('range change at: ' + this.tone)
+            this.rangeVal = event.target.value
+            const activeCheck = await this.checkActive()
+
+            if(activeCheck===true){
+               
+                this.$emit('update:getMoods', {
+                    val: this.rangeVal,
+                    tone: this.tone,
+                });
+            } else if(this.setInit===false){
+                console.log('SLIDER, CANCELLING INIT SET')
+                this.setInit=true
+            }
+            else if (activeCheck===false) {
+                console.log('DID NOT EMIT, ACTIVE CHECK FAILED AT: ' + this.tone)
+            } else {
+                console.log('DID NOT EMIT, SOMETHING ELSE HAPPENED AT: ' + this.tone)
+            }
+
+        },
 
 
         buttonRangeChange(type) {
+
+                if(this.setInit===true){
+                let active = this.tone
+                this.$store.state.activeMood=active
+                }
 
                 if(type==="add") {
                     this.rangeVal++
