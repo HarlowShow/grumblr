@@ -1,26 +1,18 @@
 <template>
  
-  <base-layout page-title="Gripe Generator">
+  <base-layout>
 
 
    
       <div class="content">
-           <h1>Gripe Generator</h1>
-          <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/input">Start</ion-button>
-          <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/testing">Test Area</ion-button>
+
+          <h3>do a funny communicate?</h3>
+        
+          <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/input">yes ok</ion-button>
+         
       </div>
       <div>
-          <ion-button @click="setOpen(true)">Show Modal</ion-button>
-        <ion-modal
-        :is-open="isOpenRef"
-        @didDismiss="setOpen(false)"
-        >
-        <div>
-          <ion-page>
-          <p>yea boi, welcome to this spicy modal!</p>
-          </ion-page>
-        </div>
-        </ion-modal>
+        
 
       <!-- <text-input
       :placeholders="placeholderArray"
@@ -90,13 +82,13 @@
   import {
        IonButton,
        IonIcon,
-       IonModal,
-       IonPage
+      //  IonModal,
+      //  IonPage
       //  IonMenuToggle
   } from '@ionic/vue';
 
   import TheIcons from '../sections/components/TheIcons.vue'
-  import { ref } from 'vue'
+  // import { ref } from 'vue'
   // import TheSliders from './TheSliders.vue'
 
   import { heart, logoFacebook, logoTwitter, logoReddit, logoWhatsapp } from 'ionicons/icons';
@@ -106,8 +98,8 @@ export default {
       IonButton,
       IonIcon,
       TheIcons,
-      IonModal,
-      IonPage
+      // IonModal,
+      // IonPage
       // TextInput
       // TheSliders,
       // IonMenuToggle,
@@ -115,12 +107,12 @@ export default {
 
   setup() {
 
-     const isOpenRef = ref(false);
-    const setOpen = (state) => (isOpenRef.value = state);
+    //  const isOpenRef = ref(false);
+    // const setOpen = (state) => (isOpenRef.value = state);
 
       return {
-        isOpenRef,
-        setOpen,
+        // isOpenRef,
+        // setOpen,
         heart,
         logoFacebook,
         logoTwitter,

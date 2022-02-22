@@ -3,11 +3,12 @@
    <ion-page >
 
        <ion-header>
-         <ion-toolbar>
+         <ion-toolbar class="ion-text-center">
+             <ion-title >Trash Talk Panda</ion-title>
              <ion-menu-button slot="start"></ion-menu-button>
              <!-- <ion-menu-toggle><button>toggle</button></ion-menu-toggle> -->
              <!-- <div slot="start"><slot name="top"></slot></div> -->
-                <!-- <h1>Trash Talk Panda</h1> -->
+             <ion-icon :icon="helpOutline" slot="end" @click="openModal"></ion-icon>
                  <h3 class="close" slot="end" v-show="open===true">X</h3>
                  <!-- <button @click="openMain()">open menu</button> -->
                  
@@ -36,30 +37,22 @@
 
 
 import ThePithyQuote from './ThePithyQuote.vue';
-// import { mail, paperPlane, heart, trash, warning, archive } from 'ionicons/icons';
+import TheSideModal from './TheSideModal.vue'
+import { helpOutline } from 'ionicons/icons';
 // import MobileFooter from './MobileFooter.vue'
 
 import {
         IonPage,
         IonHeader,
         IonToolbar,
-        // IonTitle,
+        IonTitle,
         IonContent,
-        // IonBackButton,
-        // IonButtons,
         IonFooter,
-        IonMenuButton
-        // IonMenu,
-        // menuController,
-        // IonItem,
-        // IonList,
-        // IonMenuToggle,
-        // IonButton,
-        // IonLabel,
+        IonMenuButton,
+        modalController,
+        IonIcon
      
 } from '@ionic/vue';
-
-// import TheSideMenu from './TheSideMenu.vue'
 
 
 export default {
@@ -68,23 +61,22 @@ export default {
         IonHeader, 
         IonToolbar, 
         IonMenuButton,
-        // IonTitle, 
+        IonTitle, 
         IonContent, 
         IonFooter, 
         ThePithyQuote, 
-        // IonMenu,
-        // IonItem,
-        // IonList,
-        // IonLabel,
-        // IonMenuToggle,
-        // IonButton,
-        // IonBackButton, 
-        // IonButtons,
-        // TheSideMenu
+        IonIcon
         },
     
     //  
     props: ['page-title', 'content'],
+
+    setup() {
+
+        return {
+            helpOutline
+        }
+    },
 
     data() {
 
@@ -93,22 +85,23 @@ export default {
         }
     },
 
-    // mounted() {
-    //      menuController.enable(true, 'main');
-
-    // },
-
     methods: {
+
+        async openModal() {
+        const modal = await modalController.create({
+          component: TheSideModal,
+          cssClass: 'my-custom-class',
+          componentProps: {
+            title: 'New Title',
+          },
+        });
+        return modal.present();
+      },
 
         menuDidClose(){
             console.log('menu closed')
         },
 
-        // test(){
-        //     menuController.enable(true, 'main');
-        //     menuController.close('main');
-        // },
-        
         async route(page) {
             try {
                 await this.startUpdate(page)
@@ -170,6 +163,14 @@ export default {
      width: 100%;
      max-width: 60rem;
      /* margin: 0 auto !important; */
+ }
+
+ ion-icon {
+    font-size: 1rem;
+ }
+
+ ion-toolbar {
+     --padding-end: 10px;
  }
 
  ion-content {

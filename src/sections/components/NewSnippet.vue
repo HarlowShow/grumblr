@@ -26,7 +26,7 @@
 import { toRefs, ref } from 'vue'
 export default {
     
-    props: ['snippet', 'value', 'name', 'index', 'addCount', 'subtractCount', 'initReset', 'tone', 'subTrigger'],
+    props: ['snippet', 'value', 'name', 'index', 'addCount', 'subtractCount', 'initReset'],
     setup(props) {
         const { snippet } = toRefs(props)
         const snippetValue = snippet.value
@@ -63,6 +63,7 @@ export default {
             oldAddCount: 0,
             oldSubtractCount: 0,
             isSub: false,
+            currentTone: 'default',
         }
     },
     methods: {
@@ -108,12 +109,17 @@ export default {
         async startAdd(newVal){
                 //! set it here so that if a snippet is being added another process can't start yet
                 try {
+
                 const checkStatus = await this.wait()
-                console.log(checkStatus)
+            
                 this.active=true
+                console.log(checkStatus)
+              
                 //* set active p to use to allow reloading
                 this.snippetOneActive = !this.snippetOneActive
                 this.snippetTwoActive = !this.snippetTwoActive
+               
+                console.log('snippet class object is: ' + this.classObject)
                
 
                 //* set new snippet array and option limit (determines no. of characters to push)
@@ -128,14 +134,21 @@ export default {
         }
     },
     watch: {
+        classTone: {
+
+            immediate: true,
+            handler(newValue){
+            console.log('tone watched, new val is: ' + newValue)
+            }
+        },
         initReset(newValue) {
             console.log('new init reset value is' + newValue)
             // this.swapsies = newValue;
         },
-        subTrigger(newValue) {
-            console.log('new sub general val is')
-            this.isSub = newValue
-        },
+        // subTrigger(newValue) {
+        //     console.log('new sub general val is')
+        //     this.isSub = newValue
+        // },
 
         snippet(newValue, oldValue) {
             // * change made var for tracking init change from default to showing non default snippets
@@ -143,7 +156,7 @@ export default {
             this.changeMade = true;
           
                 if(this.$store.state.add>this.$store.state.oldAdd) {
-                    console.log('SNIPPET WATCH: ADDED START')
+                    // console.log('SNIPPET WATCH: ADDED START')
                     if(this.displayText.length>0){
                         this.displayText = [];
                         this.optionLimit = 0
@@ -154,16 +167,11 @@ export default {
                 }
                 if(this.$store.state.sub>this.$store.state.oldSub&&this.changeMade===true) {
 
-                    console.log('SNIPPET WATCH: REMOVE START')
+                    // console.log('SNIPPET WATCH: REMOVE START')
                     this.displayText = [];
                     this.optionItem = 0;
                     this.startAdd(newValue, oldValue);
                     this.$store.state.oldSub++
-
-                    //      if(this.$store.state.changeTracker[this.name]>=1){
-                    //     console.log('skip sub')
-                    //     return
-                    // } else {
                 }
         }
     },
@@ -171,7 +179,7 @@ export default {
         classObject() {
             let selected = ''
             if (this.active===true) {
-                selected = this.tone
+                selected = this.$store.state.classTone
             } else {
                 selected ='default'
             }
@@ -236,18 +244,18 @@ p {
     }
     @keyframes angry-a {
         0% { color: var(--ion-color-angry);}
-        100% { color: var(--ion-color-angry);}
+        100% { color: black;}
     }
     @keyframes polite-a {
         0% { color: var(--ion-color-polite);}
-        100% { color: var(--ion-color-polite);}
+        100% { color: black;}
     }
     @keyframes paggro-a {
         0% { color: var(--ion-color-paggro);}
-        100% { color: var(--ion-color-paggro);}
+        100% { color: black;}
     }
     @keyframes pirate-a {
         0% { color: var(--ion-color-pirate);}
-        100% { color: var(--ion-color-pirate);}
+        100% { color: black;}
     }
 </style>

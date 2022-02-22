@@ -1,4 +1,5 @@
 <template>
+
      <ion-range :class="tone"
        
         id="slider"
@@ -8,15 +9,16 @@
         step="1"
         ticks="true"
         snaps="true"
-        @click="test($event)"
-        @ionChange="rangeChange($event)"
-       
-        @touchend="touchEvent('touchend')">
+    
+    
+        @click="touchEvent($event)"
+        @touchend="touchEvent($event)">
 
          <ion-icon 
                 v-if="subIsDisabled===false"
                 slot="start" :icon="removeCircle"
-                @click="buttonRangeChange('sub')"
+                @click.stop="touchEvent($event, 'stop', 'sub')"
+                @touchend.stop="touchEvent($event, 'stop', 'sub')"
         ></ion-icon>
         <ion-icon v-else
                 slot="start" :icon="removeCircle"
@@ -25,13 +27,16 @@
          <ion-icon 
                  v-if="addIsDisabled===false"
                 slot="end" :icon="addCircle"
-                @click="buttonRangeChange('add')"
+                @click.stop="touchEvent($event, 'stop', 'add')"
+                @touchend.stop="touchEvent($event, 'stop', 'add')"
                 ></ion-icon>
            <ion-icon v-else
                 slot="end" :icon="addCircle"
                 class="disabled">
+             
         </ion-icon>
         </ion-range>
+    
 </template>
 
 <script>
@@ -116,73 +121,61 @@ export default {
     methods: {
 
 
-        //* could put a kind of intermediary var in there, and it will check before emitting more
-        //* properly, and it can have a cached ranged value to revert to if it doesn't go ahead
-        //! not sure about how this is structured
+        touchEvent(event, optional, type){
+            
+            let cachedVal = this.rangeVal
+    
+            if(!optional){
+             
 
+                this.rangeVal = event.target.value
 
-        touchEvent(event){
-            this.rangeVal = event.target.value
+            } else if (optional) {
+             
+                if(type==='add') {
+                        console.log(this.rangeVal)
+                        let newAdd = this.rangeVal + 1
+                        this.rangeVal = newAdd
+                } else if (type==='sub'){
+                        let newSub = this.rangeVal - 1
+                        this.rangeVal = newSub
+                }
 
-            if(this.setInit===true){
-                    let active = this.tone
-                    this.$store.state.activeMood=active
+                } else {
+                    console.log('touchEvent: something went wrong')
+                }
+
+                    if (this.rangeVal === cachedVal){
+                        console.log('not enough range change')
+                        return
+
+                        } else {
+
+                        let active = this.tone
+                        this.$store.state.activeMood=active
+
+                        this.$emit('update:getMoods', {
+                                val: this.rangeVal,
+                                tone: this.tone,
+                        });
+
             }
            
             //! will need to update to ignore the initthingy events
         },
 
-        checkActive() {
-             return new Promise((resolve) => {
-                 if(this.$store.state.activeMood===this.tone){
-                     resolve(true)
-                     console.log('SLIDER: check active resolved at: ' + this.tone)
-                 } else {
-                     setTimeout(() => {
-                        resolve(false)
-                        console.log('SLIDER: check active rejected at: ' + this.tone)
-                     }, 1000)
-                 }
-            })
-        },
-
-        async rangeChange(event) {
-
-           
-            console.log('range change at: ' + this.tone)
-            this.rangeVal = event.target.value
-            const activeCheck = await this.checkActive()
-
-            if(activeCheck===true){
-               
-                this.$emit('update:getMoods', {
-                    val: this.rangeVal,
-                    tone: this.tone,
-                });
-            } else if(this.setInit===false){
-                console.log('SLIDER, CANCELLING INIT SET')
-                this.setInit=true
-            }
-            else if (activeCheck===false) {
-                console.log('DID NOT EMIT, ACTIVE CHECK FAILED AT: ' + this.tone)
-            } else {
-                console.log('DID NOT EMIT, SOMETHING ELSE HAPPENED AT: ' + this.tone)
-            }
-
-        },
-
-
         buttonRangeChange(type) {
 
-                if(this.setInit===true){
                 let active = this.tone
                 this.$store.state.activeMood=active
-                }
+         
 
                 if(type==="add") {
                     this.rangeVal++
+                    // this.touchEvent()
                 } else if (type==="sub") {
                     this.rangeVal--
+                    // this.touchEvent()
                 } else {
                     console.log('rangeval, something went wrong')
                 }
@@ -194,8 +187,19 @@ export default {
 
     watch: {
 
-        sliderVal() {
-            this.rangeVal--
+        sliderVal: {
+
+            immediate: true,
+
+            handler(newVal){
+
+                if(newVal===true){
+                    let subme = this.$store.state.sliderSubs[this.tone]
+                    console.log('subme is: ' + subme + 'at ' + this.tone)
+                    let updatedVal = this.rangeVal - subme
+                    this.rangeVal = updatedVal
+                }
+            }
         },
 
         rangeVal: {

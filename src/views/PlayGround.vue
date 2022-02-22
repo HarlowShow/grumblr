@@ -1,7 +1,9 @@
 <template>
 
     <base-layout page-default-back-link="/input" page-title="Edit your gripe">
-    <p>{{this.$store.state.changeTracker}}</p>
+    <p>{{this.activeIndexes}}</p>
+    <p>see delete options (cached) {{ this.seeDeleteOptions }}</p>
+    <button @click="resetNext"> reset next </button>
 
     <ion-chip> <p> add: {{ this.$store.state.add}} </p></ion-chip>
     <ion-chip>    <p> sub: {{ this.$store.state.sub }} </p></ion-chip>
@@ -49,8 +51,6 @@
         :name="name"
         :index="index"
         :snippet="gripeObject[name]"
-        :tone="this.queue.tone"
-        :subTrigger="this.subTrigger"
         ></new-snippet>
     </div>   
 
@@ -156,6 +156,8 @@ export default {
         
         // phrase: position, status (boolean), phrase, tone
         return {
+
+            doing: false,
             
             subFirst: false,
             subTrigger: false,
@@ -347,6 +349,8 @@ export default {
                         },
                       
             },
+
+            seeDeleteOptions: [],
 
              next: {
                 // track progress in the sequence
@@ -588,20 +592,19 @@ export default {
             }
         },
 
-        // setActive(tone){
-        //     let keys = Object.keys(this.activeMoods)
-
-        //     keys.forEach((key) => {
-        //         if(key!==tone){
-        //             this.activeMoods[key] = false
-        //         }
-        //     })
-        //     this.activeMoods[tone] = true
-        // },
+        finishedPrevious() {
+            return new Promise((resolve) => {
+                if(this.doing===false){
+                    resolve()
+                }
+            })
+        },
 
         //* testing function as a starting point so you can pass in test values needed later on
-        getMoods({val, tone}){
+        async getMoods({val, tone}){
 
+            await this.finishedPrevious()
+            this.doing = true
             this.next.step='getMoodsTest'
             // console.log('starting step: ' + this.next.step)
             this.tracking.prevCount = { ...this.moodcount }
@@ -609,6 +612,7 @@ export default {
 
                 this.next.init = {val, tone}
                 this.tracking.count[tone] = val
+                this.$store.state.classTone = tone
 
             //! update hypothetical (tracking) total here, actual total later on
             //! pass in the object for the tracking total, then you can reuse the function when you want to update the live total
@@ -691,6 +695,7 @@ export default {
                   }
                 this.updateTracking()
                 this.next.step = 'ready'
+                this.doing = false
                
             }
         },
@@ -831,14 +836,14 @@ export default {
 
             if(subQ>0) {
 
-                this.subTrigger = true;
-                setTimeout(() => {
-                    this.subTrigger = false
-                }, 50)
           
                  for(let i = 0; i < subQ; i++) {
 
-                    let tone = this.queue.sub[0]
+                    if(this.activeIndexes.length===0) {
+                            this.activeIndexes = this.allIndexes
+                    }
+
+                    let tone = this.queue.sub[i]
                     this.queue.tone = tone
                     this.moodcount[tone]--
 
@@ -846,8 +851,11 @@ export default {
                     //* get potential delete options
                     let deleteOptions = this.usedPhrases.filter(phrase => phrase.tone === tone && phrase.phrase.length>0)
 
+                    this.seeDeleteOptions = deleteOptions
                     if(deleteOptions.length>1){
                     deleteOptions.sort(() => {return 0.5 - Math.random()})
+                    } else {
+                        console.log('something went wrong with delete options')
                     }
 
                     //* find an index where a used phrase can be deleted
@@ -858,8 +866,11 @@ export default {
                     } = deleteOptions[0]
 
                      if(this.subFirst===true) {
-                                console.log('sub phrase skipped, gonna be replaced instead')
-                                this.sliderVal[tone]=!this.sliderVal[tone]
+                                //* send message to change val on sliders where moods subbed, watcher in child pulls from vuex object
+                                this.sliderVal[tone]=true
+                                console.log('slider val changed at: ' + tone)
+                                this.queue.sub.shift()
+                                
                             } else {
                     
                     this.$store.state.sub++
@@ -1070,36 +1081,55 @@ export default {
                                 this.queue.leeway = arr
                             }
                         
-                            //* create an object showing how many times each active mood can be used
-                            const options = {}
-                                //! active moods array updated here for test purposes, will need implementing properly in main thing
-                                //! remember that this assumes all are greater than zero, so it might bug out if you stray from test scenario
-                                const subMoods = this.activeMoods.filter(mood => mood!==tone);
-                                subMoods.forEach((item) => {
-                                    if(item) {
-                                    //* make an array of all possible
-                                        options[item] = Array.from({
-                                        length:  this.tracking.count[item]
-                                        }, () => (item))
-                                
-                                    }
-                                })
-
-                                //* assign the arrays to the difference object then run the function that pushes a random mood x times
-                                //* this is for the sub array
-                                this.next.difference.subOpts = {...options}
-                                let subCount = this.next.difference.sub
-                                this.pushSubs(subCount)
-                                this.queue.sub = this.next.difference.subTones
-
-                                //* finally, fill the add array with the chosen tone
+                                //* create an object showing how many times each active mood can be used
+                                const options = {}
+                                    //! active moods array updated here for test purposes, will need implementing properly in main thing
+                                    //! remember that this assumes all are greater than zero, so it might bug out if you stray from test scenario
+                                    const subMoods = this.activeMoods.filter(mood => mood!==tone);
+                                    subMoods.forEach((item) => {
+                                        if(item) {
+                                        //* make an array of all possible
+                                            options[item] = Array.from({
+                                            length:  this.tracking.count[item]
+                                            }, () => (item))
                                     
-                                let finalAddArr = Array.from({
-                                    length: this.next.difference.add
-                                }, () => (tone))
-                                this.next.difference.addTones = finalAddArr
-                                this.queue.add = finalAddArr
-                        
+                                        }
+                                    })
+
+                                    //* assign the arrays to the difference object then run the function that pushes a random mood x times
+                                    //* this is for the sub array
+                                    this.next.difference.subOpts = {...options}
+                                
+                                    let subCount = this.next.difference.sub
+                                    this.pushSubs(subCount)
+                                    this.queue.sub = this.next.difference.subTones
+
+                                    //* finally, fill the add array with the chosen tone
+                                        
+                                    let finalAddArr = Array.from({
+                                        length: this.next.difference.add
+                                    }, () => (tone))
+                                    this.next.difference.addTones = finalAddArr
+                                    this.queue.add = finalAddArr
+
+                                    //* and assign the no. of subs to an object that will be a reference later to adjust the sliders that have moods removede
+                                    //* (just the sliders, events are all done seperately)
+                                    let subRecord = this.next.difference.subTones
+
+                                    const subObject = {
+                                    angry: 0,
+                                    polite: 0,
+                                    paggro: 0,
+                                    pirate: 0
+                                    }
+
+                                    subRecord.forEach((item) => {
+                                        subObject[item]++
+                                    })
+
+                                    this.$store.state.sliderSubs = {...subObject}
+
+
                             resolve('did the complicated thing')
 
                         } else {
@@ -1111,32 +1141,35 @@ export default {
         pushSubs(count) {
             //* select a random array from sub options, push one then slice one
             console.log('count is: ' + count)
-            for(let i = 0; i < count; i++) {
-                const {   
+
+             const {   
                     difference: {
                                 subOpts: { ...rest }
                                 }
                     } = this.next
 
-                console.log(rest)
+                    for(let i = 0; i < count; i++) {
+                
+                    console.log('rest object is...' + rest)
 
-                let keys = Object.keys(rest)
-                let chosen = [keys[ keys.length * Math.random() << 0]]
+                    let keys = Object.keys(rest)
+                    let chosen = [keys[ keys.length * Math.random() << 0]]
 
-                let pushMe = rest[chosen][0]
-                console.log(pushMe)
+                    let pushMe = rest[chosen][0]
+                    console.log(pushMe)
 
-                this.next.difference.subTones.push(pushMe)
-                rest[chosen].pop()
+                    this.next.difference.subTones.push(pushMe)
+                    rest[chosen].pop()
 
-                if(rest[chosen].length===0) {
-                    delete rest[chosen]
-                    console.log('removed empty key')
-                }
-      
-                this.next.difference.subOpts = { ...rest }
-                console.log('sub pushed')
-            }
+                    if(rest[chosen].length===0) {
+                        delete rest[chosen]
+                        console.log('removed empty key')
+                    }
+
+                    console.log('sub pushed')
+                    }
+
+                 this.next.difference.subOpts = { ...rest }
 
         },
 
@@ -1180,6 +1213,24 @@ export default {
                     doing: 'none'
             }
             this.queue = reset
+
+            let empty = {
+            angry: 0,
+            polite: 0,
+            paggro: 0,
+            pirate: 0
+            }
+
+            this.$store.state.sliderSubs = { ...empty }
+
+            let falseObj = {
+            angry: false,
+            polite: false,
+            paggro: false,
+            pirate: false,
+            }
+
+            this.sliderVal = { ...falseObj }
         },
 
         updateTotal(obj) {

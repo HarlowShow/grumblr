@@ -63,6 +63,13 @@ const store = createStore({
         'pl2': 0
       },
       activeMood: '',
+      sliderSubs: {
+        angry: 0,
+        polite: 0,
+        paggro: 0,
+        pirate: 0
+      },
+      classTone: 'default'
     };
   },
 });
