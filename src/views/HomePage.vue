@@ -71,6 +71,10 @@
        
       </div>
     <!-- <template v-slot:footer><p>"A relationship should be based on communication, not on assumption" - marriage.com</p></template> -->
+  
+  <chat-response
+  :data="responses"
+  @update:value="getVal"></chat-response>
   </base-layout>
  
 </template>
@@ -88,6 +92,7 @@
   } from '@ionic/vue';
 
   import TheIcons from '../sections/components/TheIcons.vue'
+  import ChatResponse from '../sections/components/ChatResponse.vue'
   // import { ref } from 'vue'
   // import TheSliders from './TheSliders.vue'
 
@@ -98,6 +103,7 @@ export default {
       IonButton,
       IonIcon,
       TheIcons,
+      ChatResponse
       // IonModal,
       // IonPage
       // TextInput
@@ -118,6 +124,7 @@ export default {
         logoTwitter,
         logoReddit,
         logoWhatsapp,
+
        
       }
     },
@@ -128,6 +135,10 @@ export default {
         noActivated: false,
         start: false,
         test: 'it be test',
+        responses: [
+          {text: 'response text one', value: 'one', icon: heart},
+          {text: 'response text two', value: 'two', icon: logoFacebook}
+        ]
       }
     },
 
@@ -136,6 +147,10 @@ export default {
 
       angrier() {
         this.angryTracker++
+      },
+
+      getVal(value){
+        console.log(value)
       }
     },
 

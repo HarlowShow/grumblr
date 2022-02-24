@@ -13,19 +13,19 @@
         color="success"
         @click="[selected='noise', , gripeIsCustom='false', activate(this.selected)]">
             <ion-icon :icon="musicalNotes"></ion-icon>
-        <ion-label>unecessarily noisy</ion-label>
+        <ion-label>were unecessarily noisy</ion-label>
         </ion-chip>
 
         <ion-chip
         color="success"
         @click="[selected='rubbish', , gripeIsCustom='false', activate(this.selected)]">
             <ion-icon :icon="trash"></ion-icon>
-        <ion-label>not taking the rubbish out</ion-label>
+        <ion-label>didn't take the rubbish out</ion-label>
         </ion-chip>
 
         <ion-chip
         color="success"
-        @click="[selected='other', , gripeIsCustom='true']">
+        @click="[selected='other', , gripeIsCustom='true', this.$store.state.customGripe = true]">
             <ion-icon :icon="addCircle"></ion-icon>
         <ion-label>something else</ion-label>
         </ion-chip>
@@ -34,15 +34,11 @@
 
 
         <div v-if="gripeIsCustom===true">
-
-            <ion-label>What did they do?</ion-label>
-
-            
             <ion-item lines="none">
          
                 <div class="first">
                 <p 
-                class="pretext">They...</p>
+                class="pretext">they... </p>
                 </div>
                 <div class="second">
             <ion-textarea 
@@ -62,7 +58,6 @@
             
                 <div class="third">
                 <ion-icon 
-               
                 :icon="checkmarkCircle"
                 color="success"
                 @click="activate(this.selected)"
@@ -70,9 +65,6 @@
             
             </div>
               </ion-item>
-
-              <ion-label class="sublabel">*for best results, keep your description simple and avoid unnecessary punctuation, e.g. "had sex on the sofa", "kicked a baby", "ignored the mould problem".
-              </ion-label>
         </div>
         <p v-if="invalidInput===true">Please enter a valid option</p>
           
@@ -133,7 +125,7 @@ export default  {
 
         const placeholders = [
              {string: "insulted my cousin", speed: speeds.slow, classes: ["green"]},
-             {string: "left bodily fluids on the walls", speed: speeds.normal},
+             {string: "invaded Ukraine", speed: speeds.normal},
              {string: "got crumbs all over the breadbin", speed: speeds.fast},
              {string: "ate all the sticky toffee puddings", speed: speeds.normal},
         ]
@@ -188,7 +180,7 @@ export default  {
         activate(gripe) {
 
             if(this.gripeIsCustom === true) {
-                this.selected = this.customGripe;
+                this.selected = this.customGripe
             }
             gripe = this.selected;
             
@@ -389,6 +381,7 @@ ion-icon {
 .pretext {
    font-size: 1rem;
    text-align: end;
+   padding-right: 2px;
 }
 
 ion-toolbar {

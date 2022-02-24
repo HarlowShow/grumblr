@@ -10,11 +10,25 @@
             </div>
         </div>
 
+        <div>
          <div class="end-bubble box"> 
+             
             <div class="inner-bubble"
             :class="{ response: responseClass}"
             >
+            <div class="icon-slot"
+            v-if="iconSlot">
+                <slot name="icon"></slot>
+            </div>
             <slot name="end"></slot>
+            </div>
+        </div>
+        <div class="end-bubble box"> 
+        <div class="inner-bubble extra"
+            :class="{ response: responseClass}"
+            >
+             <slot name="end-next"></slot>
+            </div>
             </div>
         </div>
 
@@ -30,7 +44,7 @@
 
 <script>
 export default {
-    props: ['gridClass', 'responseClass']
+    props: ['gridClass', 'responseClass', 'iconSlot']
 }
 </script>
 
@@ -78,12 +92,21 @@ export default {
         background-color: red;
     } */
 
-   .end-bubble .inner-bubble {
-        background-color: rgb(219, 219, 219);
-        border-radius: 30px;
+    .end-bubble .inner-bubble {
+        background-color: rgb(235, 235, 235);
+        border-radius: 25px;
         padding-left: 1rem;
         padding-right: 1rem;
     }
+
+   .left .end-bubble .inner-bubble {
+        background-color: rgb(235, 235, 235);
+    }
+
+     .right .end-bubble .inner-bubble {
+       background-color: var(--ion-color-success);
+       color: white;
+     }
 
     /* .right .end-bubble .inner-bubble {
         background-color: rgb(219, 219, 219);
@@ -112,5 +135,18 @@ export default {
 
     .responses {
         grid-column: 1 / span 2;
+    }
+
+    .extra {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .icon-slot{
+        margin-bottom: -1rem;;
+        padding: 0;
+        display: flex;
+        justify-content: flex-end;
+        text-align: end;
     }
 </style>

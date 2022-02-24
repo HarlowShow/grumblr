@@ -36,6 +36,8 @@ const store = createStore({
       chosenPronouns: {},
       chosenPersonmate: '',
       chosenGripe: '',
+      chosenName: '',
+      nameIsDefault: true,
       namedPersonmate: '',
       personmateIsNamed: false,
       add: 0,
@@ -69,7 +71,8 @@ const store = createStore({
         paggro: 0,
         pirate: 0
       },
-      classTone: 'default'
+      classTone: 'default',
+      customGripe: false,
     };
   },
 });

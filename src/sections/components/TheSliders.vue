@@ -9,8 +9,6 @@
         step="1"
         ticks="true"
         snaps="true"
-    
-    
         @click="touchEvent($event)"
         @touchend="touchEvent($event)">
 
@@ -122,12 +120,13 @@ export default {
 
 
         touchEvent(event, optional, type){
+
+            console.log('touch event triggered')
             
             let cachedVal = this.rangeVal
     
             if(!optional){
-             
-
+                
                 this.rangeVal = event.target.value
 
             } else if (optional) {

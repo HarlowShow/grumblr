@@ -1,20 +1,37 @@
 import { ref, reactive} from 'vue'
+import { useStore } from 'vuex'
 
 export default function speakTrashPanda(startingIdx = 0) {
 
+    const store = useStore()
+    const name = store.state.chosenName
+    let nameVal = ''
+
+    if(name==='nothing in particular'){
+        nameVal = 'What happened then?'
+    } else {
+        nameVal = `What did ${name} do then?`
+    }
+
+    const nameString = nameVal
     const chatIdx = ref(startingIdx)
     const formChats = ref([
         { 
-        string: 'How many of you schmuckos have a complaint today?',
-        stringTwo: 'I see. Who did this then?',
+        string: 'Who needs to rant?',
+        stringTwo: "I see. And what's their relationship to you?",
         type: 'formQ',
         idx: 0},
         { string: 'I see. Who did this then?', type: 'formQ', idx: 1},
-        { string: 'Aw naw mate. What did this bugger do then?',type: 'formQ', idx: 2},
-        { string: 'Yikes. And how do you feel about that?', type: 'formQ'},
+        { string: `${nameString}`,
+        stringTwo: "try to follow the examples and avoid unnecessary punctuation",
+        type: 'formQ', idx: 2},
+        { string: 'And how do you feel about this?', type: 'formQ'},
         { string: "Blimey. But whatcha gonna do about it??", type: 'formQ'},
         { string: "Aw yeah I can work with this. How's about I whip ya' up a little sump'n sump'n?", type: 'formQ'},
-        { string: "Too bad schmucko! I didn't build in a back button yet. Here we go!", type: 'response'}
+        { string: "Too bad schmucko! I didn't build in a back button yet. Here we go!", type: 'response'},
+        { string: "What's their name?", type: 'formQ'},
+        { string: "Which bit do you want to change?", type: 'response'},
+        { string: 'What are we ranting about?'}
     ])
     const chatLength = formChats.value.length
     const currentChat = ref(formChats.value[chatIdx.value])
@@ -23,19 +40,19 @@ export default function speakTrashPanda(startingIdx = 0) {
     const backtalkChats = reactive({
 
         starter: {
-            one: 'welcome to this exciting time with default one',
+            one: "Here you go. Use the buttons or sliders to change your rant.",
             two: 'default two! It is here for you'
         },
 
         medium: {
-            angry: 'you just got medium angry',
+            angry: 'FEEL THE RAAAAAAAGEEE',
             polite: 'you just got medium polite',
             paggro: 'you just got medium paggro',
             pirate: 'you just got medium pirate',
         },
 
         max: {
-            angry: 'you just got max angry',
+            angry: 'Blimey. Have you tried taking a few deep breaths?',
             polite: 'you just got max polite',
             paggro: 'you just got max paggro',
             pirate: 'you just got max pirate',
@@ -43,7 +60,7 @@ export default function speakTrashPanda(startingIdx = 0) {
 
         confused: {
             one: 'I am confused',
-            two: 'I am confused number two'
+            two: "Everything's going to be alright"
         },
 
         alerts: {
@@ -88,6 +105,8 @@ export default function speakTrashPanda(startingIdx = 0) {
         
         backtalkChat,
         backtalkChats,
+        nameString,
+        name,
 
         currentChat,
         chatLength,

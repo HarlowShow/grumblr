@@ -6,6 +6,7 @@ export default function speakPhrases() {
     const activePronouns = {...store.state.chosenPronouns};
     const activePersonmate = store.state.chosenPersonmate;
     const activeGripe = store.state.chosenGripe;
+    const name = store.state.chosenName;
 
     const phrases = [
 
@@ -36,7 +37,7 @@ export default function speakPhrases() {
         {
             position: "op1",
             status: false,
-            phrase: "So sorry to bother you, but ",
+            phrase: `So sorry to bother you ${name}, but `,
             tone: "polite",
 
         },
@@ -60,7 +61,7 @@ export default function speakPhrases() {
         {
             position: "op1",
             status: false,
-            phrase: "So... ",
+            phrase: `So... ${name}... `,
             tone: "paggro",
 
         },
@@ -68,7 +69,7 @@ export default function speakPhrases() {
          {
             position: "op1",
             status: false,
-            phrase: "Hmmmm... ",
+            phrase: "Hmmmm... well then, ",
             tone: "paggro",
 
         },
@@ -220,7 +221,7 @@ export default function speakPhrases() {
         {
             position: "of1",
             status: false,
-            phrase: `${activePronouns.subjectPCap} can't believe you've done this. `,
+            phrase: `${activePronouns.subjectPCap} can't believe you've done this ${name}. `,
             tone: "angry",
 
         },
@@ -428,7 +429,7 @@ export default function speakPhrases() {
         {
             position: "co0",
             status: false,
-            phrase: `${activePronouns.toBeContractedCap} not annoyed at you at all, it's just that `,
+            phrase: `${activePronouns.toBeContractedCap} not annoyed at you at all ${name}, it's just that `,
             tone: "polite",
 
         },
@@ -669,7 +670,7 @@ export default function speakPhrases() {
         {
             position: "pl1",
             status: false,
-            phrase: `please help restore ${activePronouns.objectP} sanity and `,
+            phrase: `please help restore ${activePronouns.posessiveDeterminerP} sanity and `,
             tone: "angry",
 
         },
@@ -685,7 +686,7 @@ export default function speakPhrases() {
         {
             position: "pl1",
             status: false,
-            phrase: `${activePronouns.subjectPCap} would really appreciate it if you could `,
+            phrase: `${activePronouns.subjectP} would really appreciate it if you could `,
             tone: "polite",
 
         },
@@ -693,7 +694,7 @@ export default function speakPhrases() {
         {
             position: "pl1",
             status: false,
-            phrase: `${activePronouns.subjectPCap} would be very grateful if you could `,
+            phrase: `${activePronouns.subjectP} would be very grateful if you could `,
             tone: "polite",
 
         },
@@ -757,7 +758,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "stop being such a prat, yeah? Bloody hell. ",
+            phrase: `stop being such a prat, ok ${name}? `,
             tone: "angry",
 
         },
@@ -765,7 +766,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "be less crap next time. Got it? ",
+            phrase: "be less crap next time. ",
             tone: "angry",
 
         }, 
@@ -773,7 +774,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "stop inflicting your awfulness on the rest of us. Alright mate? ",
+            phrase: "stop inflicting your awfulness on the rest of us. ",
             tone: "angry",
 
         }, 
@@ -781,7 +782,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "keep an eye on this in the future. Thanks so much. ",
+            phrase: "keep an eye on this in the future. ",
             tone: "polite",
 
         }, 
@@ -789,7 +790,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "try to stay on top of this in the future. Thanks a lot. Have a great day! ",
+            phrase: "try to stay on top of this in the future. ",
             tone: "polite",
 
         }, 
@@ -797,7 +798,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "be a bit more vigilant next time. Thanks so much. ",
+            phrase: "be a bit more vigilant next time. ",
             tone: "polite",
 
         }, 
@@ -805,7 +806,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "be a decent human being next time, yeah? Ta XOXOXOXO ",
+            phrase: "be a decent human being next time, yeah? ",
             tone: "paggro",
 
         }, 
@@ -813,7 +814,7 @@ export default function speakPhrases() {
          {
             position: "pl2",
             status: false,
-            phrase: "be more considerate next time, k? :) ",
+            phrase: "be more considerate next time, k? ",
             tone: "paggro",
 
         }, 
@@ -821,7 +822,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "kindly think of other people next time. THANKS. ",
+            phrase: "kindly think of other people next time. ",
             tone: "paggro",
 
         }, 
@@ -829,7 +830,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: `spare a thought fer ${activePronouns.pirateTitle} in the future. Savvy? `,
+            phrase: `spare a thought fer ${activePronouns.pirateTitle} in the future. `,
             tone: "pirate",
 
         },
@@ -837,7 +838,7 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "straighten yer' sea legs next time. Avast! ",
+            phrase: "straighten yer' sea legs next time. ",
             tone: "pirate",
 
         }, 
@@ -845,10 +846,109 @@ export default function speakPhrases() {
         {
             position: "pl2",
             status: false,
-            phrase: "quit being such a son of a biscuit eater! Oh aye. ",
+            phrase: "quit being such a son of a biscuit eater! ",
             tone: "pirate",
 
         },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "Bloody hell... ",
+            tone: "angry",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "Got it? ",
+            tone: "angry",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: `Yours sincerely,
+            someone who is no longer going to put up with this. `,
+            tone: "angry",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "Thanks so much. ",
+            tone: "polite",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "Thanks - I really appreciate it. ",
+            tone: "polite",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "Thank you! I hope you enjoy the rest of your day. ",
+            tone: "polite",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: " Ta XOXOXOXOXOXOXO. ",
+            tone: "paggro",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "(っ＾▿＾) ",
+            tone: "paggro",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "CHEERS. ",
+            tone: "paggro",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "Savvy? ",
+            tone: "pirate",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "Avast! ",
+            tone: "pirate",
+
+        },
+
+        {
+            position: "so0",
+            status: false,
+            phrase: "Oh aye. ",
+            tone: "pirate",
+
+        },
+
+        //TODO: so0, for signoff
     ];
 
     return {

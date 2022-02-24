@@ -1,47 +1,6 @@
 <template>
 
     <base-layout page-default-back-link="/input" page-title="Edit your gripe">
-    <p>{{this.activeIndexes}}</p>
-    <p>see delete options (cached) {{ this.seeDeleteOptions }}</p>
-    <button @click="resetNext"> reset next </button>
-
-    <ion-chip> <p> add: {{ this.$store.state.add}} </p></ion-chip>
-    <ion-chip>    <p> sub: {{ this.$store.state.sub }} </p></ion-chip>
-    <ion-chip>    <p>old add: {{ this.$store.state.oldAdd }} </p></ion-chip>
-    <ion-chip>  <p>old sub: {{ this.$store.state.oldSub }} </p></ion-chip>
-
-    <h3> {{ this.$store.state.activeMood }}</h3>
-     <ion-chip
-            color="success"
-            v-for="(value, name) in queue"
-            :key="name">
-            {{ name }} {{ value}}
-    </ion-chip>
-      <ion-chip
-            color="success"
-            v-for="(value, name) in next"
-            :key="name">
-            {{ name }} {{ value}}
-    </ion-chip>
-     <ion-chip
-            color="success"
-            v-for="(value, name) in moodcount"
-            :key="name">
-            {{ name }} {{ value}}
-    </ion-chip>
-
-
-     <!-- <ion-chip
-            color="success"
-            v-for="(value, name) in usedPhrases"
-            :key="name">
-            {{ name }} {{ value}}
-    </ion-chip> -->
-
-        <p> tracking count: {{ tracking.count }}</p>
-        <p> tracking prevCount: {{ tracking.prevCount }}</p>
-
-       <p>active moods: {{ activeMoods }}</p>
 
     <div class="snippets">
         <new-snippet v-for="(value, name, index) in gripeObject"
@@ -65,12 +24,20 @@
                     </the-sliders>
     </div>
 
+  
+
             <chat-bubble
-                    v-if="testVar===false"
+                    v-if="collapsed===false"
                     id="mobilefooter"
-                    :gridClass="'left'">
+                    :gridClass="'left'"
+                    :iconSlot="true">
                         <template v-slot:start>
                             <the-icons :name="'raccoon-shifty'"></the-icons>
+                        </template>
+                        <template v-slot:icon>
+                        <span
+                        @click="toggleChat"
+                        >x</span>
                         </template>
                         <template v-slot:end>
                                 <chat-typer
@@ -81,6 +48,22 @@
                            
                         </template>
             </chat-bubble>
+            <div
+             v-else
+             @click="toggleChat">
+            <chat-bubble
+                   
+                    id="mobilefooter"
+                    :gridClass="'left'"
+                    :iconSlot="true">
+                        <template v-slot:start>
+                            <the-icons :name="'chat-active'"
+                            :newChat="newChat"
+                            ></the-icons>
+                        </template>
+            </chat-bubble>
+            </div>
+              <button class="help" @click="toggleChatStatus">click me</button>
     </base-layout>
 </template>
 
@@ -91,7 +74,7 @@ import TheSliders from '../sections/components/TheSliders.vue'
 import ChatBubble from '../sections/components/ChatBubble.vue'
 import ChatTyper from '../sections/components/ChatTyper.vue'
 
-import { IonChip } from '@ionic/vue'
+// import { IonChip } from '@ionic/vue'
 import TheIcons from '../sections/components/TheIcons.vue'
 
 import speakPhrases from '../composables/phrases'
@@ -103,7 +86,7 @@ import { ref } from 'vue'
 export default {
 
     components: {
-        IonChip,
+        // IonChip,
         ChatBubble,
         ChatTyper,
         TheIcons,
@@ -157,6 +140,8 @@ export default {
         // phrase: position, status (boolean), phrase, tone
         return {
 
+            collapsed: false,
+            newChat: 'grey',
             doing: false,
             
             subFirst: false,
@@ -201,9 +186,9 @@ export default {
             activePersonmate: '',
             activeGripe: '',
             selectedPhrases: [],
-            activeIndexes: ['op1', 'op2', 'of1', 'of2', 'co0', 'co2', 'pl0', 'pl1', 'pl2'],
-            allIndexes: ['op1', 'op2', 'of1', 'of2', 'co0', 'co2', 'pl0', 'pl1', 'pl2'],
-            moodLimit: 9,
+            activeIndexes: ['op1', 'op2', 'of1', 'of2', 'co0', 'co2', 'pl0', 'pl1', 'pl2', 'so0'],
+            allIndexes: ['op1', 'op2', 'of1', 'of2', 'co0', 'co2', 'pl0', 'pl1', 'pl2', 'so0'],
+            moodLimit: 10,
             selectedTone: '',
             
             //? does this do anything??
@@ -419,10 +404,12 @@ export default {
                 if(newValue===3&&this.chatted.angry===0) {
                     this.setBackchat('medium', 'angry')
                     this.chatted.angry=1
+                    this.alertChat()
                 }
                 if(newValue===8&&this.chatted.angry===1) {
                     this.setBackchat('max', 'angry')
                     this.chatted.angry=2
+                    this.alertChat()
                 }
         },
 
@@ -462,11 +449,13 @@ export default {
               if(newValue===3&&this.chatted.paggro===0) {
                     this.setBackchat('medium', 'paggro')
                     this.chatted.paggro=1
+                    this.alertChat()
                 }
 
                 if(newValue===8&&this.chatted.paggro===1) {
                     this.setBackchat('max', 'paggro')
                     this.chatted.paggro=2
+                    this.alertChat()
                 }
             
         },
@@ -484,11 +473,13 @@ export default {
                 if(newValue===3&&this.chatted.pirate===0) {
                     this.setBackchat('medium', 'pirate')
                     this.chatted.pirate=1
+                    this.alertChat()
                 }
 
                 if(newValue===8&&this.chatted.pirate===1) {
                     this.setBackchat('max', 'pirate')
                     this.chatted.pirate=2
+                    this.alertChat()
                 }
     
         },
@@ -508,9 +499,11 @@ export default {
             if(newVal>=3&&this.chatted.confused===0) {
                   this.setBackchat('confused', 'one')
                   this.chatted.confused++
+                  this.alertChat()
             }  else if(newVal>=3&&this.chatted.confused===1&&this.chatted.confusedReset===true) {
                   this.setBackchat('confused', 'two')
                   this.chatted.confused++
+                  this.alertChat()
             }
             
             if(this.chatted.confused===1&&newVal<3) {
@@ -546,6 +539,29 @@ export default {
     },
 
     methods: {
+
+        alertChat(){
+              if (this.newChat==='grey'&&this.collapsed===false) {
+                this.newChat='red'
+            }
+        },
+
+        toggleChat(){
+            this.collapsed=!this.collapsed
+            if (this.newChat==='red') {
+                this.newChat='grey'
+            }
+        },
+
+        toggleChatStatus(){
+            if(this.newChat==='grey') {
+                  this.newChat='red'
+            } else if (this.newChat==='red') {
+                this.newChat='grey'
+            }
+          
+            console.log('toggled' + this.newChat)
+        },
 
         initLoaded() {
             return new Promise((resolve) => {
@@ -1340,6 +1356,20 @@ export default {
 
 <style scoped>
 /* temp styling! make less ugly */
+
+.grey {
+      font-size: 4rem;
+     color: grey;
+}
+
+.red {
+      font-size: 4rem;
+      color: red;
+}
+
+.help {
+    margin-top: 2rem;
+}
 
 .angry {
     color: var(--ion-color-angry);

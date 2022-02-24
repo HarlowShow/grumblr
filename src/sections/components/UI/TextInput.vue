@@ -15,6 +15,10 @@
                 @click="setVal(outputValue)"
                 ></ion-icon>
     </ion-chip>
+    <div v-if="examples"
+    class="examples">
+        <p> e.g. {{ examples.join(', ')}}</p>
+    </div>
 
 
     <ion-chip v-if="inputType==='long'"
@@ -86,6 +90,11 @@ export default {
         inputType: {
             type: String,
             required: true,
+        },
+
+        examples: {
+            type: Array,
+            required: false
         }
     },
 
@@ -118,4 +127,12 @@ export default {
 
 }
 </script>
+
+<style scoped>
+    .examples {
+        margin-top: 0px !important;
+        font-size: 0.8rem;
+        color: var(--ion-color-success);
+    }
+</style>
 

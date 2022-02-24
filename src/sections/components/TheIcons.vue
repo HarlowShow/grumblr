@@ -75,15 +75,73 @@
     >
     <h1>?</h1>
     </div>
+
+    <div v-if="name==='profile'"
+    class="avatar"
+    >
+        <ion-icon :icon="personCircle"></ion-icon>
+    </div>
+
+        <div v-if="name==='chat-active'"
+    class="avatar"
+      :class="newChat"
+    >
+        <ion-icon :icon="chatboxEllipses"
+      ></ion-icon>
+    </div>
+
+    <div v-if="name==='chat'"
+    class="avatar"
+    >
+        <ion-icon :icon="chatbox"></ion-icon>
+    </div>
 </template>
 
 <script>
+import { IonIcon } from '@ionic/vue';
+import { personCircle, chatboxEllipses, chatbox } from 'ionicons/icons'
+
 export default {
-    props: ['name'],
+    components: {
+        IonIcon
+    },
+    props: ['name', 'newChat'],
+    setup() {
+        return {
+            personCircle,
+            chatboxEllipses,
+            chatbox
+        }
+    }
 }
 </script>
 
 <style scoped>
+
+ion-icon {
+    font-size: 4rem;
+     color: inherit;
+}
+
+.chat-normal {
+    font-size: 4rem;
+     color: grey;
+}
+
+.chat-new {
+    font-size: 4rem;
+    color: red;
+}
+
+.grey {
+      font-size: 4rem;
+     color: grey;
+}
+
+.red {
+      font-size: 4rem;
+      color: red;
+}
 
 .user {
     background-color: rgb(17, 108, 160);
