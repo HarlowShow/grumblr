@@ -4,8 +4,8 @@
 
        <ion-header>
          <ion-toolbar class="ion-text-center">
-             <ion-title >GRUMBLR</ion-title>
-             <ion-menu-button slot="start"></ion-menu-button>
+             <ion-title>GRUMBLR</ion-title>
+             <ion-icon slot="start" :icon="homeOutline" @click="presentAlertConfirm"></ion-icon>
              <!-- <ion-menu-toggle><button>toggle</button></ion-menu-toggle> -->
              <!-- <div slot="start"><slot name="top"></slot></div> -->
              <ion-icon :icon="helpOutline" slot="end" @click="openModal"></ion-icon>
@@ -38,7 +38,7 @@
 
 import ThePithyQuote from './ThePithyQuote.vue';
 import TheSideModal from './TheSideModal.vue'
-import { helpOutline } from 'ionicons/icons';
+import { helpOutline, homeOutline } from 'ionicons/icons';
 // import MobileFooter from './MobileFooter.vue'
 
 import {
@@ -48,8 +48,9 @@ import {
         IonTitle,
         IonContent,
         IonFooter,
-        IonMenuButton,
+        // IonMenuButton,
         modalController,
+        alertController,
         IonIcon
      
 } from '@ionic/vue';
@@ -60,7 +61,7 @@ export default {
         IonPage,
         IonHeader, 
         IonToolbar, 
-        IonMenuButton,
+        // IonMenuButton,
         IonTitle, 
         IonContent, 
         IonFooter, 
@@ -74,7 +75,8 @@ export default {
     setup() {
 
         return {
-            helpOutline
+            helpOutline,
+            homeOutline
         }
     },
 
@@ -87,13 +89,43 @@ export default {
 
     methods: {
 
+        async presentAlertConfirm() {
+      const alert = await alertController
+        .create({
+          cssClass: 'my-custom-class',
+          header: 'Are you sure?',
+          message: 'You may lose any saved grumble',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              cssClass: 'secondary',
+              id: 'cancel-button',
+              handler: blah => {
+                console.log('Confirm Cancel:', blah)
+              },
+            },
+            {
+              text: 'Yes, leave this page',
+              id: 'confirm-button',
+              handler: () => {
+                this.$router.push({
+                    path: "/",
+                    })
+              },
+            },
+          ],
+        });
+      return alert.present();
+    },
+
         async openModal() {
         const modal = await modalController.create({
           component: TheSideModal,
           cssClass: 'my-custom-class',
-          componentProps: {
-            title: 'New Title',
-          },
+        //   componentProps: {
+        //     title: 'New Title',
+        //   },
         });
         return modal.present();
       },
@@ -166,10 +198,11 @@ export default {
  }
 
  ion-icon {
-    font-size: 1rem;
+    font-size: 1.5rem;
  }
 
  ion-toolbar {
+     --padding-start: 10px;
      --padding-end: 10px;
  }
 

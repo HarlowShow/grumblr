@@ -37,6 +37,7 @@
                         <template v-slot:icon>
                         <span
                         @click="toggleChat"
+                        class="close-chat"
                         >x</span>
                         </template>
                         <template v-slot:end>
@@ -67,7 +68,7 @@
                         </template>
             </chat-bubble>
             </div>
-              <button class="help" @click="toggleChatStatus">click me</button>
+              <!-- <button class="help" @click="toggleChatStatus">click me</button> -->
     </base-layout>
 </template>
 
@@ -144,10 +145,11 @@ export default {
     data() {
         
         // phrase: position, status (boolean), phrase, tone
+        //TODO: fill these out with some tut stuff
         return {
 
             chatResponseOptions: [
-                { text: 'finished', value: 'finished'}
+                { text: 'finished', value: 'finished'},
             ],
 
             collapsed: false,
@@ -262,6 +264,12 @@ export default {
                            phrase: '',
                            tone: '',
                            position: 'pl2'
+                       },
+
+                     {
+                           phrase: '',
+                           tone: '',
+                           position: 'so0'
                        },
                       
             ],
@@ -543,20 +551,20 @@ export default {
            
         },
 
-        moodcount: {
-            immediate: true,
-            handler(newVal) {
-                let { angry, polite, paggro, pirate, total, ...rest} = newVal
-            console.log('MOODCOUNT WATCHED: ' + angry, polite, paggro, pirate, total, rest)
-            },
+        // moodcount: {
+        //     immediate: true,
+        //     handler(newVal) {
+        //         let { angry, polite, paggro, pirate, total, ...rest} = newVal
+        //     console.log('MOODCOUNT WATCHED: ' + angry, polite, paggro, pirate, total, rest)
+        //     },
             
-        },
+        // },
 
         //related to backchat UI
         moodTotal(newVal){
             //if they're trying to add beyong the mood limit, warn that there will be a delete first
                 if(newVal===this.moodLimit) {
-                    console.log('replace mode one')
+                    // console.log('replace mode one')
                     this.$store.state.replace = true
                 } else if (newVal < this.moodLimit) {
                     this.$store.state.replace = false
@@ -596,14 +604,14 @@ export default {
                 this.newChat='grey'
             }
           
-            console.log('toggled' + this.newChat)
+            // console.log('toggled' + this.newChat)
         },
 
         initLoaded() {
             return new Promise((resolve) => {
 
                 if(this.firstTone&&this.secondTone){
-                    console.log(this.firstTone, this.secondTone)
+                    // console.log(this.firstTone, this.secondTone)
                     resolve('starter tones added')
                 } else {
                     setTimeout(() => {
@@ -616,8 +624,8 @@ export default {
        //! change initial add so it runs properly through the same system
         async addInit(){
             
-            const getStarters = await this.initLoaded()
-            console.log('resolved: ' + getStarters)
+            await this.initLoaded()
+            // console.log('resolved: ' + getStarters)
 
             if(this.firstTone===this.secondTone){
                 let sendDouble = {
@@ -660,7 +668,7 @@ export default {
             this.next.step='getMoodsTest'
             // console.log('starting step: ' + this.next.step)
             this.tracking.prevCount = { ...this.moodcount }
-            console.log('getting moods, prev count is: ' + this.tracking.prevCount)
+            // console.log('getting moods, prev count is: ' + this.tracking.prevCount)
 
                 this.next.init = {val, tone}
                 this.tracking.count[tone] = val
@@ -679,25 +687,25 @@ export default {
 
         async createQueue(val, tone) {
               this.next.step='createQueue'
-              console.log('starting step: ' + this.next.step)
+            //   console.log('starting step: ' + this.next.step)
 
               try {
                  
             // * return true if subs needed first, otherwise false
-                const checkDiff = await this.getDifference(val, tone)
-                console.log('checkdiff is: ' + checkDiff)
+                await this.getDifference(val, tone)
+                // console.log('checkdiff is: ' + checkDiff)
             // * calc how many need adding/subbing
-                const setDiff = await this.setDifference(val, tone)
-                console.log('setdiff is: ' + setDiff)
+                await this.setDifference(val, tone)
+                // console.log('setdiff is: ' + setDiff)
             // * create a queue of actions
-                const pushDifference = await this.pushDifference(tone)
-                console.log('push difference is: ' + pushDifference)
+                await this.pushDifference(tone)
+                // console.log('push difference is: ' + pushDifference)
 
               } catch(e) {
                   console.log(e)
               } finally {
                   //? update final count here, but useful to set init count somewhere else to decide on scenarios
-                  console.log('all done! moving on')
+                //   console.log('all done! moving on')
                   this.resetNext()
                   this.manageQueue(val, tone)
                  
@@ -710,7 +718,7 @@ export default {
             this.queue.val = val
             this.queue.tone = tone
             this.next.step = 'manageQueue'
-            console.log('starting step: ' + this.next.step)
+            // console.log('starting step: ' + this.next.step)
 
             //! start with just add queue to test, only try adding!
 
@@ -724,16 +732,16 @@ export default {
             // console.log('STARTING QUEUE, gonna do: ' + 'add' + toAdd + 'sub' + toSub + 'leeway' + toLeeway)
  
             this.leeway(toLeeway)
-            const leewayed = await this.nextQueue('leeway')
-            console.log(leewayed)
+            await this.nextQueue('leeway')
+            // console.log(leewayed)
 
             this.sub(toSub)
-            const subbed = await this.nextQueue('sub')
-            console.log(subbed)
+            await this.nextQueue('sub')
+            // console.log(subbed)
       
             this.add(toAdd)
-            const added = await this.nextQueue('add')
-            console.log(added)
+            await this.nextQueue('add')
+            // console.log(added)
             } catch {
                 console.log('error in some part of the queue bit')
             } finally {
@@ -783,7 +791,7 @@ export default {
                     this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
                     let selectedObj = this.selectedPhrases[0]
                     let selected = this.selectedPhrases[0].phrase
-                    console.log(i + ':' + selected)
+                    // console.log(i + ':' + selected)
                     
 
                     //* mark the phrase as selected/index tracking
@@ -799,7 +807,7 @@ export default {
                         this.$store.state.baseOutput[currentIndex] = selected
                         this.gripeObject[currentIndex] = selected
                        
-                           console.log('leeway, phrase sent to snippet')
+                        //    console.log('leeway, phrase sent to snippet')
                     }, 200)
                     //* add to vuex tracking and the gripe object, which triggers the actual text change
 
@@ -810,7 +818,7 @@ export default {
                     }
                  }
             } else {
-                console.log('no leeway added')
+                // console.log('no leeway added')
                 setTimeout(() => {
                     this.nextQueue('leeway')
                 }, 200)
@@ -843,7 +851,7 @@ export default {
                     this.selectedPhrases.sort(() => {return 0.5 - Math.random()});
                     let selectedObj = this.selectedPhrases[0]
                     let selected = this.selectedPhrases[0].phrase
-                    console.log(i + ':' + selected)
+                    // console.log(i + ':' + selected)
                     
 
                     //* mark the phrase as selected/index tracking
@@ -862,7 +870,7 @@ export default {
                            this.$store.state.baseOutput[currentIndex] = selected
                            this.gripeObject[currentIndex] = selected
                           
-                           console.log('add, phrase sent to snippet')
+                        //    console.log('add, phrase sent to snippet')
                     }, 200)
                  
 
@@ -873,7 +881,7 @@ export default {
                     }
                  }
             } else {
-                console.log('no add necessary')
+                // console.log('no add necessary')
                 setTimeout(() => {
                      this.nextQueue('add')
                 }, 200)
@@ -899,7 +907,7 @@ export default {
                     this.queue.tone = tone
                     this.moodcount[tone]--
 
-                    console.log('for loop, sub first is: ' + this.subFirst)
+                    // console.log('for loop, sub first is: ' + this.subFirst)
                     //* get potential delete options
                     let deleteOptions = this.usedPhrases.filter(phrase => phrase.tone === tone && phrase.phrase.length>0)
 
@@ -912,15 +920,13 @@ export default {
 
                     //* find an index where a used phrase can be deleted
                     let {
-                           phrase: deletePhrase,
-                           tone: deleteTone,
                            position: deleteKey
                     } = deleteOptions[0]
 
                      if(this.subFirst===true) {
                                 //* send message to change val on sliders where moods subbed, watcher in child pulls from vuex object
                                 this.sliderVal[tone]=true
-                                console.log('slider val changed at: ' + tone)
+                                // console.log('slider val changed at: ' + tone)
                                 this.queue.sub.shift()
                                 
                             } else {
@@ -933,8 +939,8 @@ export default {
                     this.$store.state.changeTracker[deleteKey]--
                     }
                     this.queue.sub.shift()
-                    console.log('deletePhrase: ' + deletePhrase)
-                    console.log('deleteTone: ' + deleteTone)
+                    // console.log('deletePhrase: ' + deletePhrase)
+                    // console.log('deleteTone: ' + deleteTone)
 
                     //!now update the prop in used phrases
 
@@ -956,7 +962,7 @@ export default {
                                 
                                 this.$store.state.baseOutput[deleteKey] = this.priorPhrases[deleteKey];
                                 this.gripeObject[deleteKey] =  this.priorPhrases[deleteKey];
-                                console.log('sub, phrase sent to snippet')
+                                // console.log('sub, phrase sent to snippet')
                                 this.$store.state.changeTracker[deleteKey]=0
 
                         }, 200)
@@ -975,7 +981,7 @@ export default {
 
                 }
             } else {
-                console.log('no sub necessary')
+                // console.log('no sub necessary')
                 setTimeout(() => {
                      this.nextQueue('sub')
                 }, 200)
@@ -1012,11 +1018,11 @@ export default {
             return new Promise ((resolve) => {
                 // * set step
                 this.next.step="getDifference"
-                console.log('starting step: ' + this.next.step)
+                // console.log('starting step: ' + this.next.step)
                 
                 // * find out if the number is going to be greater than the limit - do more elegantly when done with testing
                 let hypotheticalTotal = this.tracking.count.total
-                console.log('hypothetical total is: ' + hypotheticalTotal)
+                // console.log('hypothetical total is: ' + hypotheticalTotal)
                 if(hypotheticalTotal>this.moodLimit) {
                     // * if the limit is reached, indicate that the mode will be adding first
                     // TODO: add another promise thingy here in a different step that lets them reject this option
@@ -1025,7 +1031,7 @@ export default {
                     // * sets the property for the snippet phase
                     this.subFirst = true
                     let leeway = this.moodLimit - this.tracking.prevCount['total']
-                    console.log('leeway set at: ' + leeway)
+                    // console.log('leeway set at: ' + leeway)
                     // console.log('leeway: ' + leeway)
                     this.next.difference.leeway = leeway
                 } else {
@@ -1038,10 +1044,10 @@ export default {
         setDifference(val, tone){
             return new Promise ((resolve, reject) => {
 
-                    console.log('SET DIFFERENCE: tone is ' + tone)
+                    // console.log('SET DIFFERENCE: tone is ' + tone)
 
                     this.next.step="setDifference"
-                    console.log('starting step: ' + this.next.step)
+                    // console.log('starting step: ' + this.next.step)
 
                     let oldVal = this.tracking.prevCount[tone]
                 
@@ -1050,7 +1056,7 @@ export default {
                     let numType = Math.sign(newVal-oldVal)
                     let diff = null
 
-                    console.log(`DIFFERENCE: old val is ${oldVal}. new val is ${newVal}`)
+                    // console.log(`DIFFERENCE: old val is ${oldVal}. new val is ${newVal}`)
                     // console.log('num type is: ' + numType)
                     // * this returns whether it's negative or positive, negative is -1 and positive is 1
                     if (numType===-1||newVal===0) {
@@ -1068,14 +1074,14 @@ export default {
                         if(this.next.subFirst===true&&this.next.difference.leeway>0){
                            this.next.difference.add = diff - this.next.difference.leeway
                            this.next.difference.sub = this.next.difference.add
-                           console.log('outcome: add, sub and leeway')
+                        //    console.log('outcome: add, sub and leeway')
                         } else if(this.next.subFirst===true) {
                             this.next.difference.add = diff
                             this.next.difference.sub = diff
-                                     console.log('outcome: sub then add')
+                                    //  console.log('outcome: sub then add')
                             } else {
                             this.next.difference.add = diff
-                                 console.log('outcome: just add')
+                                //  console.log('outcome: just add')
                             }
 
                         resolve(diff)
@@ -1093,7 +1099,7 @@ export default {
             return new Promise((resolve, reject) => {
                     
                     this.next.step="pushDifference"
-                    console.log(`at push difference step, vals are: sub, ${this.next.difference.sub} add, ${this.next.difference.add}  leeway, ${this.next.difference.leeway} `)
+                    // console.log(`at push difference step, vals are: sub, ${this.next.difference.sub} add, ${this.next.difference.add}  leeway, ${this.next.difference.leeway} `)
             
                        //* if we're just adding
                         if (this.next.difference.add>0&&this.next.subFirst===false){
@@ -1102,7 +1108,7 @@ export default {
                             }, () => (tone))
                             this.next.difference.addTones = addArr
                             this.queue.add = addArr
-                            console.log(this.next.step + ': just adding')
+                            // console.log(this.next.step + ': just adding')
 
                             resolve('added')
 
@@ -1114,14 +1120,14 @@ export default {
                             }, () => (tone))
                             this.next.difference.subTones = subArr
                             this.queue.sub = subArr
-                            console.log(this.next.step + ': just subbing')
+                            // console.log(this.next.step + ': just subbing')
 
                             resolve('subbed')
 
                                 //*if we have to sub first
                             } else if (this.next.difference.sub>0&&this.next.subFirst===true) {
 
-                                console.log(this.next.step + ': started doing the complicated one')
+                                // console.log(this.next.step + ': started doing the complicated one')
 
                                 if (this.next.difference.leeway>0) {
                                 //* if there's leeway, fill leeway array with add tones
@@ -1192,7 +1198,7 @@ export default {
 
         pushSubs(count) {
             //* select a random array from sub options, push one then slice one
-            console.log('count is: ' + count)
+            // console.log('count is: ' + count)
 
              const {   
                     difference: {
@@ -1202,23 +1208,23 @@ export default {
 
                     for(let i = 0; i < count; i++) {
                 
-                    console.log('rest object is...' + rest)
+                    // console.log('rest object is...' + rest)
 
                     let keys = Object.keys(rest)
                     let chosen = [keys[ keys.length * Math.random() << 0]]
 
                     let pushMe = rest[chosen][0]
-                    console.log(pushMe)
+                    // console.log(pushMe)
 
                     this.next.difference.subTones.push(pushMe)
                     rest[chosen].pop()
 
                     if(rest[chosen].length===0) {
                         delete rest[chosen]
-                        console.log('removed empty key')
+                        // console.log('removed empty key')
                     }
 
-                    console.log('sub pushed')
+                    // console.log('sub pushed')
                     }
 
                  this.next.difference.subOpts = { ...rest }
@@ -1286,7 +1292,7 @@ export default {
         },
 
         updateTotal(obj) {
-            console.log('update total function triggered on: ' + obj)
+            // console.log('update total function triggered on: ' + obj)
             let total
             let angry, polite, paggro, pirate
             if(obj==='tracking') {
@@ -1303,9 +1309,9 @@ export default {
                 'something went wrong in update total function'
             }
 
-            console.log(`angry: ${angry} polite: ${polite} paggro: ${paggro} pirate: ${pirate}`)
+            // console.log(`angry: ${angry} polite: ${polite} paggro: ${paggro} pirate: ${pirate}`)
             total = angry + polite + paggro + pirate
-            console.log('total should be: ' + total)
+            // console.log('total should be: ' + total)
             return total
         },
 
@@ -1320,8 +1326,8 @@ export default {
 
         changeLog(key, newPhrase) {
 
-            console.log('changelog, key is: ' + key)
-            console.log('changelog, newPhrase is: ' + newPhrase)
+            // console.log('changelog, key is: ' + key)
+            // console.log('changelog, newPhrase is: ' + newPhrase)
 
             let { phrase, tone } = newPhrase
             //? room for improved functionality here?
@@ -1392,6 +1398,10 @@ export default {
 
 <style scoped>
 /* temp styling! make less ugly */
+
+.close-chat {
+    cursor: pointer;
+}
 
 .grey {
       font-size: 4rem;

@@ -4,27 +4,17 @@ import HomePage from '../views/HomePage.vue'
 import SharingPage from '../views/SharingPage.vue'
 import SingleShare from '../views/SingleShare.vue'
 import FormArea from '../views/FormArea.vue';
-
 import PlayGround from '../views/PlayGround.vue';
-// import TheBottomMenu from '../components/base/TheBottomMenu.vue';
-
 import EndPage from '../views/EndPage.vue';
 import TestingArea from '../views/TestingArea.vue'
-// import { menuController } from '@ionic/vue';
 
-// const afterRoute = (to) => {
-//   if(to.path === '/home') {
-//     console.log("you are home!")
-//     this.$router.go
-//   }
-// }
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/input',
  
     },
     {
@@ -36,7 +26,6 @@ const router = createRouter({
     {
       path: '/input',
       component: FormArea,
-
       props: true
     },
   
@@ -65,21 +54,8 @@ const router = createRouter({
       name: 'SingleShare',
       component: SingleShare,
       props: true,
-    }
+    },
   ]
 })
-
-// router.afterEach(() => {
-
-//     console.log('aftereach worked')
-//     setTimeout(() => {
-//       const hiddenPage = document.getElementsByClassName("ion-page-hidden");
-//       if (hiddenPage.classList.inclu) {
-//         console.log(hiddenPage)
-//         hiddenPage[0].classList.remove("ion-page-hidden")
-
-//       }
-//     }, 100);
-//   })
 
 export default router

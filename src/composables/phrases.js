@@ -710,7 +710,7 @@ export default function speakPhrases() {
         {
             position: "pl1",
             status: false,
-            phrase: `${activePronouns.subjectPCap} have a TEENY WEENY favour to ask... `,
+            phrase: `${activePronouns.subjectP} have a TEENY WEENY favour to ask... `,
             tone: "paggro",
 
         },
@@ -718,7 +718,7 @@ export default function speakPhrases() {
         {
             position: "pl1",
             status: false,
-            phrase: `${activePronouns.subjectPCap} would sooooooo grateful (and impressed!) if you could `,
+            phrase: `${activePronouns.subjectP} would sooooooo grateful (and impressed!) if you could `,
             tone: "paggro",
 
         },
@@ -734,7 +734,7 @@ export default function speakPhrases() {
         {
             position: "pl1",
             status: false,
-            phrase: `${activePronouns.subjectPCap} suggest ye' leave yer bilge-suckin' ways behind and `,
+            phrase: `${activePronouns.subjectP} suggest ye' leave yer bilge-suckin' ways behind and `,
             tone: "pirate",
 
         },
@@ -742,7 +742,7 @@ export default function speakPhrases() {
          {
             position: "pl1",
             status: false,
-            phrase: `${activePronouns.subjectPCap} reckon ye'd better heave ho and `,
+            phrase: `${activePronouns.subjectP} reckon ye'd better heave ho and `,
             tone: "pirate",
 
         },
@@ -750,7 +750,7 @@ export default function speakPhrases() {
          {
             position: "pl1",
             status: false,
-            phrase: `${activePronouns.subjectPCap} be asking ye' to batten down the hatches and `,
+            phrase: `${activePronouns.subjectP} be asking ye' to batten down the hatches and `,
             tone: "pirate",
 
         },

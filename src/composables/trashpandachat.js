@@ -8,7 +8,15 @@ export default function speakTrashPanda(startingIdx = 0) {
     const activePersonmate = store.state.chosenPersonmate;
     const activeGripe = store.state.chosenGripe;
     const name = ref('')
+    const chatName = ref('')
     name.value = store.state.chosenName
+
+    if(store.state.chosenName==='mate'){
+        chatName.value = ` your ${activePersonmate}`
+    } else {
+        chatName.value = store.state.chosenName
+    }
+
     let nameVal = ''
 
     if(name.value==='nothing in particular'){
@@ -82,26 +90,33 @@ export default function speakTrashPanda(startingIdx = 0) {
     const backtalkChats = reactive({
 
         starter: {
-            one: "Here you go. Use the buttons or sliders to change your rant.",
-            two: 'default two! It is here for you'
+            one: "Here's your grumble. Use the buttons to fine-tune things.",
+            two: 'I\'m so glad we feel the same way.'
         },
 
         medium: {
-            angry: 'FEEL THE RAAAAAAAGEEE',
-            polite: 'you just got medium polite',
-            paggro: 'you just got medium paggro',
-            pirate: 'you just got medium pirate',
+            angry: 'Oh my.',
+            polite: 'That\'s nice...',
+            paggro: 'I\'m sensing a spot of unresolved tension',
+            pirate: 'Yaarrrrrrrggggghhhh.',
+        },
+
+        high: {
+            angry: 'Have you tried taking a few deep breaths?',
+            polite: 'That\'s right, you need to take a defiant stand. Set clear boundaries. Just like that.',
+            paggro: 'Oh no you DIDN\'T',
+            pirate: 'It seems like you\re returning to your authentic self. Will things ever be the same again?',
         },
 
         max: {
-            angry: 'Blimey. Have you tried taking a few deep breaths?',
-            polite: 'you just got max polite',
-            paggro: 'you just got max paggro',
-            pirate: 'you just got max pirate',
+            angry: `I know it's been a rough time, but I'm not sure that ${chatName.value} deserves THIS...`,
+            polite: 'Well you sure told them.',
+            paggro: 'It\'s ok. Everything will be ok.',
+            pirate: 'YAAAAARRRRRRGGGGGGHHHHHHHHHHHHHH.',
         },
 
         confused: {
-            one: 'I am confused',
+            one: `Are we sending ${chatName.value} mixed messages? We might be sending ${chatName.value} mixed messages.`,
             two: "Everything's going to be alright"
         },
 
@@ -149,6 +164,7 @@ export default function speakTrashPanda(startingIdx = 0) {
         backtalkChats,
         nameString,
         name,
+        chatName,
         activePersonmate,
         activePronouns,
         activeGripe,

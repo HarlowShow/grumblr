@@ -69,8 +69,8 @@ export default {
     methods: {
             doing() {
             
-            console.log('snippet array is' + this.snippetArray)
-            console.log('display text is' + this.displayText)
+            // console.log('snippet array is' + this.snippetArray)
+            // console.log('display text is' + this.displayText)
             //? honestly not sure if any of this matters
             this.dostuff();
                 
@@ -88,7 +88,7 @@ export default {
             this.optionItem++
             this.dostuff();
             } else {
-            console.log('no more stuff to do already reached:' + this.optionItem)
+            // console.log('no more stuff to do already reached:' + this.optionItem)
             this.active = false
             }
         },
@@ -110,16 +110,16 @@ export default {
                 //! set it here so that if a snippet is being added another process can't start yet
                 try {
 
-                const checkStatus = await this.wait()
+                await this.wait()
             
                 this.active=true
-                console.log(checkStatus)
+                // console.log(checkStatus)
               
                 //* set active p to use to allow reloading
                 this.snippetOneActive = !this.snippetOneActive
                 this.snippetTwoActive = !this.snippetTwoActive
                
-                console.log('snippet class object is: ' + this.classObject)
+                // console.log('snippet class object is: ' + this.classObject)
                
 
                 //* set new snippet array and option limit (determines no. of characters to push)
@@ -134,21 +134,6 @@ export default {
         }
     },
     watch: {
-        classTone: {
-
-            immediate: true,
-            handler(newValue){
-            console.log('tone watched, new val is: ' + newValue)
-            }
-        },
-        initReset(newValue) {
-            console.log('new init reset value is' + newValue)
-            // this.swapsies = newValue;
-        },
-        // subTrigger(newValue) {
-        //     console.log('new sub general val is')
-        //     this.isSub = newValue
-        // },
 
         snippet(newValue, oldValue) {
             // * change made var for tracking init change from default to showing non default snippets

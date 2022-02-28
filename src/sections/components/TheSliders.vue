@@ -1,12 +1,13 @@
 <template>
 
+
      <ion-range :class="tone"
-       
+        class="main-range"
         id="slider"
         :value="rangeVal"
         min="0"
         max="10"
-        step="1"
+    
         @click="touchEvent($event)"
         @touchend="touchEvent($event)">
 
@@ -29,7 +30,6 @@
            <ion-icon v-else
                 slot="end" :icon="addCircle"
                 class="disabled">
-             
         </ion-icon>
         </ion-range>
     
@@ -226,7 +226,7 @@ export default {
 <style scoped>
 
     ion-range {
-    --knob-size: 3rem;
+    --knob-size: 5rem;
     --knob-box-shadow: none;
    
     }
@@ -250,7 +250,19 @@ export default {
         font-size: 24px;
     }
 
-    .disabled {
-    color: grey!important;
+
+    .main-range {
+        pointer-events: none;
     }
+
+    ion-range > ion-icon {
+        pointer-events: initial;
+        cursor: pointer;
+    }
+
+        .disabled {
+        color: grey!important;
+        pointer-events: none;
+    }
+
 </style>
