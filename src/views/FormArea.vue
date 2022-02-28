@@ -17,15 +17,16 @@
                     <the-icons :name="'raccoon-shifty'"></the-icons>
                 </template>
                  <template v-slot:end>
+                     <!-- Q: who's grumbling -->
                    <chat-typer
                    :chatString="this.pandaChats[0].string"
                    @scroll="scrollToBottom(this.content)"
                     :scrollType="setScroll"
                    ></chat-typer>
                 </template>
-                <template  v-slot:responses
-              
-                >
+
+                    <!-- chips - choose pronoun -->
+                <template  v-slot:responses>
                 <div ref="el">
                     <set-pronouns
                     v-if="this.formPosition===-1"
@@ -34,8 +35,9 @@
                     </set-pronouns>
                 </div>
                 </template>
+
             </chat-bubble>
-             <!-- CLICK, set form, position to 0 -->
+            <!-- CLICK, set form, position to 0 -->
             <!-- pronoun response -->
             <chat-bubble
              :gridClass="'right'"
@@ -57,32 +59,22 @@
                     <the-icons :name="'raccoon-shifty'"></the-icons>
                 </template>
                             <template v-slot:end>
+                                <!-- Q: choose name -->
                             <chat-typer
-                            :chatString="this.pandaChats[9].string"
+                            :chatString="this.pandaChats[1].string"
                             @scroll="scrollToBottom(this.content)"
                                 :scrollType="setScroll"
                             ></chat-typer>
                             </template>
-                            <template v-slot:end-next>
-                                    <chat-typer
-                                        v-if=" this.chosen.chosenNameType==='someone'||this.chosen.chosenNameType==='something'"
-                                    :chatString="this.chosen.nameTypeFollowUp"
-                                    @scroll="scrollToBottom(this.content)"
-                                        :scrollType="setScroll"
-                                    ></chat-typer>
-                            </template>
                 <template  v-slot:responses>
                 <div>
-
-                            <chat-response
-                            v-if="this.formPosition>-1"
-                            :data="this.nameTypeResponses"
-                            @update:value="setNameType">
-                            </chat-response>
+                                     <!-- chips - choose name -->
                                     <text-input
-                                    v-if=" this.chosen.chosenNameType==='someone'||this.chosen.chosenNameType==='something'"
+                                    v-if="this.formPosition===0"
                                     @update:value="setName"
                                     :inputType="'short'"
+                                    :examples="['You can leave this blank if you prefer']"
+                                    :exampleType="'info'"
                                     ></text-input>
                 </div>
                 </template>
@@ -94,7 +86,7 @@
              :responseClass="true"
              v-if="this.formPosition>=1">
                 <template v-slot:end>
-                    <p>{{ this.chosen.chosenName }}</p>
+                    <p>{{ this.chosen.demoName }}</p>
                 </template>
                  <template v-slot:third>
                       <the-icons :name="'profile'"></the-icons>
@@ -104,23 +96,36 @@
             <!-- enter PERSONMATE -->
             <chat-bubble
             :gridClass="'left'"
-            v-if="this.formPosition>0&&this.named===true"
+            v-if="this.formPosition>0&&this.nameSet===true"
             >
                     <template v-slot:start>
                     <the-icons :name="'raccoon-shifty'"></the-icons>
                     </template>
                     <template v-slot:end>
+                        <!-- Q: enter personmate -->
                        <chat-typer
                          @scroll="scrollToBottom(this.content)"
                         :scrollType="setScroll"
-                        :chatString="this.chosen.personmateFollowUp"
+                        :chatString="this.nameFollowUp"
                         ></chat-typer>
                     </template>
+                            <template v-slot:end-next>
+                                <!-- form validation message -->
+                            <chat-typer
+                            v-if="personmateInvalid===true"
+                                @scroll="scrollToBottom(this.content)"
+                                :scrollType="setScroll"
+                                :chatString="'Put some words in first, yeah?'"
+                                ></chat-typer>
+                    </template>
                       <template  v-slot:responses>
+                                     <!-- chips - choose/enter personmate -->
                      <text-input
+                     v-if="this.formPosition===1"
                                     @update:value="getPersonmate"
                                     :inputType="'short'"
-                                    :examples="this.chosen.nameTypeExamples"
+                                    :examples="['flatmate', 'world leader', 'baked good', 'aunt']"
+                                    :exampleType="'list'"
                                     ></text-input>
                     </template>
             </chat-bubble>
@@ -128,7 +133,7 @@
             <!-- personmate response -->
             <chat-bubble 
              :gridClass="'right'"
-             v-if="this.formPosition>1&&this.named===true">
+             v-if="this.formPosition>1">
                 <template v-slot:end>
                     <p>{{  this.chosen.chosenPersonmate }}</p>
                 </template>
@@ -145,28 +150,31 @@
                     <the-icons :name="'raccoon-disappointed'"></the-icons>
                     </template>
                     <template v-slot:end>
+                           <!-- Q: enter gripe -->
                           <chat-typer
                             @scroll="scrollToBottom(this.content)"
                             :scrollType="setScroll"
-                            :chatString="gripeSentence"
+                            :chatString="this.personmateFollowUp"
                         ></chat-typer>
                     </template>
                       <template  v-slot:responses>
+                          <!-- chips - choose gripe. Includes text input -->
                           <set-gripe
                             v-if="this.formPosition===2"
                             @update:gripe="getGripe"
                           ></set-gripe>
                     </template>
                     <template v-slot:end-next>
+                                    <!-- Additional info: chat guidelines on custom gripe -->
                                     <chat-typer
-                                        v-if="this.$store.state.customGripe===true"
-                                    :chatString="this.pandaChats[2].stringTwo"
-                                    @scroll="scrollToBottom(this.content)"
+                                        v-if="this.$store.state.customGripe===true&&this.formPosition>1"
+                                        :chatString="this.pandaChats[3].stringTwo"
+                                        @scroll="scrollToBottom(this.content)"
                                         :scrollType="setScroll"
                                     ></chat-typer>
                             </template>
             </chat-bubble>
-             <!-- CLICK, set form, position to 3 -->
+            <!-- CLICK, set form, position to 3 -->
             <!-- gripe response -->
             <chat-bubble 
              :gridClass="'right'"
@@ -188,6 +196,7 @@
                 </template>
 
                 <template v-slot:end>
+                    <!-- Q: check sentence -->
                    <chat-typer
                    :chatString="sentenceToCheck"
                    @scroll="scrollToBottom(this.content)"
@@ -195,11 +204,12 @@
                    ></chat-typer>
                 </template>
 
+                <!-- Additional info - options to change -->
                 <template v-slot:end-next
-                v-if="choicesConfirmed===false"
+                v-if="choicesConfirmed===false&&this.formPosition>2"
                     >
                     <chat-typer
-                   :chatString="this.pandaChats[8].string"
+                   :chatString="this.pandaChats[4].string"
                    @scroll="scrollToBottom(this.content)"
                     :scrollType="setScroll"
                    ></chat-typer>
@@ -208,13 +218,16 @@
                 <template  v-slot:responses
                 >
                 <div>
+                     <!-- chips - options to swap choices -->
                     <chat-response
                       v-if="choicesConfirmed===false&&this.formPosition===3"
                      :data="checkStrings"
+                     :subtext="true"
                      @update:value="swapChoices">
                      </chat-response>
+                     <!-- chips - yes/no, confirm choices -->
                      <chat-response
-                     v-else
+                     v-else-if="this.formPosition===3"
                      :data="confirmResponses"
                      @update:value="confirmChoices">
                      </chat-response>
@@ -228,7 +241,7 @@
              :responseClass="true"
              v-if="this.formPosition>3">
                 <template v-slot:end>
-                    <p>{{ this.chosen.confirmResponse }}</p>
+                    <p>{{ this.chosen.confirmResponseDemo }}</p>
                 </template>
                  <template v-slot:third>
                       <the-icons :name="'profile'"></the-icons>
@@ -245,18 +258,19 @@
                     </template>
                     <template v-slot:end>
                         <div>
+                            <!-- Q: get tone 1 -->
                         <chat-typer
                          @scroll="scrollToBottom(this.content)"
                           :scrollType="setScroll"
-                        :chatString="this.pandaChats[3].string"
+                        :chatString="this.pandaChats[5].string"
                         ></chat-typer>
                         </div>
                     </template>
                        <template  v-slot:responses>
+                           <!-- chips - choose tone 1 -->
                     <emotional-teaser
                         :step="1"
                         @update:starters="getStarterTones"
-                       
                         v-if="this.formPosition===4">  
                     </emotional-teaser>
                 </template>
@@ -287,7 +301,7 @@
                         <chat-typer
                          @scroll="scrollToBottom(this.content)"
                           :scrollType="setScroll"
-                        :chatString="this.pandaChats[4].string"
+                        :chatString="this.pandaChats[6].string"
                         ></chat-typer>
                         </div>
                     </template>
@@ -323,7 +337,7 @@
                     <template v-slot:end>
                         <div>
                         <chat-typer
-                         :chatString="this.pandaChats[5].string"
+                         :chatString="this.pandaChats[7].string"
                          @scroll="scrollToBottom(this.content)"
                          :scrollType="setScroll"
                         ></chat-typer>
@@ -382,7 +396,7 @@
 
 <script>
 
-    import { accessibility, earth, infinite, sad } from 'ionicons/icons'
+    import { accessibility, earth, infinite, sad, ellipse, checkmarkCircle, closeCircle } from 'ionicons/icons'
 
     import SetPronouns from '../sections/components/form-components/SetPronouns.vue'
     // import SetPersonmate from '../sections/components/form-components/SetPersonmate.vue'
@@ -437,6 +451,12 @@
                 earth,
                 infinite,
                 sad,
+                ellipse,
+                checkmarkCircle,
+                closeCircle,
+                nameFollowUp: pandaChat.nameFollowUp,
+                personmateFollowUp: pandaChat.personmateFollowUp,
+                gripeFollowUp: pandaChat.gripeFollowUp,
 
                 pronouns,
                 setPronouns: pronouns.setPronouns,
@@ -452,14 +472,17 @@
         data() {
             return {
 
+                editing: false,
+
+                personmateInvalid: false,
 
                 checkStrings: [
-                    {text: '', value: 'name'},
-                    {text: '', value: 'gripe'},
-                    {text: '', value: 'pronoun'},
-                    {text: '', value: 'personmate'},
-                    {text: 'change everything', value: 'all'},
-                    {text: 'change nothing', value: 'none'}
+                    {text: '', value: 'name', icon: ellipse, subtext: 'name'},
+                    {text: '', value: 'gripe', icon: ellipse, subtext: 'what they did'},
+                    {text: '', value: 'pronoun', icon: ellipse, subtext: 'I or we'},
+                    {text: '', value: 'personmate', icon: ellipse, subtext: 'relationship to you'},
+                    {text: 'change everything', value: 'all', icon: ellipse},
+                    {text: 'change nothing', value: 'none', icon: ellipse}
                 ],
 
                 nameTypeResponses: [
@@ -493,8 +516,8 @@
                 gripeChange: false,
             
                 confirmResponses: [
-                    { text: 'sure', value: true},
-                    { text: 'no, change something', value: false}
+                    { text: 'sure', value: true, icon: checkmarkCircle},
+                    { text: 'no, change something', value: false, icon: closeCircle}
                 ],
 
                     offenses: [
@@ -605,7 +628,7 @@
                         {chosenText: '', area: 'offense', areaIndex: '2', type: 'addon'},
                         {chosenNameType: '', nameTypeFollowUp: '', personmateFollowUp: '', nameTypeExamples: []},
                         {chosenName: null},
-                        {confirmResponse: ''}
+                        {confirmResponse: '', confirmResponseDemo: ''}
                     ],
 
                     starterTones: [],
@@ -651,7 +674,6 @@
                     }
                     return pro
             },
-
             proTwo(){
             let pro
                     if(this.chosen.chosenPronoun==="we"){
@@ -666,18 +688,8 @@
 
             sentenceToCheck(){ 
                 let sentence = 
-                `"${this.stringA} ${this.stringB} ${this.stringC} ${this.stringD}". Does that make sense?`
+                `"${this.stringA} ${this.gripeFollowUp} ${this.stringC} ${this.stringD}" Does that make sense?`
 
-                return sentence
-            },
-
-            gripeSentence(){
-                let sentence 
-                if(this.chosen.chosenNameType==='nothing in particular'||this.chosen.chosenNameType==='everything'){
-                    sentence = 'What happened then?'
-                } else {
-                    sentence = `What did ${this.chosen.chosenName} do then?`
-                } 
                 return sentence
             },
 
@@ -730,13 +742,13 @@
                         response = "they need to know that this is NOT ON."
                         break;
                     case 'polite':
-                        response = "I'm going to make sure this doesn't ruin our relationship."
+                        response = `${this.proOne} will bravely pretend it never happened`
                         break;
                     case 'paggro':
-                        response = "I will be leaving them a strongly worded post-it note."
+                        response = `${this.proOne} will be leaving them a strongly worded post-it note.`
                         break;
                     case 'pirate':
-                        response = "I'll need to consult my parrot before taking any further action."
+                        response = `${this.proOne} best consult ${this.proTwo} parrot before taking any further action.`
                 }
                 return response
             }
@@ -747,23 +759,49 @@
         methods: {
 
             swapChoices(choice){
-                 this.chosen.confirmResponse = choice
+                this.chosen.confirmResponse = choice
 
                 if(choice==='none') {
+                    this.choicesConfirmed=true
+                    this.chosen.confirmResponseDemo = 'change nothing'
                     this.formPosition++
                 } else if (choice==='all') {
-                    this.formPositon===-1
+                    this.formPositon=-1
+                    this.editing=true
+                } else if (choice==='name'){
+                    this.formPosition=0
+                    this.editing=true
+                } else if (choice==='gripe'){
+                    this.formPosition=2
+                    this.editing=true
+                } else if (choice==='pronoun'){
+                    this.formPosition=-1
+                    this.editing=true
+                } else if (choice==='personmate'){
+                    this.formPosition=1
+                    this.editing=true
                 } else {
-                    //! come back here to add rewind stuff
                     this.formPosition++
                 }
+
                 return choice
             },
 
             confirmChoices(response){
                     this.choicesConfirmed = response
                     this.chosen.confirmResponse = response
-                    this.formPosition++
+
+                            if(response===true){
+                        this.chosen.confirmResponseDemo = 'sure'
+                        } else if (response===false){
+                            this.chosen.confirmResponseDemo = 'no, change something'
+                        }
+
+                    if(response===true){
+                        this.editing=false
+                       
+                        this.formPosition++
+                    }
             },
 //tbc here on the scroll thing
             getElPosition(){
@@ -788,34 +826,66 @@
             getPronoun(pronoun) {
 
                 this.chosen.chosenPronoun = pronoun
-                this.formPosition++
 
                 if(this.chosen.chosenPronoun==="me") {
                     this.samplePronoun = "You"
-                    this.demoPronoun = 'Just me'
+                    this.demoPronoun = 'yes I am'
                     this.stringC = "I expected better from "
                 }
                 if (this.chosen.chosenPronoun==="we") {
                     this.samplePronoun = "Several of you"
-                    this.demoPronoun = 'Several of us'
+                    this.demoPronoun = 'yes we are'
                     this.stringC = `We expected better from `
                 }
 
                 this.checkStrings[2].text = this.stringC
+
+                if(this.editing===true&&this.chosen.confirmResponse==='pronoun'){
+                     this.choicesConfirmed=true
+                    this.formPosition=3
+                } else {
+                    this.formPosition++;
+                }
                
             },
 
             getPersonmate(personmate) {
+                if(!personmate){
+                    this.personmateInvalid = true
+                } else {
                 this.chosen.chosenPersonmate = personmate;
+                this.$store.state.chosenPersonmate = personmate;
                 this.samplePersonmate = personmate + '.'
-                this.formPosition++;
                 this.stringD = `${this.proTwo} ${personmate}.`
                 this.checkStrings[3].text = this.stringD
+
+                if(this.editing===true&&this.chosen.confirmResponse==='personmate'){
+                     this.choicesConfirmed=true
+                    this.formPosition=3
+                } else {
+                    this.formPosition++;
+                }
+                }
         
+            },
+
+            calcB(gripe){
+                let sentence = ''
+                if(gripe==='dishes') {
+                    sentence = 'you didn\'t do your washing up. '
+                } else if (gripe==='noise') {
+                    sentence = " you were very loud last night. "
+                } else if (gripe==='rubbish') {
+                    sentence = " you didn't take the rubbish out. "
+                } else {
+                    sentence = `you ${gripe}. `
+                }
+                return sentence
             },
 
 
             getGripe(gripe) {
+   
                 this.chosen.chosenGripe = gripe;
                 console.log(this.chosen.chosenGripe)
                 this.gripeChange=!this.gripeChange;
@@ -823,10 +893,17 @@
                 
                 //* set custom prop to decide if we should show guidance text in custom input.
                 //* really sloppy code, this bit should all be consolidated in one function
-                this.stringB = `you ${gripe}.`
-                console.log('string b is: ' + this.stringB)
-                this.checkStrings[1].text = this.stringB
-                this.formPosition++;
+                const string = this.calcB(gripe)
+                console.log('string is: ' + string)
+                this.stringB = string
+                this.checkStrings[1].text = string
+              
+                 if(this.editing===true&&this.chosen.confirmResponse==='gripe'){
+                     this.choicesConfirmed=true
+                    this.formPosition=3
+                } else {
+                    this.formPosition++;
+                }
             },
             getStarterTones(tone) {
                 this.starterTones.push(tone)
@@ -842,7 +919,7 @@
                 let option = array[0]
 
                 if(this.chosen.chosenName) {
-                    let newString = `${option} ${this.chosen.chosenName} ,`
+                    let newString = `${option} ${this.chosen.chosenName}, `
                     this.chosen.chosenTempOpen = newString;
                     this.output.op1 = newString;
                 } else {
@@ -905,39 +982,32 @@
             },
 
             setName(name){
-                if(this.chosen.chosenNameType==='someone'){
-                    this.chosen.personmateFollowUp = `and what's ${name}'s relationship to you?`
-                    this.chosen.nameTypeExamples = ['flatmate', 'world leader', 'aunt']
-                }
-                    else if(this.chosen.chosenNameType==='something'){
-                        this.chosen.personmateFollowUp = `and what type of thing is ${name}?`
-                        this.chosen.nameTypeExamples = ['soft furnishing', 'crisp brand', 'method of public transport']
-                    } else {
-                        this.$store.state.nameIsDefault = true
-                        console.log('set default name to true')
-                    }
             
-                this.chosen.chosenName = name
-                this.$store.state.chosenName = name
-                this.nameSet = true
-                this.$store.state.nameIsDefault = false
-                const string = this.setA()
-                this.stringA = string
-                this.checkStrings[0].text = string
-                console.log('string is: ' + string)
-                this.formPosition++
-               
-            },
-
-            setA(){
-                let stringname
-                 if(this.$store.state.nameIsDefault===false){
-                    stringname = `${this.chosen.chosenName}, `
+                if(name){
+                    this.chosen.chosenName = name
+                    this.$store.state.chosenName = name
+                    this.chosen.demoName = name
+                    this.$store.state.nameIsDefault = false
+                    this.stringA = `${this.chosen.chosenName}, `
+                    this.nameSet = true
                 } else {
-                    stringname = 'Now really, '
+                    this.chosen.demoName = 'I name no names'
+                    this.chosen.chosenName = 'mate'
+                    this.$store.state.chosenName = 'mate'
+                    this.$store.state.nameIsDefault = true
+                    this.stringA = 'Mate, '
+                    this.nameSet = true
                 }
-                    
-                return stringname
+                
+                this.checkStrings[0].text = this.stringA
+                if(this.editing===true&&this.chosen.confirmResponse==='name'){
+                     this.choicesConfirmed=true
+                    this.formPosition=3
+                } else {
+                    this.formPosition++;
+                }
+           
+               
             },
 
             setGripe(chosenGripe) {

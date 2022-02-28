@@ -1,6 +1,9 @@
 <template>
-    <ion-chip v-for="(response, index) in data"
+    <div v-for="(response, index) in data"
     :key="index"
+    
+    >
+    <ion-chip
     @click="[selected=response.value, activate(this.selected)]"
     color="success"
     >
@@ -11,6 +14,9 @@
                 {{ response.text }}
         </ion-label>
     </ion-chip>
+         <ion-label class="examples" v-if="this.subtext===true&&response.subtext">({{ response.subtext }})</ion-label>
+    </div>
+   
 </template>
 
 <script>
@@ -21,12 +27,21 @@ import {
     
 } from '@ionic/vue'
 
+
+
  export default {
+
+   
 
      props: {
          data: {
              type: Array,
              required: true,
+         },
+
+         subtext: {
+             type: Boolean,
+             required: false,
          }
      },
 
@@ -49,7 +64,15 @@ import {
           activate(value) {
                 this.$emit('update:value', value)
           }
-     }
+     },
 
  }
 </script>
+
+<style scoped>
+.examples {
+        margin-top: 0px !important;
+        font-size: 0.8rem;
+        color: var(--ion-color-success);
+    }
+</style>

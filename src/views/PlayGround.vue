@@ -13,7 +13,7 @@
         ></new-snippet>
     </div>   
 
-    <div id="sliders">
+   <div id="sliders">
                     <the-sliders
                         v-for="mood in allMoods"
                         :key="mood"
@@ -45,7 +45,11 @@
                                 ></chat-typer>
                         </template>
                         <template  v-slot:responses>
-                           
+                                <chat-response
+                                :data="chatResponseOptions"
+                                @update:value="goToEnd"
+                                >
+                                </chat-response>
                         </template>
             </chat-bubble>
             <div
@@ -73,6 +77,7 @@ import NewSnippet from '../sections/components/NewSnippet.vue'
 import TheSliders from '../sections/components/TheSliders.vue'
 import ChatBubble from '../sections/components/ChatBubble.vue'
 import ChatTyper from '../sections/components/ChatTyper.vue'
+import ChatResponse from '../sections/components/ChatResponse.vue'
 
 // import { IonChip } from '@ionic/vue'
 import TheIcons from '../sections/components/TheIcons.vue'
@@ -92,6 +97,7 @@ export default {
         TheIcons,
         TheSliders,
         NewSnippet,
+        ChatResponse
     },
 
     setup() {
@@ -139,6 +145,10 @@ export default {
         
         // phrase: position, status (boolean), phrase, tone
         return {
+
+            chatResponseOptions: [
+                { text: 'finished', value: 'finished'}
+            ],
 
             collapsed: false,
             newChat: 'grey',
@@ -401,14 +411,19 @@ export default {
 
                 //* tracking for the backchat ui stuff
                 //? move this too? into a separate function?
-                if(newValue===3&&this.chatted.angry===0) {
+                if(newValue>=3&&this.chatted.angry===0) {
                     this.setBackchat('medium', 'angry')
                     this.chatted.angry=1
                     this.alertChat()
                 }
-                if(newValue===8&&this.chatted.angry===1) {
-                    this.setBackchat('max', 'angry')
+                if(newValue>=8&&this.chatted.angry===1) {
+                    this.setBackchat('high', 'angry')
                     this.chatted.angry=2
+                    this.alertChat()
+                }
+                 if(newValue>=10&&this.chatted.angry===2) {
+                    this.setBackchat('max', 'angry')
+                    this.chatted.angry=3
                     this.alertChat()
                 }
         },
@@ -424,14 +439,20 @@ export default {
                 }
 
             
-                if(newValue===3&&this.chatted.polite===0) {
+                if(newValue>=3&&this.chatted.polite===0) {
                     this.setBackchat('medium', 'polite')
                     this.chatted.polite=1
+                    this.alertChat()
                 }
-
-                if(newValue===8&&this.chatted.polite===1) {
-                    this.setBackchat('max', 'polite')
+                if(newValue>=8&&this.chatted.polite===1) {
+                    this.setBackchat('high', 'polite')
                     this.chatted.polite=2
+                    this.alertChat()
+                }
+                 if(newValue>=10&&this.chatted.polite===2) {
+                    this.setBackchat('max', 'polite')
+                    this.chatted.polite=3
+                    this.alertChat()
                 }
             
         },
@@ -446,17 +467,22 @@ export default {
                     this.hasPaggro=false;
                 }
 
-              if(newValue===3&&this.chatted.paggro===0) {
+                if(newValue>=3&&this.chatted.paggro===0) {
                     this.setBackchat('medium', 'paggro')
                     this.chatted.paggro=1
                     this.alertChat()
                 }
-
-                if(newValue===8&&this.chatted.paggro===1) {
-                    this.setBackchat('max', 'paggro')
+                if(newValue>=8&&this.chatted.paggro===1) {
+                    this.setBackchat('high', 'paggro')
                     this.chatted.paggro=2
                     this.alertChat()
                 }
+                 if(newValue>=10&&this.chatted.paggro===2) {
+                    this.setBackchat('max', 'paggro')
+                    this.chatted.paggro=3
+                    this.alertChat()
+                }
+            
             
         },
 
@@ -470,17 +496,22 @@ export default {
                     this.hasPirate=false;
                 }
 
-                if(newValue===3&&this.chatted.pirate===0) {
+                if(newValue>=3&&this.chatted.pirate===0) {
                     this.setBackchat('medium', 'pirate')
                     this.chatted.pirate=1
                     this.alertChat()
                 }
-
-                if(newValue===8&&this.chatted.pirate===1) {
-                    this.setBackchat('max', 'pirate')
+                if(newValue>=8&&this.chatted.pirate===1) {
+                    this.setBackchat('high', 'pirate')
                     this.chatted.pirate=2
                     this.alertChat()
                 }
+                 if(newValue>=10&&this.chatted.pirate===2) {
+                    this.setBackchat('max', 'pirate')
+                    this.chatted.pirate=3
+                    this.alertChat()
+                }
+            
     
         },
 
@@ -539,6 +570,11 @@ export default {
     },
 
     methods: {
+
+        goToEnd(){
+        this.$store.state.finalOutput = { ...this.gripeObject }
+           this.$router.push('/finish')
+        },
 
         alertChat(){
               if (this.newChat==='grey'&&this.collapsed===false) {

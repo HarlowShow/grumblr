@@ -33,6 +33,8 @@ const store = createStore({
   state() {
     return {
       baseOutput: {},
+      finalOutput: {},
+      gripeString: '',
       chosenPronouns: {},
       chosenPersonmate: '',
       chosenGripe: '',

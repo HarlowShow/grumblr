@@ -44,19 +44,19 @@
     <ion-chip
         color="success"
         @click="pushTone('paggro')">
-        <ion-label> I will be leaving them a strongly worded post-it note.</ion-label>
+        <ion-label>{{ proOne }} will be leaving them a strongly worded post-it note.</ion-label>
     </ion-chip>
 
     <ion-chip
         color="success"
        @click="pushTone('pirate')">
-        <ion-label>I'll need to consult my parrot before taking any further action.</ion-label>
+        <ion-label>{{ proOne }} best consult {{ proTwo }} parrot before taking any further action.</ion-label>
     </ion-chip>
 
     <ion-chip
         color="success"
         @click="pushTone('polite')">
-        <ion-label>I'm going to make sure this doesn't ruin our relationship.</ion-label>
+        <ion-label>{{ proOne }} will bravely pretend it never happened.</ion-label>
     </ion-chip>
 
   </div>
@@ -97,6 +97,7 @@ import {
 
 } from '@ionic/vue'
 
+import { useStore } from 'vuex'
 
 export default {
     components: {
@@ -110,6 +111,16 @@ export default {
             required: true
         }
     },
+
+    setup(){
+
+        const store = useStore()
+        const activePronouns = {...store.state.chosenPronouns};
+
+        return {
+            activePronouns
+        }
+     },
 
     emits: ['update:starters'],
 
@@ -135,57 +146,15 @@ export default {
 
     },
 
-    // computed: {
+     computed:{
 
-    //     connector() {
-    //     return 'and'
-    //     },
+         proOne(){
+             return this.activePronouns.subjectP
+         },
 
-    //     firstChoice() {
-    //         let choice = ''
-    //         switch(this.activeBtn) {
-    //             case 'one':
-    //                 choice = "I'm annoyed"
-    //                 break;
-    //             case 'two':
-    //                 choice = "I'm pretty ok with it"
-    //                 break;
-    //             case 'three':
-    //                 choice = "I'm quietly seething"
-    //                 break;
-    //             case 'four':
-    //                 choice = "I'm swarthy AF"
-    //         }
-    //         return choice
-    //     },
-
-    //     secondChoice() {
-    //         let choice = ''
-    //         switch(this.activeBtnTwo) {
-    //             case 'one':
-    //                 choice = "they need to know that this is NOT ON."
-    //                 break;
-    //             case 'two':
-    //                 choice = "I'm going to make sure this doesn't ruin our relationship."
-    //                 break;
-    //             case 'three':
-    //                 choice = "I will be leaving them a note about it."
-    //                 break;
-    //             case 'four':
-    //                 choice = "I'll need to consult my parrot before taking any further action."
-    //         }
-    //         return choice
-    //     },
-
-    //     displayConnector() {
-    //         let choice = ''
-    //         if (this.chosen===true&&this.chosenTwo===true) {
-    //             choice = 'and '
-    //         } else {
-    //             choice = '...'
-    //         }
-    //         return choice
-    //     }
-    // },
+         proTwo(){
+             return this.activePronouns.posessiveDeterminerP
+         }
+     }
 }
 </script>

@@ -9,6 +9,7 @@
           <h3>do a funny communicate?</h3>
         
           <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/input">yes ok</ion-button>
+           <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/shared">see shared</ion-button>
          
       </div>
       <div>

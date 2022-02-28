@@ -6,14 +6,14 @@
         @click="[selectedPronoun='me', submitPronoun(selectedPronoun)]"
         >
         <ion-icon :icon="person"></ion-icon>
-        <ion-label>just me</ion-label>
+        <ion-label>yes I am</ion-label>
         </ion-chip>
 
                 <ion-chip color="success"
         @click="[selectedPronoun='we', submitPronoun(selectedPronoun)]"
         >
         <ion-icon :icon="people"></ion-icon>
-        <ion-label>several of us</ion-label>
+        <ion-label>yes we are</ion-label>
         </ion-chip>
 
 

@@ -4,7 +4,7 @@
 
        <ion-header>
          <ion-toolbar class="ion-text-center">
-             <ion-title >Trash Talk Panda</ion-title>
+             <ion-title >GRUMBLR</ion-title>
              <ion-menu-button slot="start"></ion-menu-button>
              <!-- <ion-menu-toggle><button>toggle</button></ion-menu-toggle> -->
              <!-- <div slot="start"><slot name="top"></slot></div> -->

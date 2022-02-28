@@ -17,7 +17,7 @@
     </ion-chip>
     <div v-if="examples"
     class="examples">
-        <p> e.g. {{ examples.join(', ')}}</p>
+        <p><span v-if="exampleType==='list'">e.g. </span>{{ examples.join(', ')}}</p>
     </div>
 
 
@@ -94,6 +94,11 @@ export default {
 
         examples: {
             type: Array,
+            required: false
+        },
+
+        exampleType: {
+            type: String,
             required: false
         }
     },

@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 
 import HomePage from '../views/HomePage.vue'
+import SharingPage from '../views/SharingPage.vue'
+import SingleShare from '../views/SingleShare.vue'
 import FormArea from '../views/FormArea.vue';
 
 import PlayGround from '../views/PlayGround.vue';
@@ -51,6 +53,19 @@ const router = createRouter({
       path: '/finish',
       component: EndPage,
     },
+
+    {
+      path: '/shared',
+      name: 'Shared',
+      component: SharingPage,
+    },
+
+    {
+      path: '/shared/:id',
+      name: 'SingleShare',
+      component: SingleShare,
+      props: true,
+    }
   ]
 })
 

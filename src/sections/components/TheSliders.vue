@@ -5,10 +5,8 @@
         id="slider"
         :value="rangeVal"
         min="0"
-        max="9"
+        max="10"
         step="1"
-        ticks="true"
-        snaps="true"
         @click="touchEvent($event)"
         @touchend="touchEvent($event)">
 
