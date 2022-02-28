@@ -2,30 +2,34 @@
 
     <base-layout page-default-back-link="/input" page-title="Edit your gripe">
 
-    <div class="snippets">
-        <new-snippet v-for="(value, name, index) in gripeObject"
-        :initReset="this.subFirst"
-        :key="index"
-        :value="value"
-        :name="name"
-        :index="index"
-        :snippet="gripeObject[name]"
-        ></new-snippet>
-    </div>   
-
-   <div id="sliders">
-                    <the-sliders
-                        v-for="mood in allMoods"
-                        :key="mood"
-                        :tone="mood"
-                        :isActive="activeSlider[mood]"
-                        :sliderVal="sliderVal[mood]"
-                        @update:getMoods="getMoods">
-                    </the-sliders>
-    </div>
+    <div id="playground">
+        <div class="grid-one">
+            <div class="snippets">
+                <new-snippet v-for="(value, name, index) in gripeObject"
+                :initReset="this.subFirst"
+                :key="index"
+                :value="value"
+                :name="name"
+                :index="index"
+                :snippet="gripeObject[name]"
+                ></new-snippet>
+            </div> 
+        </div>
+        <div class="grid-two">
+        <div id="sliders">
+                        <the-sliders
+                            v-for="mood in allMoods"
+                            :key="mood"
+                            :tone="mood"
+                            :isActive="activeSlider[mood]"
+                            :sliderVal="sliderVal[mood]"
+                            @update:getMoods="getMoods">
+                        </the-sliders>
+        </div>
+        </div>
 
   
-
+        <div class="grid-three">
             <chat-bubble
                     v-if="collapsed===false"
                     id="mobilefooter"
@@ -53,21 +57,23 @@
                                 </chat-response>
                         </template>
             </chat-bubble>
-            <div
-             v-else
-             @click="toggleChat">
-            <chat-bubble
-                   
-                    id="mobilefooter"
-                    :gridClass="'left'"
-                    :iconSlot="true">
-                        <template v-slot:start>
-                            <the-icons :name="'chat-active'"
-                            :newChat="newChat"
-                            ></the-icons>
-                        </template>
-            </chat-bubble>
+                    <div
+                    v-else
+                    @click="toggleChat">
+                    <chat-bubble
+                        
+                            id="mobilefooter"
+                            :gridClass="'left'"
+                            :iconSlot="true">
+                                <template v-slot:start>
+                                    <the-icons :name="'chat-active'"
+                                    :newChat="newChat"
+                                    ></the-icons>
+                                </template>
+                    </chat-bubble>
+                    </div>
             </div>
+        </div>
               <!-- <button class="help" @click="toggleChatStatus">click me</button> -->
     </base-layout>
 </template>
@@ -1478,29 +1484,45 @@ export default {
 
     }
 
-     /* @media(max-width: 576px) {
-         .snippets {
-             min-height: 50%;
-        
-         }
-     } */
-
     ion-icon {
         font-size: 2.2rem;
     }
 
+    #mobilefooter {
+        align-content: end;
+    }
+
     #sliders {
-        /* display: grid; */
-        align-items: center;
-        justify-content: center;
-        /* grid-template-rows: repeat(3, min-content); */
-        /* grid-template-columns: minmax(min-content, 1.5fr) 8fr minmax(min-content, 1.5fr); */
+        grid-row-end: 3;
+    }
+
+    #playground {
+        display: grid;
+        height: 100%;
+        grid-template-columns: auto;
+        grid-template-rows: minmax(150px, 4fr) minmax(300px, min-content) minmax(160px, min-content);
+        grid-row-gap: 1rem;
+     
+    }
+
+    .grid-one{
+       
+        align-self: center;
+    }
+
+
+    .grid-two{
+     
+        grid-row-end: 3;
+        align-self: end;
+       
     }
     
-    #mobilefooter {
-        position: absolute;
-        bottom: 0px;
-        width: 100vw;
+    .grid-three{
+      
+        grid-row-end: 4;
+        align-self: end;
+       
     }
    
 

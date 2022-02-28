@@ -871,7 +871,7 @@ export default function speakPhrases() {
             position: "so0",
             status: false,
             phrase: `Yours sincerely,
-            someone who is no longer going to put up with this. `,
+            ${activePronouns.subjectP}, the DEEPLY AGGRAVATED ${activePronouns.groupType}. `,
             tone: "angry",
 
         },

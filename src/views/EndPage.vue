@@ -5,6 +5,42 @@
             <p> {{ fullGripe }}</p>
         </div>
 
+        <div class="sharing-icons">
+
+          <ShareNetwork
+          network="facebook"
+          url='https://news.vuejs.org/issues/180'
+          title="this is shared between friends"
+          description="description goes here"
+          ><ion-icon :icon="logoFacebook"></ion-icon>
+          </ShareNetwork>
+
+          <ShareNetwork
+          network="twitter"
+          url='https://news.vuejs.org/issues/180'
+          title="this is shared between friends"
+          description="description goes here"
+          ><ion-icon :icon="logoTwitter"></ion-icon>
+          </ShareNetwork>
+
+          <ShareNetwork
+          network="reddit"
+          url='https://news.vuejs.org/issues/180'
+          title="this is shared between friends"
+          description="description goes here"
+          ><ion-icon :icon="logoReddit"></ion-icon>
+          </ShareNetwork>
+
+          <ShareNetwork
+          network="whatsapp"
+          url='https://news.vuejs.org/issues/180'
+          :title="test"
+          description="description goes here"
+          ><ion-icon :icon="logoWhatsapp"></ion-icon>
+          </ShareNetwork>
+       
+      </div>
+
        <p>sharing buttons will go here</p>
        <ion-button @click="handleShare">add gripe to DB</ion-button>
        <ion-button 
@@ -15,7 +51,9 @@
 
 <script>
 
-    import { IonButton } from '@ionic/vue'
+    import { IonButton, IonIcon } from '@ionic/vue'
+
+  import { logoFacebook, logoTwitter, logoReddit, logoWhatsapp } from 'ionicons/icons';
     import { useStore } from 'vuex'
 
     import { db } from '../firebase/config'
@@ -24,6 +62,7 @@
 export default {
     components: {
         IonButton,
+        IonIcon
     },
 
     setup(){
@@ -45,6 +84,10 @@ export default {
             gripe,
             fullGripe,
             handleShare,
+            logoFacebook,
+            logoTwitter,
+            logoReddit,
+            logoWhatsapp,
         }
     },
 
@@ -52,6 +95,12 @@ export default {
         output() {
             return this.$store.state.baseOutput;
         },
+    },
+
+    data() {
+        return {
+             test: 'it be test, it be best',
+        }
     }
 }
 </script>

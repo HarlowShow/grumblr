@@ -348,6 +348,7 @@
                         :step="3"
                         v-if="this.formPosition===6"
                         @update:starters="getStarterTones"
+                        @update:route="routin"
                         > 
                     </emotional-teaser>
                 </template>
@@ -759,6 +760,14 @@
 
         methods: {
 
+            async routin(shouldRoute){
+                if(shouldRoute===true){
+                    await this.checkStarters()
+
+                    this.$router.push('/playground')
+                }
+            },
+
             swapChoices(choice){
                 this.chosen.confirmResponse = choice
 
@@ -912,6 +921,14 @@
                 // console.log(this.$store.state.starterTones)
                 // console.log(tone)
                 this.formPosition++;
+            },
+
+            checkStarters() {
+                return new Promise((resolve) => {
+                    if(this.$store.state.starterTones.length===2){
+                        resolve()
+                    }
+                })
             },
 
 

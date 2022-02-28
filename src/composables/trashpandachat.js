@@ -98,7 +98,7 @@ export default function speakTrashPanda(startingIdx = 0) {
             angry: 'Oh my.',
             polite: 'That\'s nice...',
             paggro: 'I\'m sensing a spot of unresolved tension',
-            pirate: 'Yaarrrrrrrggggghhhh.',
+            pirate: 'Yaarrrrrrrggggghhhh?',
         },
 
         high: {

@@ -67,13 +67,13 @@
 
     <ion-chip
         color="success"
-        @click="routin">
+        @click="routin(true)">
         <ion-label>sure</ion-label>
     </ion-chip>
 
     <ion-chip
         color="success"
-        @click="routin">
+        @click="routin(true)">
         <ion-label>whip me up sump'n real good</ion-label>
     </ion-chip>
 
@@ -122,7 +122,7 @@ export default {
         }
      },
 
-    emits: ['update:starters'],
+    emits: ['update:starters', 'update:route'],
 
     methods: {
 
@@ -133,15 +133,7 @@ export default {
          },
 
         routin(arg) {
-            this.$emit('update:starters')
-            if(arg===false) {
-                setTimeout(()=>{
-                    arg=true
-                    this.routin(arg)
-                }, 3000)
-            } else {
-            this.$router.push('playground')
-            }
+            this.$emit('update:route', arg)
         },
 
     },

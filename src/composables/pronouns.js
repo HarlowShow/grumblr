@@ -28,8 +28,8 @@ export default function usePronouns(){
         toBePastContracted: "I've",
         toBePastContractedCap: "I've",
         pirateTitle: "this old cap'n",
-        pirateTitleCap: "This old cap'n"
-
+        pirateTitleCap: "This old cap'n",
+        groupType: "person",
        
         }
             } else if (pronoun === "we") {
@@ -52,7 +52,8 @@ export default function usePronouns(){
         toBePastContracted: "we've",
         toBePastContractedCap: "We've",
         pirateTitle: "these fine crewmates",
-        pirateTitleCap: "These fine crewmates"
+        pirateTitleCap: "These fine crewmates",
+        groupType: 'people'
         };
    
     } else {
