@@ -14,7 +14,7 @@
             :gridClass="'left'"
             v-if="this.formPosition>-2">
                  <template v-slot:start>
-                    <the-icons :name="'raccoon-shifty'"></the-icons>
+                    <the-icons :name="'reg-reg'"></the-icons>
                 </template>
                  <template v-slot:end>
                      <!-- Q: who's grumbling -->
@@ -56,7 +56,7 @@
             :gridClass="'left'"
               v-if="this.formPosition>-1">
                  <template v-slot:start>
-                    <the-icons :name="'raccoon-shifty'"></the-icons>
+                    <the-icons :name="'reg-reg-two'"></the-icons>
                 </template>
                             <template v-slot:end>
                                 <!-- Q: choose name -->
@@ -99,7 +99,7 @@
             v-if="this.formPosition>0&&this.nameSet===true"
             >
                     <template v-slot:start>
-                    <the-icons :name="'raccoon-shifty'"></the-icons>
+                    <the-icons :name="'reg-reg'"></the-icons>
                     </template>
                     <template v-slot:end>
                         <!-- Q: enter personmate -->
@@ -475,6 +475,7 @@
             return {
 
                 editing: false,
+                confirmedSet: false,
 
                 personmateInvalid: false,
 
@@ -575,9 +576,12 @@
             ],
                     
                  tempOpens: [
-                    "Hey ",
-                    "Hiya ",
-                    "Hello "
+                    `Hey 
+                    `,
+                    `Hiya 
+                    `,
+                    `Hello 
+                    `
                      ],
 
                 consequences: [
@@ -762,6 +766,7 @@
 
             async routin(shouldRoute){
                 if(shouldRoute===true){
+                    await this.confirmSet()
                     await this.checkStarters()
 
                     this.$router.push('/playground')
@@ -893,13 +898,21 @@
                 return sentence
             },
 
+            confirmSet() {
+                return new Promise ((resolve) => {
+                    if(this.confirmedSet === true){
+                        resolve()
+                    }
+                })
+            },
 
-            getGripe(gripe) {
+
+            async getGripe(gripe) {
    
                 this.chosen.chosenGripe = gripe;
                 console.log(this.chosen.chosenGripe)
-                this.gripeChange=!this.gripeChange;
-              
+                await this.generateGripe()
+                this.confirmedSet = true
                 
                 //* set custom prop to decide if we should show guidance text in custom input.
                 //* really sloppy code, this bit should all be consolidated in one function
@@ -937,14 +950,16 @@
                 let option = array[0]
 
                 if(this.chosen.chosenName) {
-                    let newString = `${option} ${this.chosen.chosenName}, `
+                    let newString = `${option} ${this.chosen.chosenName}, 
+                    `
                     this.chosen.chosenTempOpen = newString;
                     this.output.op1 = newString;
                 } else {
                 this.chosen.chosenTempOpen = option;
                 this.output.op1 = option;
                 }
-                this.output.so0 = 'Thanks. '
+                this.output.so0 = `
+                Thanks. `
             },
 
             setNameType(nameType){
@@ -1079,18 +1094,19 @@
             },
 
             generateGripe() {
-                this.tempChosen = this.chosen;
-                // console.log(this.tempChosen)
-                this.setPronouns(this.chosen.chosenPronoun);
+                return new Promise((resolve) => {
+                        this.tempChosen = this.chosen;
+                        // console.log(this.tempChosen)
+                        this.setPronouns(this.chosen.chosenPronoun);
 
-                //* note that this also sets the temp signoff close caus i'm lazy
-                this.setTempOpen(this.tempOpens);
-                this.setGripe(this.chosen.chosenGripe);
-                this.setConsequence(this.consequences);
-                this.setPlea(this.pleas);
-                this.$store.state.baseOutput = this.output;
-
-                
+                        //* note that this also sets the temp signoff close caus i'm lazy
+                        this.setTempOpen(this.tempOpens);
+                        this.setGripe(this.chosen.chosenGripe);
+                        this.setConsequence(this.consequences);
+                        this.setPlea(this.pleas);
+                        this.$store.state.baseOutput = this.output;
+                        resolve()
+                })
                 // this.formPosition++
             },
 
@@ -1278,5 +1294,15 @@
 
 .buffer {
     height: 1rem;
+}
+
+ion-chip {
+    --color: black;
+    border: 2.5px solid black;
+    --background: none;
+}
+
+ion-icon {
+    color: black;
 }
 </style>

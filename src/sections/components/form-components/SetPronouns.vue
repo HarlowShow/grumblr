@@ -2,14 +2,14 @@
 
     <div>
 
-        <ion-chip color="success"
+        <ion-chip
         @click="[selectedPronoun='me', submitPronoun(selectedPronoun)]"
         >
         <ion-icon :icon="person"></ion-icon>
         <ion-label>yes I am</ion-label>
         </ion-chip>
 
-                <ion-chip color="success"
+                <ion-chip
         @click="[selectedPronoun='we', submitPronoun(selectedPronoun)]"
         >
         <ion-icon :icon="people"></ion-icon>

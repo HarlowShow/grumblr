@@ -1,7 +1,7 @@
 <template>
      <ion-chip v-if="inputType==='short'"
             class="input"
-            color="success"
+           
             outline="true">
                 <ion-input 
                 type="text"
@@ -11,7 +11,7 @@
                 </ion-input>
                 <ion-icon 
                 :icon="checkmarkCircle"
-                color="success"
+               
                 @click="setVal(outputValue)"
                 ></ion-icon>
     </ion-chip>
@@ -23,7 +23,7 @@
 
     <ion-chip v-if="inputType==='long'"
             class="input outer"
-            color="success"
+           
             outline="true">
                
                 <div
@@ -47,7 +47,7 @@
                 </ion-textarea>
                 <ion-icon 
                 :icon="checkmarkCircle"
-                color="success"
+               
                 @click="setVal(outputValue)"
                 ></ion-icon>
             </ion-chip>
@@ -137,7 +137,6 @@ export default {
     .examples {
         margin-top: 0px !important;
         font-size: 0.8rem;
-        color: var(--ion-color-success);
     }
 </style>
 

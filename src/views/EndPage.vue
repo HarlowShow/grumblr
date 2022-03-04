@@ -2,14 +2,15 @@
     <base-layout>
         <div v-if="fullGripe">
        <p>Here's what you decided on:</p>
-            <p> {{ fullGripe }}</p>
+            <p>{{ fullGripe }}</p>
         </div>
 
-        <div class="sharing-icons">
+        <div v-if="ready===true"
+        class="sharing-icons">
 
           <ShareNetwork
           network="facebook"
-          url='https://news.vuejs.org/issues/180'
+          :url="sharingURL"
           title="this is shared between friends"
           description="description goes here"
           ><ion-icon :icon="logoFacebook"></ion-icon>
@@ -17,7 +18,7 @@
 
           <ShareNetwork
           network="twitter"
-          url='https://news.vuejs.org/issues/180'
+          :url="sharingURL"
           title="this is shared between friends"
           description="description goes here"
           ><ion-icon :icon="logoTwitter"></ion-icon>
@@ -25,7 +26,7 @@
 
           <ShareNetwork
           network="reddit"
-          url='https://news.vuejs.org/issues/180'
+          :url="sharingURL"
           title="this is shared between friends"
           description="description goes here"
           ><ion-icon :icon="logoReddit"></ion-icon>
@@ -33,19 +34,17 @@
 
           <ShareNetwork
           network="whatsapp"
-          url='https://news.vuejs.org/issues/180'
+          :url="sharingURL"
           :title="test"
           description="description goes here"
           ><ion-icon :icon="logoWhatsapp"></ion-icon>
           </ShareNetwork>
        
       </div>
-
-       <p>sharing buttons will go here</p>
-       <ion-button @click="handleShare">add gripe to DB</ion-button>
+       
        <ion-button 
        expand="block" color="primary" shape="round" fill="outline"
-       router-link="/home">Make another gripe</ion-button>
+       router-link="/home">Grumble Again</ion-button>
     </base-layout>
 </template>
 
@@ -55,9 +54,10 @@
 
   import { logoFacebook, logoTwitter, logoReddit, logoWhatsapp } from 'ionicons/icons';
     import { useStore } from 'vuex'
+    import { ref, toRef } from 'vue'
 
     import { db } from '../firebase/config'
-    import { addDoc, collection } from 'firebase/firestore'
+    import { doc, setDoc, collection } from 'firebase/firestore'
 
 export default {
     components: {
@@ -71,23 +71,62 @@ export default {
         const gripe = store.state.finalOutput
         const fullGripe = Object.values(gripe).join('');
         store.state.gripeString = fullGripe
+        const nameVal = ref('')
+            
+            if(store.state.nameIsDefault===true){
+                nameVal.value = 'a mysterious subject'
+            } else {
+                nameVal.value = store.state.chosenName
+            }
+         
+        const personmateVal = store.state.chosenPersonmate
+        const idRef = ref('')
+        const sharingURL = ref('')
 
-        const handleShare = async () => {
-            const colRef = collection(db, 'grumbles')
+        const grumbleRef = doc(collection(db, 'grumbles'));
 
-            await addDoc(colRef, {
-                text: fullGripe
-            })
+        const createShare = async () => {
+    
+            await setDoc(grumbleRef, {
+            text: fullGripe,
+            name: nameVal.value,
+            personmate: personmateVal,
+        })
+
+            idRef.value = grumbleRef.id
+            const id = toRef(idRef)
+            // sharingURL.value = `https://grumblr-web.web.app/shared/${id.value}`
+            sharingURL.value = `http://localhost:8100/shared/${id.value}`
         }
 
+        
+
+
         return {
+            nameVal,
+            personmateVal: personmateVal.value,
+            sharingURL,
+            idRef,
+            createShare,
             gripe,
+            grumbleRef,
             fullGripe,
-            handleShare,
             logoFacebook,
             logoTwitter,
             logoReddit,
             logoWhatsapp,
+        }
+    },
+
+    mounted(){
+        this.handleShare()
+    },
+
+    methods: {
+
+        async handleShare(){
+            await this.createShare()
+            this.ready=true
         }
     },
 
@@ -100,6 +139,7 @@ export default {
     data() {
         return {
              test: 'it be test, it be best',
+             ready: false,
         }
     }
 }

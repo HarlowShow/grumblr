@@ -3,28 +3,28 @@
         <div class="options">
 
         <ion-chip
-        color="success"
+     
         @click="[selected='dishes', , gripeIsCustom='false', activate(this.selected)]">
             <ion-icon :icon="water"></ion-icon>
         <ion-label>didn't do the washing up</ion-label>
         </ion-chip>
 
           <ion-chip
-        color="success"
+       
         @click="[selected='noise', , gripeIsCustom='false', activate(this.selected)]">
             <ion-icon :icon="musicalNotes"></ion-icon>
         <ion-label>were unecessarily noisy</ion-label>
         </ion-chip>
 
         <ion-chip
-        color="success"
+       
         @click="[selected='rubbish', , gripeIsCustom='false', activate(this.selected)]">
             <ion-icon :icon="trash"></ion-icon>
         <ion-label>didn't take the rubbish out</ion-label>
         </ion-chip>
 
         <ion-chip
-        color="success"
+       
         @click="[selected='other', , gripeIsCustom='true', this.$store.state.customGripe = true]">
             <ion-icon :icon="addCircle"></ion-icon>
         <ion-label>something else</ion-label>
@@ -59,7 +59,7 @@
                 <div class="third">
                 <ion-icon 
                 :icon="checkmarkCircle"
-                color="success"
+               
                 @click="activate(this.selected)"
                 ></ion-icon>
             
@@ -356,14 +356,19 @@ ion-icon {
     } */
 
     ion-item {
-        --border-radius: 40px;
+        --border-radius: 20px;
         --background: rgb(238,249,242);
         align-items: center;
+         --color: black;
+        --border-width: 2.5px;
+        --border-style: solid;
+        --border-color: black;
     
     }
 
     ion-textarea {
         --padding-top: 21px;
+        
     }
 
     .second {

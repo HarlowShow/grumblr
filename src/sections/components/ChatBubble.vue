@@ -86,6 +86,7 @@ export default {
         padding-right: 1rem; */
         display: flex;
         justify-content: flex-start;
+        
     }
 
     /* .left .avatar .inner-bubble{
@@ -93,20 +94,25 @@ export default {
     } */
 
     .end-bubble .inner-bubble {
-        background-color: rgb(235, 235, 235);
+        background-color: rgb(224, 255, 212);
         border-radius: 25px;
+        border: 3px solid black;
+        box-shadow: 0px 4px 0px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
         padding-left: 1rem;
         padding-right: 1rem;
     }
 
    .left .end-bubble .inner-bubble {
-        background-color: rgb(235, 235, 235);
+        background-color: rgb(224, 255, 212);
+        
     }
 
      .right .end-bubble .inner-bubble {
-       background-color: var(--ion-color-success);
-       color: white;
+       background-color: #e3ccfd;
+       color: black;
      }
+
+     /* background-color: #573280; */
 
     /* .right .end-bubble .inner-bubble {
         background-color: rgb(219, 219, 219);
@@ -122,6 +128,7 @@ export default {
         padding-right: 1rem; */
         display: flex;
         justify-content: flex-end;
+        
     }
 
     .avatar {
@@ -140,6 +147,10 @@ export default {
     .extra {
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
+    }
+
+    .inner-bubble.extra {
+        border: none;
     }
 
     .icon-slot{

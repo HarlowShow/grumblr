@@ -117,7 +117,7 @@ export default function speakPhrases() {
          {
             position: "op2",
             status: false,
-            phrase: `${activePronouns.subjectP} ${activePronouns.toBePresent} PISSED that`,
+            phrase: `${activePronouns.subjectP} ${activePronouns.toBePresent} PISSED that `,
             tone: "angry",
 
         },
@@ -125,7 +125,7 @@ export default function speakPhrases() {
         {
             position: "op2",
             status: false,
-            phrase: `${activePronouns.subjectP} ${activePronouns.toBePresent} RAGING because`,
+            phrase: `${activePronouns.subjectP} ${activePronouns.toBePresent} RAGING because `,
             tone: "angry",
 
         },

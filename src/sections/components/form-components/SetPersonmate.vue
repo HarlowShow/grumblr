@@ -2,7 +2,7 @@
 
     <div class="options">
         <ion-chip
-        color="success"
+       
         @click="[tempPersonmate='flatmate', validateSubmission()]"
         >
         <ion-icon :icon="business"></ion-icon>
@@ -10,7 +10,7 @@
         </ion-chip>
 
         <ion-chip
-        color="success"
+      
         @click="[tempPersonmate='housemate', validateSubmission()]"
         >
         <ion-icon :icon="home"></ion-icon>
@@ -18,7 +18,7 @@
         </ion-chip>
 
         <ion-chip
-        color="success"
+       
         @click="[tempPersonmate='neighbour', validateSubmission()]"
         >
         <ion-icon :icon="storefront"></ion-icon>
@@ -27,7 +27,7 @@
 
         
         <ion-chip
-        color="success"
+       
         @click="[tempPersonmate='landlord', validateSubmission()]"
         >
         <ion-icon :icon="hammer"></ion-icon>
@@ -36,7 +36,7 @@
 
          
         <ion-chip
-        color="success"
+       
         @click="[tempPersonmate='other']"
         >
         <ion-icon :icon="man"></ion-icon>

@@ -6,7 +6,6 @@
         <div class="grid-one">
             <div class="snippets">
                 <new-snippet v-for="(value, name, index) in gripeObject"
-                :initReset="this.subFirst"
                 :key="index"
                 :value="value"
                 :name="name"
@@ -36,7 +35,7 @@
                     :gridClass="'left'"
                     :iconSlot="true">
                         <template v-slot:start>
-                            <the-icons :name="'raccoon-shifty'"></the-icons>
+                            <the-icons :name="'reg-reg'"></the-icons>
                         </template>
                         <template v-slot:icon>
                         <span
@@ -1481,6 +1480,10 @@ export default {
     .snippets {
         margin: 0 auto;
         padding: 0.5rem;
+        background-color: rgb(235, 235, 235);
+    border-radius: 25px;
+    padding-left: 1rem;
+    padding-right: 1rem;
 
     }
 

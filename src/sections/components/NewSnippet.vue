@@ -18,16 +18,18 @@
             :class="classObject"
             v-if="snippetTwoActive===true&&changeMade===true">{{ activeSnippet }}</p>
             </transition>
-
     </div>
+        <br v-if="index===11">
+
 </template>
 
 <script>
 import { toRefs, ref } from 'vue'
 export default {
     
-    props: ['snippet', 'value', 'name', 'index', 'addCount', 'subtractCount', 'initReset'],
+    props: ['snippet', 'value', 'name', 'index', 'addCount', 'subtractCount'],
     setup(props) {
+        // console.log('index is: ' + props.index)
         const { snippet } = toRefs(props)
         const snippetValue = snippet.value
         const snippetArray = [...snippetValue]
@@ -36,8 +38,6 @@ export default {
         const displayText = ref([])
         const optionLimit = snippetArray.length;
         const optionItem = 0;
-  
-        // tbc here, need to sort the initreset thingy to get the accurate vals and all
         
         return {
             snippetValue,
@@ -201,7 +201,7 @@ export default {
   opacity: 0;
 }
 .snippetarea {
-    display: inline
+    display: inline;
 }
 p {
     display: inline

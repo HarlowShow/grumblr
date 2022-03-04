@@ -5,7 +5,7 @@
     >
     <ion-chip
     @click="[selected=response.value, activate(this.selected)]"
-    color="success"
+    outline='true'
     >
         <ion-icon
         :icon="response.icon">
@@ -75,4 +75,13 @@ import {
         font-size: 0.8rem;
         color: var(--ion-color-success);
     }
+
+ion-chip {
+    --color: black;
+    border: 2.5px solid black;
+}
+
+ion-icon {
+    color: black;
+}
 </style>
