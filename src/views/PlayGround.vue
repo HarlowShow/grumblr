@@ -1,78 +1,121 @@
 <template>
 
-    <base-layout page-default-back-link="/input" page-title="Edit your gripe">
+    <base-layout page-default-back-link="/input">
 
-    <div id="playground">
-        <div class="grid-one">
-            <div class="snippets">
-                <new-snippet v-for="(value, name, index) in gripeObject"
-                :key="index"
-                :value="value"
-                :name="name"
-                :index="index"
-                :snippet="gripeObject[name]"
-                ></new-snippet>
-            </div> 
-        </div>
-        <div class="grid-two">
-        <div id="sliders">
-                        <the-sliders
-                            v-for="mood in allMoods"
-                            :key="mood"
-                            :tone="mood"
-                            :isActive="activeSlider[mood]"
-                            :sliderVal="sliderVal[mood]"
-                            @update:getMoods="getMoods">
-                        </the-sliders>
-        </div>
-        </div>
+        <div id="playground">
+            <div>
+                 <chat-bubble
+                 v-for="chat, index in addedChatStrings"
+                 :key="index"
+                        :gridClass="'left'">
+                        <template v-slot:start>
+                            <the-icons :name="chat.icon"></the-icons>
+                        </template>
+                        <template v-slot:end>
+                            <chat-typer
+                            :chatString="chat.string"
+                            ></chat-typer>
+                        </template>
+                    </chat-bubble>
+            </div>
 
-  
-        <div class="grid-three">
-            <chat-bubble
-                    v-if="collapsed===false"
-                    id="mobilefooter"
-                    :gridClass="'left'"
-                    :iconSlot="true">
+            <div id="gridtop">
+                    <chat-bubble
+                        :gridClass="'left'">
                         <template v-slot:start>
                             <the-icons :name="'reg-reg'"></the-icons>
                         </template>
-                        <template v-slot:icon>
-                        <span
-                        @click="toggleChat"
-                        class="close-chat"
-                        >x</span>
-                        </template>
                         <template v-slot:end>
-                                <chat-typer
-                                :chatString="this.backchat"
-                                ></chat-typer>
+                            <chat-typer
+                            :chatString="'how about a starter grumble?'"
+                            @scroll="setBackchat('starter', 'two')"
+                            ></chat-typer>
                         </template>
-                        <template  v-slot:responses>
-                                <chat-response
-                                :data="chatResponseOptions"
-                                @update:value="goToEnd"
-                                >
-                                </chat-response>
-                        </template>
-            </chat-bubble>
-                    <div
-                    v-else
-                    @click="toggleChat">
-                    <chat-bubble
-                        
-                            id="mobilefooter"
-                            :gridClass="'left'"
-                            :iconSlot="true">
-                                <template v-slot:start>
-                                    <the-icons :name="'chat-active'"
-                                    :newChat="newChat"
-                                    ></the-icons>
-                                </template>
                     </chat-bubble>
-                    </div>
+
+                    <chat-bubble
+                                v-if="collapsed===false&&chatCount>0"
+                                id="mobilefooter"
+                                :gridClass="'left'"
+                                :iconSlot="true">
+                                    <template v-slot:start>
+                                        <the-icons :name="'reg-reg'"></the-icons>
+                                    </template>
+                                    <template v-slot:icon>
+                                    <span
+                                    @click="toggleChat"
+                                    class="close-chat"
+                                    >x</span>
+                                    </template>
+                                    <template v-slot:end>
+                                            <chat-typer
+                                            :chatString="this.backchat"
+                                            @scroll="loadNext"
+                                            ></chat-typer>
+                                    </template>
+                        </chat-bubble>
+
+                            <div
+                            v-else-if="chatCount>0"
+                            @click="toggleChat">
+                            <chat-bubble
+                                
+                                    id="mobilefooter"
+                                    :gridClass="'left'"
+                                    :iconSlot="true">
+                                        <template v-slot:start>
+                                            <the-icons :name="'chat-active'"
+                                            :newChat="newChat"
+                                            ></the-icons>
+                                        </template>
+                            </chat-bubble>
+                            </div>
             </div>
-        </div>
+
+           
+            
+
+               
+            </div>
+        
+            <template v-slot:footer>
+                <transition name="footer">
+                <div id="gridbottom"
+                v-if="this.chatCount>1"
+                >
+                       
+                            <div id="snippetarea">
+                                <div class="snippets">
+                                            <new-snippet v-for="(value, name, index) in gripeObject"
+                                            :key="index"
+                                            :value="value"
+                                            :name="name"
+                                            :index="index"
+                                            :snippet="gripeObject[name]"
+                                            ></new-snippet>
+                                </div>
+                                <chat-response
+                                            :data="chatResponseOptions"
+                                            :noIcon="true"
+                                            @update:value="goToEnd"
+                                            >
+                                </chat-response>
+                            </div>
+                                        
+                            <div id="sliders">
+                                        <the-sliders
+                                            v-for="mood in allMoods"
+                                            :key="mood"
+                                            :tone="mood"
+                                            :isActive="activeSlider[mood]"
+                                            :sliderVal="sliderVal[mood]"
+                                            @update:getMoods="getMoods">
+                                        </the-sliders>
+                            </div>
+                       
+                </div>
+                </transition>
+            </template>
               <!-- <button class="help" @click="toggleChatStatus">click me</button> -->
     </base-layout>
 </template>
@@ -156,6 +199,13 @@ export default {
             chatResponseOptions: [
                 { text: 'finished', value: 'finished'},
             ],
+
+            addedChatStrings: [
+
+                {string: "the starter chat string!", icon: 'reg-reg'},
+            ],
+
+            chatCount: 1,
 
             collapsed: false,
             newChat: 'grey',
@@ -583,6 +633,13 @@ export default {
     },
 
     methods: {
+
+        loadNext(){
+            //* UI - wait for a sec then load next chat element
+            setTimeout(() => {
+                this.chatCount++
+            }, 500)
+        },
 
         goToEnd(){
         this.$store.state.finalOutput = { ...this.gripeObject }
@@ -1325,8 +1382,18 @@ export default {
         },
 
         setBackchat(obj, inner) {
-              let testVar = this.setChat(obj, inner)
-            this.backchat = testVar
+            let chosenChat = this.setChat(obj, inner)
+            this.backchat = chosenChat
+
+                 setTimeout(() => {
+                        this.addedChatStrings.push(
+                        {
+                            string: this.backchat,
+                            icon: 'reg-reg'
+                        }
+                    )
+                    this.chatCount++
+                }, 500)
         },
 
         changeLog(key, newPhrase) {
@@ -1404,6 +1471,14 @@ export default {
 <style scoped>
 /* temp styling! make less ugly */
 
+.footer-enter-from {
+    transform: translateY(400px);
+}
+
+.footer-enter-active {
+    transition: 1.5s ease-out;
+}
+
 .close-chat {
     cursor: pointer;
 }
@@ -1477,14 +1552,18 @@ export default {
     opacity: 0;
     }
 
-    .snippets {
-        margin: 0 auto;
-        padding: 0.5rem;
-        background-color: rgb(235, 235, 235);
-    border-radius: 25px;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    #snippetarea {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
 
+    .snippets {
+        background-color: #ffffff;
+        border-radius: 25px;
+        border: 3px solid rgb(85, 85, 85);
+        box-shadow: 0px 4px 0px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
+        padding: 1rem;
+        
     }
 
     ion-icon {
@@ -1496,36 +1575,30 @@ export default {
     }
 
     #sliders {
-        grid-row-end: 3;
+       margin-top: 1rem;
+       padding-top: 1rem;
     }
 
     #playground {
-        display: grid;
-        height: 100%;
-        grid-template-columns: auto;
-        grid-template-rows: minmax(150px, 4fr) minmax(300px, min-content) minmax(160px, min-content);
-        grid-row-gap: 1rem;
-     
+        display: flex;
+        height: 100vh;
+        width: 90%;
+        position: absolute;
+        flex-direction: column;
+        background-color: rgb(255, 211, 211);
+        justify-content: space-between;
     }
 
-    .grid-one{
-       
-        align-self: center;
-    }
-
-
-    .grid-two{
-     
-        grid-row-end: 3;
-        align-self: end;
+    #gridtop{
+        background-color: rgb(224, 224, 255);
        
     }
-    
-    .grid-three{
-      
-        grid-row-end: 4;
-        align-self: end;
-       
+
+    #gridbottom{
+        background-color: rgb(223, 255, 223);
+        position: sticky;
+        min-height: 50vh;
+        padding: 2rem;
     }
    
 

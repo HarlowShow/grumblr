@@ -3,9 +3,7 @@
     :class="gridClass"
     class="grid">
         <div class="avatar start-bubble box">
-            <div class="inner-bubble"
-            :class="{ response: responseClass}"
-            >
+            <div class="inner-bubble">
             <slot name="start"></slot>
             </div>
         </div>
@@ -14,7 +12,6 @@
          <div class="end-bubble box"> 
              
             <div class="inner-bubble"
-            :class="{ response: responseClass}"
             >
             <div class="icon-slot"
             v-if="iconSlot">
@@ -25,7 +22,7 @@
         </div>
         <div class="end-bubble box"> 
         <div class="inner-bubble extra"
-            :class="{ response: responseClass}"
+            v-if="additionalBubbles>0"
             >
              <slot name="end-next"></slot>
             </div>
@@ -43,12 +40,18 @@
 </template>
 
 <script>
+
 export default {
-    props: ['gridClass', 'responseClass', 'iconSlot']
-}
+    props: ['gridClass', 'iconSlot', 'additionalBubbles'],
+       mounted(){
+           console.log(this.additionalBubbles)
+       }
+    }
+
 </script>
 
 <style scoped>
+    
     .grid {
         display: grid;
        
@@ -94,7 +97,7 @@ export default {
     } */
 
     .end-bubble .inner-bubble {
-        background-color: rgb(224, 255, 212);
+        background-color: #D2FFE6;
         border-radius: 25px;
         border: 3px solid black;
         box-shadow: 0px 4px 0px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
@@ -103,7 +106,7 @@ export default {
     }
 
    .left .end-bubble .inner-bubble {
-        background-color: rgb(224, 255, 212);
+        background-color: #D2FFE6;
         
     }
 
@@ -147,10 +150,6 @@ export default {
     .extra {
         margin-top: 0.5rem;
         margin-bottom: 0.5rem;
-    }
-
-    .inner-bubble.extra {
-        border: none;
     }
 
     .icon-slot{

@@ -47,7 +47,7 @@ export default {
           watch(isFinished, function(newVal){
             //   console.log('new val is: ' + newVal)
             if(newVal===true&&!props.scrollType) {
-                // console.log('chat typer emitted')
+                console.log('chat typer emitted')
                 context.emit('scroll')
             }
         })

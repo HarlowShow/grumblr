@@ -69,6 +69,21 @@
     class="reg-reg avatar">
     </div>
 
+    <div 
+    v-if="name==='reg-eyebrow'"
+    class="reg-eyebrow avatar">
+    </div>
+
+     <div 
+    v-if="name==='reg-peeved'"
+    class="reg-peeved avatar">
+    </div>
+
+       <div 
+    v-if="name==='reg-shocked'"
+    class="reg-shocked avatar">
+    </div>
+
     <div
     v-if="name==='angry-one'"
     class='angry-one avatar'>

@@ -83,7 +83,6 @@
             <!-- their name response -->
             <chat-bubble
              :gridClass="'right'"
-             :responseClass="true"
              v-if="this.formPosition>=1">
                 <template v-slot:end>
                     <p>{{ this.chosen.demoName }}</p>
@@ -96,6 +95,7 @@
             <!-- enter PERSONMATE -->
             <chat-bubble
             :gridClass="'left'"
+            :additionalBubbles="bubbleCount['personmateInvalid']"
             v-if="this.formPosition>0&&this.nameSet===true"
             >
                     <template v-slot:start>
@@ -145,9 +145,10 @@
             <!-- enter gripe -->
             <chat-bubble :gridClass="'left'"
              v-if="this.formPosition>1&&this.nameSet===true"
+             :additionalBubbles="bubbleCount['customGripe']"
              >
                     <template v-slot:start>
-                    <the-icons :name="'raccoon-disappointed'"></the-icons>
+                    <the-icons :name="'reg-eyebrow'"></the-icons>
                     </template>
                     <template v-slot:end>
                            <!-- Q: enter gripe -->
@@ -162,12 +163,14 @@
                           <set-gripe
                             v-if="this.formPosition===2"
                             @update:gripe="getGripe"
+                            @addBubble="this.bubbleCount['customGripe']++"
                           ></set-gripe>
                     </template>
                     <template v-slot:end-next>
                                     <!-- Additional info: chat guidelines on custom gripe -->
                                     <chat-typer
                                         v-if="this.$store.state.customGripe===true&&this.formPosition>1"
+
                                         :chatString="this.pandaChats[3].stringTwo"
                                         @scroll="scrollToBottom(this.content)"
                                         :scrollType="setScroll"
@@ -190,9 +193,10 @@
              <!-- check sentence -->
              <chat-bubble
                 :gridClass="'left'"
+                :additionalBubbles="bubbleCount['confirmChoices']"
                 v-if="this.formPosition>2">
                  <template v-slot:start>
-                    <the-icons :name="'raccoon-shifty'"></the-icons>
+                    <the-icons :name="'reg-reg-two'"></the-icons>
                 </template>
 
                 <template v-slot:end>
@@ -223,6 +227,7 @@
                       v-if="choicesConfirmed===false&&this.formPosition===3"
                      :data="checkStrings"
                      :subtext="true"
+                     :noIcon="true"
                      @update:value="swapChoices">
                      </chat-response>
                      <!-- chips - yes/no, confirm choices -->
@@ -254,7 +259,7 @@
              v-if="this.formPosition>3"
              >
                     <template v-slot:start>
-                    <the-icons :name="'raccoon-disappointed'"></the-icons>
+                    <the-icons :name="'reg-reg-two'"></the-icons>
                     </template>
                     <template v-slot:end>
                         <div>
@@ -294,7 +299,7 @@
              v-if="this.formPosition>4"
              >
                     <template v-slot:start>
-                    <the-icons :name="'raccoon-disappointed'"></the-icons>
+                    <the-icons :name="'reg-reg'"></the-icons>
                     </template>
                     <template v-slot:end>
                         <div>
@@ -332,7 +337,7 @@
              v-if="this.formPosition>5"
              >
                     <template v-slot:start>
-                    <the-icons :name="'raccoon-disappointed'"></the-icons>
+                    <the-icons :name="'reg-reg'"></the-icons>
                     </template>
                     <template v-slot:end>
                         <div>
@@ -476,7 +481,11 @@
 
                 editing: false,
                 confirmedSet: false,
-
+                bubbleCount: {
+                    confirmChoices: 0,
+                    customGripe: 0,
+                    personmateInvalid: 0,
+                },
                 personmateInvalid: false,
 
                 checkStrings: [
@@ -799,6 +808,8 @@
                     this.formPosition++
                 }
 
+                this.bubbleCount['confirmChoices']=0
+
                 return choice
             },
 
@@ -809,6 +820,7 @@
                             if(response===true){
                         this.chosen.confirmResponseDemo = 'sure'
                         } else if (response===false){
+                            this.bubbleCount['confirmChoices']++
                             this.chosen.confirmResponseDemo = 'no, change something'
                         }
 
@@ -865,21 +877,22 @@
             },
 
             getPersonmate(personmate) {
-                if(!personmate){
-                    this.personmateInvalid = true
-                } else {
-                this.chosen.chosenPersonmate = personmate;
-                this.$store.state.chosenPersonmate = personmate;
-                this.samplePersonmate = personmate + '.'
-                this.stringD = `${this.proTwo} ${personmate}.`
-                this.checkStrings[3].text = this.stringD
+                    if(!personmate){
+                        this.personmateInvalid = true
+                        this.bubbleCount['personmateInvalid']++
+                    } else {
+                    this.chosen.chosenPersonmate = personmate;
+                    this.$store.state.chosenPersonmate = personmate;
+                    this.samplePersonmate = personmate + '.'
+                    this.stringD = `${this.proTwo} ${personmate}.`
+                    this.checkStrings[3].text = this.stringD
 
-                if(this.editing===true&&this.chosen.confirmResponse==='personmate'){
-                     this.choicesConfirmed=true
-                    this.formPosition=3
-                } else {
-                    this.formPosition++;
-                }
+                    if(this.editing===true&&this.chosen.confirmResponse==='personmate'){
+                        this.choicesConfirmed=true
+                        this.formPosition=3
+                    } else {
+                        this.formPosition++;
+                    }
                 }
         
             },

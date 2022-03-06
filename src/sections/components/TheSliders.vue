@@ -25,6 +25,7 @@
                 slot="end" :icon="addCircle"
                 @click="touchEvent($event, 'stop', 'add')"
                 class="right"
+                color=tone
                 ></ion-icon>
            <ion-icon v-else
                 slot="end" :icon="addCircle"

@@ -7,7 +7,7 @@
     @click="[selected=response.value, activate(this.selected)]"
     outline='true'
     >
-        <ion-icon
+        <ion-icon v-if="!noIcon"
         :icon="response.icon">
         </ion-icon>
          <ion-label>
@@ -42,6 +42,11 @@ import {
          subtext: {
              type: Boolean,
              required: false,
+         },
+
+         noIcon: {
+             type: Boolean,
+             required: false,
          }
      },
 
@@ -73,7 +78,6 @@ import {
 .examples {
         margin-top: 0px !important;
         font-size: 0.8rem;
-        color: var(--ion-color-success);
     }
 
 ion-chip {

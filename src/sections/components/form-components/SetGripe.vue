@@ -25,7 +25,7 @@
 
         <ion-chip
        
-        @click="[selected='other', , gripeIsCustom='true', this.$store.state.customGripe = true]">
+        @click="[selected='other', gripeIsCustom='true', setCustom(this.selected)]">
             <ion-icon :icon="addCircle"></ion-icon>
         <ion-label>something else</ion-label>
         </ion-chip>
@@ -112,7 +112,7 @@ export default  {
         
     },
 
-    emits: ['update:gripe', 'backClick'],
+    emits: ['update:gripe', 'backClick', 'addBubble'],
 
      setup() {
 
@@ -191,6 +191,14 @@ export default  {
             
             } else {
                 this.invalidInput = true;
+            }
+        },
+
+        setCustom(opt){
+
+            if(opt==='other'){
+                this.$emit('addBubble')
+                this.$store.state.customGripe = true
             }
         },
 

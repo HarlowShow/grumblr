@@ -90,8 +90,8 @@ export default function speakTrashPanda(startingIdx = 0) {
     const backtalkChats = reactive({
 
         starter: {
-            one: "Here's your grumble. Use the buttons to fine-tune things.",
-            two: 'I\'m so glad we feel the same way.'
+            one: "Use the buttons to fine-tune things.",
+            two: 'Ooh. The second starter chat string'
         },
 
         medium: {
