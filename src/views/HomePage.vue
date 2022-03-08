@@ -2,33 +2,105 @@
  
   <base-layout>
 
+<div class="emoji-container">
+      <div class="button-holder">
+      <button class="emoji-button" @click="cycleEmoji('angry', 'add')">
+          <the-emoji-buttons :clickstep="this.btnStep['angry']"
+          :type="'add'"
+          :tone="'angry'">
+          </the-emoji-buttons>
+      </button>
+      <button class="emoji-button" @click="cycleEmoji('angry', 'sub')"
+      v-if="this.prevStep['angry']>0">
+          <the-emoji-buttons :clickstep="this.prevStep['angry']"
+          :type="'sub'"
+          :tone="'angry'">
+          </the-emoji-buttons>
+      </button>
+    </div>
+
+    <div class="button-holder">
+      <button class="emoji-button" @click="cycleEmoji('paggro', 'add')">
+          <the-emoji-buttons :clickstep="this.btnStep['paggro']"
+          :type="'add'"
+          :tone="'paggro'">
+          </the-emoji-buttons>
+      </button>
+      <button class="emoji-button" @click="cycleEmoji('paggro', 'sub')"
+      v-if="this.prevStep['paggro']>0">
+          <the-emoji-buttons :clickstep="this.prevStep['paggro']"
+          :type="'sub'"
+          :tone="'paggro'">
+          </the-emoji-buttons>
+      </button>
+    </div>
+
+    <div class="button-holder">
+      <button class="emoji-button" @click="cycleEmoji('polite', 'add')">
+          <the-emoji-buttons :clickstep="this.btnStep['polite']"
+          :type="'add'"
+          :tone="'polite'">
+          </the-emoji-buttons>
+      </button>
+      <button class="emoji-button" @click="cycleEmoji('polite', 'sub')"
+      v-if="this.prevStep['polite']>0">
+          <the-emoji-buttons :clickstep="this.prevStep['polite']"
+          :type="'sub'"
+          :tone="'polite'">
+          </the-emoji-buttons>
+      </button>
+    </div>
+
+      <div class="button-holder">
+      <button class="emoji-button" @click="cycleEmoji('pirate', 'add')">
+          <the-emoji-buttons :clickstep="this.btnStep['pirate']"
+          :type="'add'"
+          :tone="'pirate'">
+          </the-emoji-buttons>
+      </button>
+      <button class="emoji-button" @click="cycleEmoji('pirate', 'sub')"
+      v-if="this.prevStep['pirate']>0">
+          <the-emoji-buttons :clickstep="this.prevStep['pirate']"
+          :type="'sub'"
+          :tone="'pirate'">
+          </the-emoji-buttons>
+      </button>
+    </div>
+</div>
+      
 
    
       <div class="content">
           
           <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/input">yes ok</ion-button>
-           <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/shared">see shared</ion-button>
-         
+          <ion-button expand="block" color="primary" shape="round" fill="outline" router-link="/shared">see shared</ion-button>
       </div>
-      <div>
-        
 
-      <!-- <text-input
-      :placeholders="placeholderArray"
-      :speeds="speeds">
 
-      </text-input> -->
+      <div class="sharing-icons">
+        <the-icons :name="'angry-one'"></the-icons>
+        <the-icons :name="'angry-two'"></the-icons>
+        <the-icons :name="'angry-three'"></the-icons>
+        <the-icons :name="'angry-four'"></the-icons>
+        <the-icons :name="'angry-neutral'"></the-icons>
       </div>
 
       <div class="sharing-icons">
-
-      <the-icons :name="'angry-one'"></the-icons>
-      <the-icons :name="'angry-two'"></the-icons>
-      <the-icons :name="'angry-three'"></the-icons>
-      <the-icons :name="'reg-reg'"></the-icons>
-      <the-icons :name="'reg-reg-two'"></the-icons>
-
+        <the-icons :name="'polite-one'"></the-icons>
+        <the-icons :name="'polite-two'"></the-icons>
+        <the-icons :name="'polite-three'"></the-icons>
+        <the-icons :name="'polite-four'"></the-icons>
+        <the-icons :name="'polite-neutral'"></the-icons>
       </div>
+
+        <div class="sharing-icons">
+        <the-icons :name="'pirate-one'"></the-icons>
+        <the-icons :name="'pirate-two'"></the-icons>
+        <the-icons :name="'pirate-three'"></the-icons>
+        <the-icons :name="'pirate-four'"></the-icons>
+        <the-icons :name="'pirate-neutral'"></the-icons>
+      </div>
+
 
             <div class="sharing-icons">
 
@@ -39,6 +111,7 @@
       <the-icons :name="'raccoon-sosad'"></the-icons>
 
       </div>
+      <!-- share network -->
       <div class="sharing-icons">
 
           <ShareNetwork
@@ -74,13 +147,13 @@
           </ShareNetwork>
        
       </div>
-    <!-- <template v-slot:footer><p>"A relationship should be based on communication, not on assumption" - marriage.com</p></template> -->
-  
-  <chat-response
+   
+  <!-- <chat-response
   :data="responses"
   @update:value="getVal"></chat-response>
+  </base-layout> -->
+   
   </base-layout>
- 
 </template>
 
 <script>
@@ -96,7 +169,7 @@
   } from '@ionic/vue';
 
   import TheIcons from '../sections/components/TheIcons.vue'
-  import ChatResponse from '../sections/components/ChatResponse.vue'
+  import TheEmojiButtons from '../sections/components/TheEmojiButtons.vue'
   // import { ref } from 'vue'
   // import TheSliders from './TheSliders.vue'
 
@@ -107,7 +180,7 @@ export default {
       IonButton,
       IonIcon,
       TheIcons,
-      ChatResponse
+      TheEmojiButtons,
       // IonModal,
       // IonPage
       // TextInput
@@ -135,6 +208,18 @@ export default {
 
     data() {
       return {
+        btnStep: {
+          angry: 0,
+          paggro: 0,
+          polite: 0,
+          pirate: 0
+        },
+        prevStep: {
+          angry: -1,
+          paggro: -1,
+          polite: -1,
+          pirate: -1,
+        },
         angryTracker: 0,
         noActivated: false,
         start: false,
@@ -150,6 +235,19 @@ export default {
 
 
     methods: {
+      cycleEmoji(tone, type){
+        if(type==='add'){
+          if(this.btnStep[tone]<10){
+          this.btnStep[tone]++
+          this.prevStep[tone]++
+          } 
+        } else if (type==='sub'){
+          if(this.btnStep[tone]>0){
+          this.btnStep[tone]--
+          this.prevStep[tone]--
+          }
+        }
+      },
 
       angrier() {
         this.angryTracker++
@@ -174,6 +272,11 @@ export default {
 </script>
 
 <style scoped>
+
+  .emoji-container {
+    display: flex;
+    justify-content: start;
+  }
     header {
       text-align: center;
     }
@@ -312,4 +415,12 @@ ion-menu-toggle {
    background-position: 50% 100%;
 
  }
+    button {
+      background-color: transparent;
+    }
+
+  .button-holder {
+    display: flex;
+    flex-direction: column;
+  }
 </style>

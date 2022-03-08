@@ -247,9 +247,10 @@ export default {
 <style scoped>
 
     ion-range {
-    --knob-size: 5rem;
+    --knob-size: 3.5rem;
     --knob-box-shadow: none;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+    padding: 0;
    
     }
     ion-range.angry.one {

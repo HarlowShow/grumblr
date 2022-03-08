@@ -43,9 +43,6 @@
 
 export default {
     props: ['gridClass', 'iconSlot', 'additionalBubbles'],
-       mounted(){
-           console.log(this.additionalBubbles)
-       }
     }
 
 </script>
@@ -103,6 +100,7 @@ export default {
         box-shadow: 0px 4px 0px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
         padding-left: 1rem;
         padding-right: 1rem;
+        margin-bottom: 0.5rem;
     }
 
    .left .end-bubble .inner-bubble {

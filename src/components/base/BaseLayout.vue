@@ -66,14 +66,14 @@
              
      </ion-content>
 
-    <ion-footer>
+    <!-- <ion-footer>
         <ion-toolbar>
             <slot name="footer">
 
                
             </slot>
         </ion-toolbar>
-    </ion-footer>
+    </ion-footer> -->
    </ion-page>
 </template>
 
@@ -92,7 +92,7 @@ import {
         IonToolbar,
         // IonTitle,
         IonContent,
-        IonFooter,
+        // IonFooter,
         // IonMenuButton,
         modalController,
         alertController,
@@ -112,7 +112,7 @@ export default {
         // IonMenuButton,
         // IonTitle, 
         IonContent, 
-        IonFooter, 
+        // IonFooter, 
         // ThePithyQuote, 
         IonIcon
         },
@@ -207,7 +207,7 @@ ion-icon {
  ion-toolbar {
      --padding-bottom: 0px;
      --min-height: 60px;
-     --background: none;
+     --background: #FCF5E6;
  }
 
 
@@ -223,7 +223,7 @@ ion-icon {
  }
 
 
- ion-content {
+ ion-content#main-page {
      --padding-start: 1.5rem;
      --padding-end: 1.5rem;
      --padding-top: 1rem;
@@ -238,11 +238,15 @@ ion-icon {
  }
 
 @media(max-width: 576px) {
- ion-footer {
-     display: none;
- }
- ion-content {
+ ion-content#main-page {
      height: calc(100% - 100px);
+      --padding-start: 1rem;
+     --padding-end: 1rem;
+     --padding-top: 1rem;
+     --padding-bottom: 1rem;
+    --offset-top: 0px !important;
+      align-items: center;
+     justify-content: center;
  }
 }
 
@@ -261,6 +265,7 @@ ion-icon {
       justify-content: space-between;
       align-content: flex-end;
       align-items: baseline;
+      padding-bottom: 0;
     }
 
     .line-left {

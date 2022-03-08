@@ -775,10 +775,15 @@
 
             async routin(shouldRoute){
                 if(shouldRoute===true){
-                    await this.confirmSet()
-                    await this.checkStarters()
-
-                    this.$router.push('/playground')
+                    Promise.all([
+                        this.confirmSet(),
+                        this.checkStarters(),
+                    ]).then(() => {
+                        this.$router.push('/playground')
+                    })
+                    .catch(() => {
+                        console.log('something went wrong with routing promise')
+                    })
                 }
             },
 
@@ -915,6 +920,7 @@
                 return new Promise ((resolve) => {
                     if(this.confirmedSet === true){
                         resolve()
+                        console.log('confirmed set')
                     }
                 })
             },
@@ -959,7 +965,8 @@
 
 
             setTempOpen(array) {
-                this.randomize(array);
+                return new Promise((resolve) => {
+                    this.randomize(array);
                 let option = array[0]
 
                 if(this.chosen.chosenName) {
@@ -973,6 +980,10 @@
                 }
                 this.output.so0 = `
                 Thanks. `
+                    resolve()
+                    console.log('temp open set')
+                })
+                
             },
 
             setNameType(nameType){
@@ -1057,7 +1068,8 @@
             },
 
             setGripe(chosenGripe) {
-                if(chosenGripe === 'dishes') {
+                return new Promise((resolve) => {
+                         if(chosenGripe === 'dishes') {
                     this.chosen.chosenOffense = " you didn't do your washing up. ";
                     this.chosen.offenseActive = "use the kitchen ";
                     this.chosen.offenseBadThing = "your dirty plates ";
@@ -1082,24 +1094,37 @@
                     this.chosen.demoGripe = chosenGripe + '. ';
                 }
                  this.output.of0 = this.chosen.chosenOffense;
-              
+                 resolve()
+                 console.log('gripe set')
+                })
+               
             },
 
             setConsequence(consequence) {
-                this.randomize(consequence);
+                return new Promise((resolve) => {
+                                        this.randomize(consequence);
                 const chosenConsequence = consequence[0];
                 chosenConsequence.middle = `dealing with ${this.chosen.offenseBadThing}`;
                 this.output.co0 = chosenConsequence.stringOne;
                 this.output.co1 = chosenConsequence.middle;
                 this.output.co2 = chosenConsequence.stringTwo;
+                resolve()
+                console.log('consequence set')
+                })
+
             },
 
             setPlea(plea) {
+                return new Promise((resolve) => {
                 this.randomize(plea);
                 const chosenPlea = plea[0];
                 this.output.pl0 = chosenPlea.stringOne;
                 this.output.pl1 = chosenPlea.stringTwo;
                 this.output.pl2 = chosenPlea.stringThree;
+                resolve()
+                console.log('plea set')
+                })
+             
             }, 
 
             randomize(ar) {
@@ -1110,15 +1135,18 @@
                 return new Promise((resolve) => {
                         this.tempChosen = this.chosen;
                         // console.log(this.tempChosen)
-                        this.setPronouns(this.chosen.chosenPronoun);
-
-                        //* note that this also sets the temp signoff close caus i'm lazy
-                        this.setTempOpen(this.tempOpens);
-                        this.setGripe(this.chosen.chosenGripe);
-                        this.setConsequence(this.consequences);
-                        this.setPlea(this.pleas);
-                        this.$store.state.baseOutput = this.output;
-                        resolve()
+                        Promise.all([
+                            this.setPronouns(this.chosen.chosenPronoun),
+                            this.setTempOpen(this.tempOpens),
+                            this.setGripe(this.chosen.chosenGripe),
+                            this.setConsequence(this.consequences),
+                            this.setPlea(this.pleas),
+                        ]).then(() => {
+                                 this.$store.state.baseOutput = this.output;
+                                resolve()
+                        })
+                        //* note that set temp open also sets the temp signoff close caus i'm lazy
+ 
                 })
                 // this.formPosition++
             },

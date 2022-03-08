@@ -3,23 +3,25 @@
     <base-layout page-default-back-link="/input">
 
         <div id="playground">
-            <div>
-                 <chat-bubble
-                 v-for="chat, index in addedChatStrings"
-                 :key="index"
-                        :gridClass="'left'">
-                        <template v-slot:start>
-                            <the-icons :name="chat.icon"></the-icons>
-                        </template>
-                        <template v-slot:end>
-                            <chat-typer
-                            :chatString="chat.string"
-                            ></chat-typer>
-                        </template>
-                    </chat-bubble>
-            </div>
+         
+                <ion-content id="chat">
+                    <chat-bubble
+                    v-for="chat, index in addedChatStrings"
+                    :key="index"
+                            :gridClass="'left'">
+                            <template v-slot:start>
+                                <the-icons :name="chat.icon"></the-icons>
+                            </template>
+                            <template v-slot:end>
+                                <chat-typer
+                                :chatString="chat.string"
+                                @scroll="setBackchat(chat.nextObj, chat.nextInner)"
+                                ></chat-typer>
+                            </template>
+                        </chat-bubble>
+                </ion-content>
 
-            <div id="gridtop">
+            <!-- <div id="gridtop">
                     <chat-bubble
                         :gridClass="'left'">
                         <template v-slot:start>
@@ -70,21 +72,28 @@
                                         </template>
                             </chat-bubble>
                             </div>
-            </div>
-
-           
-            
-
+            </div> -->
                
-            </div>
-        
-            <template v-slot:footer>
-                <transition name="footer">
+                  <transition name="footer">
+
                 <div id="gridbottom"
                 v-if="this.chatCount>1"
                 >
+               
                        
                             <div id="snippetarea">
+                                <!-- (old test thingy) <div class="snippets">
+                                            <div v-for="(item, index) in testStringObject"
+                                            :key="index"
+                                            class="snippety"
+                                            >
+                                                <test-snippet
+                                                :snippet="item.value"
+                                                @transitioned="pushSnippet(index+1)"
+                                                ></test-snippet>
+                                            </div>
+                                </div> -->
+
                                 <div class="snippets">
                                             <new-snippet v-for="(value, name, index) in gripeObject"
                                             :key="index"
@@ -92,14 +101,30 @@
                                             :name="name"
                                             :index="index"
                                             :snippet="gripeObject[name]"
+                                            @transitioned="setInits"
                                             ></new-snippet>
                                 </div>
-                                <chat-response
+
+                                <ion-icon :icon="send"
+                                 @click="goToEnd"
+                                 class="send-icon"
+                                ></ion-icon>
+
+                                <!-- (old verson) <div class="snippets">
+                                            <new-snippet v-for="(value, name, index) in gripeObject"
+                                            :key="index"
+                                            :value="value"
+                                            :name="name"
+                                            :index="index"
+                                            :snippet="gripeObject[name]"
+                                            ></new-snippet>
+                                </div> -->
+                                <!-- <chat-response
                                             :data="chatResponseOptions"
                                             :noIcon="true"
                                             @update:value="goToEnd"
                                             >
-                                </chat-response>
+                                </chat-response> -->
                             </div>
                                         
                             <div id="sliders">
@@ -112,24 +137,30 @@
                                             @update:getMoods="getMoods">
                                         </the-sliders>
                             </div>
-                       
+                        
+                        
+                    </div>
+                    </transition>
                 </div>
-                </transition>
-            </template>
+        
+             
               <!-- <button class="help" @click="toggleChatStatus">click me</button> -->
     </base-layout>
 </template>
 
 <script>
+// import TestSnippet from '../sections/components/TestSnippet.vue'
 
 import NewSnippet from '../sections/components/NewSnippet.vue'
 import TheSliders from '../sections/components/TheSliders.vue'
 import ChatBubble from '../sections/components/ChatBubble.vue'
 import ChatTyper from '../sections/components/ChatTyper.vue'
-import ChatResponse from '../sections/components/ChatResponse.vue'
+// import ChatResponse from '../sections/components/ChatResponse.vue'
 
 // import { IonChip } from '@ionic/vue'
 import TheIcons from '../sections/components/TheIcons.vue'
+import { send } from 'ionicons/icons'
+import { IonIcon, IonContent } from '@ionic/vue'
 
 import speakPhrases from '../composables/phrases'
 import speakTrashPanda from '../composables/trashpandachat'
@@ -146,12 +177,17 @@ export default {
         TheIcons,
         TheSliders,
         NewSnippet,
-        ChatResponse
+        // ChatResponse,
+        IonIcon,
+        IonContent,
+
+        // TestSnippet
     },
 
     setup() {
         //set imports for phrases and selections
         //main phrases
+        const checkRender = ref(false)
         const phraseObject = speakPhrases()
         const store = useStore()
         const gripeObject = store.state.baseOutput
@@ -175,7 +211,9 @@ export default {
             phrases: phraseObject.phrases,
             initVal: initVal.value,
             firstTone,
-            secondTone
+            secondTone,
+            checkRender,
+            send
         }
 
     },
@@ -185,9 +223,11 @@ export default {
             this.priorPhrases = Object.assign({}, this.$store.state.baseOutput);
             this.phraseHistory = Object.assign({}, this.$store.state.baseOutput)
             this.updatedPhrases = this.phrases;
-            this.addingInit = true
-            this.addInit()
-            //! move this to the child component - at least do bug testing
+             //! moved to after first transitions - come back to it if necessary
+            // this.checkRender=true;
+            // this.addingInit = true
+            // this.addInit()
+           
         },
 
     data() {
@@ -196,13 +236,26 @@ export default {
         //TODO: fill these out with some tut stuff
         return {
 
+            starterStrings: [
+                {value: 'one', grumbleIndex: 'one'},
+                {value: 'two', grumbleIndex: 'two'},
+                {value: 'hurray', grumbleIndex: 'three'},
+                {value: 'adieu', grumbleIndex: 'four'}
+            ],
+
+            starterStringObject: [
+
+            ],
+
+            stringIndex: 0,
+
             chatResponseOptions: [
                 { text: 'finished', value: 'finished'},
             ],
 
             addedChatStrings: [
 
-                {string: "the starter chat string!", icon: 'reg-reg'},
+                {string: "the starter chat string!", icon: 'reg-reg', nextObj: 'starter', nextInner: 'two'},
             ],
 
             chatCount: 1,
@@ -633,6 +686,22 @@ export default {
     },
 
     methods: {
+
+        pushSnippet(idx){
+            //* FOR STARTER CHATS ONLY
+            console.log('pushing snippet at index: ' + idx)
+            if(idx<this.starterStrings.length){
+                this.starterStringObject.push(this.starterStrings[idx])
+            } else if (idx===this.starterStrings.length){
+               console.log('placeholder for once strings pushed')    
+            }
+        },
+
+        setInits(){
+                    this.checkRender=true;
+                    this.addingInit = true
+                    this.addInit()
+        },
 
         loadNext(){
             //* UI - wait for a sec then load next chat element
@@ -1382,8 +1451,18 @@ export default {
         },
 
         setBackchat(obj, inner) {
+          
+            if(obj, inner){
             let chosenChat = this.setChat(obj, inner)
             this.backchat = chosenChat
+
+            //* once, trigger snippets rendering after default two is loaded
+                if(obj==='starter'&&inner==='two'){
+                    setTimeout(() => {
+                         this.pushSnippet(0)
+                    }, 1000)
+                   
+                }
 
                  setTimeout(() => {
                         this.addedChatStrings.push(
@@ -1392,8 +1471,12 @@ export default {
                             icon: 'reg-reg'
                         }
                     )
-                    this.chatCount++
+                   
                 }, 500)
+            } else {
+                console.log('no backchat keys passed')
+                this.chatCount++
+            }
         },
 
         changeLog(key, newPhrase) {
@@ -1470,6 +1553,18 @@ export default {
 
 <style scoped>
 /* temp styling! make less ugly */
+.snippety {
+    animation: snippetenter 2s forwards;
+}
+
+@keyframes snippetenter {
+    to {
+        color: blue;
+    }
+}
+
+
+
 
 .footer-enter-from {
     transform: translateY(400px);
@@ -1478,6 +1573,8 @@ export default {
 .footer-enter-active {
     transition: 1.5s ease-out;
 }
+
+
 
 .close-chat {
     cursor: pointer;
@@ -1555,14 +1652,23 @@ export default {
     #snippetarea {
         padding: 1rem;
         margin-bottom: 1rem;
+        display: grid;
+        grid-template-columns: auto min-content;
+        grid-template-rows: auto;
+        grid-column-gap: 0.3rem;
+    }
+
+    .send-icon {
+        align-self: end;
     }
 
     .snippets {
         background-color: #ffffff;
-        border-radius: 25px;
+        border-radius: 10px;
         border: 3px solid rgb(85, 85, 85);
         box-shadow: 0px 4px 0px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
         padding: 1rem;
+        min-width: 60%;
         
     }
 
@@ -1570,9 +1676,6 @@ export default {
         font-size: 2.2rem;
     }
 
-    #mobilefooter {
-        align-content: end;
-    }
 
     #sliders {
        margin-top: 1rem;
@@ -1581,11 +1684,10 @@ export default {
 
     #playground {
         display: flex;
-        height: 100vh;
+        height: calc(100% - 10px);
         width: 90%;
         position: absolute;
         flex-direction: column;
-        background-color: rgb(255, 211, 211);
         justify-content: space-between;
     }
 
@@ -1595,10 +1697,39 @@ export default {
     }
 
     #gridbottom{
-        background-color: rgb(223, 255, 223);
         position: sticky;
-        min-height: 50vh;
+        bottom: 0%;
+        min-height: 100px;
         padding: 2rem;
+        width: 90%;
+        max-width: 752px;
+        border-top: 3px solid black;
+    }
+
+    @media(max-width: 576px) {
+        p {
+            font-size: 0.8rem;
+        }
+
+        #gridbottom{
+            min-height: 30vh;
+            padding-left: 0;
+            padding-right: 0;
+            padding-top: 0.5rem;
+            padding-bottom: 0;
+        }
+        #snippetarea {
+            padding: 0;
+        }
+    }
+
+    #inner-grid {
+        display: grid;
+        grid-template-rows: auto min-content;
+    }
+
+    ion-content#chat {
+        max-height: 50vh;
     }
    
 

@@ -1,6 +1,7 @@
 <template>
 
-    <div class="snippetarea">
+    <div class="snippetarea"
+        v-if="count===true">
             <transition name="fade">
             <p class="snippet"
             :class="classObject"
@@ -28,9 +29,12 @@ import { toRefs, ref } from 'vue'
 export default {
     
     props: ['snippet', 'value', 'name', 'index', 'addCount', 'subtractCount'],
+    emits: ['transitioned'],
     setup(props) {
         // console.log('index is: ' + props.index)
         const { snippet } = toRefs(props)
+        const idx = ref(0)
+        idx.value = props.index*150
         const snippetValue = snippet.value
         const snippetArray = [...snippetValue]
         // console.log(snippetValue)
@@ -38,6 +42,7 @@ export default {
         const displayText = ref([])
         const optionLimit = snippetArray.length;
         const optionItem = 0;
+        const count = ref(false)
         
         return {
             snippetValue,
@@ -45,6 +50,9 @@ export default {
             displayText,
             optionLimit,
             optionItem,
+            count,
+            idx,
+
         }
     },
     data() {
@@ -64,6 +72,24 @@ export default {
             oldSubtractCount: 0,
             isSub: false,
             currentTone: 'default',
+        }
+    },
+
+    mounted(){
+        if(this.optionLimit===0){
+             this.count = true
+             console.log('initially empty snippet')
+        } else {
+            setTimeout(() => {
+                this.count = true
+                console.log('idx is: ' + this.idx)
+                if(this.index===12){
+                    setTimeout(() => {
+                        this.$emit('transitioned')
+                    }, 500)
+                    
+                }
+            }, this.idx)
         }
     },
     methods: {
@@ -158,6 +184,23 @@ export default {
                     this.startAdd(newValue, oldValue);
                     this.$store.state.oldSub++
                 }
+        },
+
+        // count(newVal){
+        //      if(newVal===true) {
+        //         console.log('snippet delay emitted')
+        //         this.$emit('transitioned')
+        //     }
+        // },
+
+        name: {
+            immediate: true,
+            handler(newVal){
+                if(newVal===this.index){
+                    console.log('name and index match!')
+                }
+            }
+
         }
     },
     computed: {
@@ -192,7 +235,8 @@ export default {
 </script>
 
 <style scoped>
-.fade-leave-active {
+.fade-leave-active,
+.fade-enter-active {
   transition: opacity 1s ease;
 }
 .fade-enter-from,

@@ -91,7 +91,7 @@ export default function speakTrashPanda(startingIdx = 0) {
 
         starter: {
             one: "Use the buttons to fine-tune things.",
-            two: 'Ooh. The second starter chat string'
+            two: 'Ooh. The second starter chat string',
         },
 
         medium: {
@@ -129,9 +129,6 @@ export default function speakTrashPanda(startingIdx = 0) {
 
     const setChat = ((objKey = '', innerKey = '') => {
 
-        // console.log('objKey is: ' + objKey)
-        // console.log('inner key is: ' + innerKey)
-        // console.log('backtalkChats starter one is: ' + backtalkChats.starter.one)
         let newChat = backtalkChats[objKey]
         let newChatString = newChat[innerKey]
     
