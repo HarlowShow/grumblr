@@ -13,7 +13,7 @@
 import useTypewriter from '../../composables/typewriter'
 // import speakTrashPanda from '../../composables/trashpandachat'
 
-import { ref, watch} from 'vue'
+import { ref, watch } from 'vue'
 
 export default {
 
@@ -47,21 +47,12 @@ export default {
           watch(isFinished, function(newVal){
             //   console.log('new val is: ' + newVal)
             if(newVal===true&&!props.scrollType) {
-                console.log('chat typer emitted')
+                // console.log('chat typer emitted')
                 context.emit('scroll')
             }
         })
 
-        // console.log(typewriterEl)
-
         return {
-            // trashpandaChat,
-            // chatOptions,
-            // chosenChats,
-           
-            // nextChat: trashpandaChat.nextChat,
-            // currentString: trashpandaChat.currentString,
-            // chats: trashpandaChat.chats,
             typewriterEl,
             chosenMode: chosenMode.value,
             chosenString: chosenString.value,

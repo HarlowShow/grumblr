@@ -212,6 +212,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             status.finished=true;
             dText.value = []
             dText.value.push(string.value)
+            isFinished.value = true;
         })
 
         const doNext = (()=> {

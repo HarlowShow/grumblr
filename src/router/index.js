@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 
 import HomePage from '../views/HomePage.vue'
+import TheArt from '../views/TheArt.vue'
 import SingleShare from '../views/SingleShare.vue'
 import FormArea from '../views/FormArea.vue';
 import PlayGround from '../views/PlayGround.vue';
@@ -19,8 +20,10 @@ const router = createRouter({
     {
       path: '/home',
       component: HomePage,
-
-
+    },
+    {
+      path: '/art',
+      component: TheArt,
     },
     {
       path: '/input',

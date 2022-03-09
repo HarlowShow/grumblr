@@ -73,8 +73,8 @@
                                     v-if="this.formPosition===0"
                                     @update:value="setName"
                                     :inputType="'short'"
-                                    :examples="['You can leave this blank if you prefer']"
-                                    :exampleType="'info'"
+                                    :examples="['weather, cheese, Paul, Vlad']"
+                                    :exampleType="'list'"
                                     ></text-input>
                 </div>
                 </template>
@@ -115,7 +115,7 @@
                             v-if="personmateInvalid===true"
                                 @scroll="scrollToBottom(this.content)"
                                 :scrollType="setScroll"
-                                :chatString="'Put some words in first, yeah?'"
+                                :chatString="`You're going to have to give me a little more than that...`"
                                 ></chat-typer>
                     </template>
                       <template  v-slot:responses>
@@ -124,7 +124,7 @@
                      v-if="this.formPosition===1"
                                     @update:value="getPersonmate"
                                     :inputType="'short'"
-                                    :examples="['flatmate', 'world leader', 'baked good', 'aunt']"
+                                    :examples="['force of nature', 'dairy product', 'landlord', 'world leader']"
                                     :exampleType="'list'"
                                     ></text-input>
                     </template>
@@ -200,27 +200,38 @@
                 </template>
 
                 <template v-slot:end>
-                    <!-- Q: check sentence -->
+                    <!-- Q: check sentence 1-->
                    <chat-typer
+                   :chatString="sentenceToCheckPreamble"
+                   @scroll="[scrollToBottom(this.content), this.bubbleCount['confirmChoices']++]"
+                    :scrollType="setScroll"
+                   ></chat-typer>
+                </template>
+
+               
+                 <!-- Q: check sentence 2-->
+                <template v-slot:end-next>
+                    <chat-typer
                    :chatString="sentenceToCheck"
                    @scroll="scrollToBottom(this.content)"
                     :scrollType="setScroll"
                    ></chat-typer>
-                </template>
 
-                <!-- Additional info - options to change -->
-                <template v-slot:end-next
-                v-if="choicesConfirmed===false&&this.formPosition>2"
-                    >
+                </template>
+                
+                 <!-- Additional Q - options to change -->
+                <template v-slot:end-next-two>
                     <chat-typer
-                   :chatString="this.pandaChats[4].string"
-                   @scroll="scrollToBottom(this.content)"
-                    :scrollType="setScroll"
-                   ></chat-typer>
-                </template>
+                    v-if="choicesConfirmed===false&&this.formPosition>2"
+                    :chatString="this.pandaChats[4].string"
+                    @scroll="scrollToBottom(this.content)"
+                    :scrollType="setScroll">
+                    </chat-typer>
+                   </template>
 
-                <template  v-slot:responses
-                >
+                
+
+                <template v-slot:responses>
                 <div>
                      <!-- chips - options to swap choices -->
                     <chat-response
@@ -266,7 +277,7 @@
                             <!-- Q: get tone 1 -->
                         <chat-typer
                          @scroll="scrollToBottom(this.content)"
-                          :scrollType="setScroll"
+                        :scrollType="setScroll"
                         :chatString="this.pandaChats[5].string"
                         ></chat-typer>
                         </div>
@@ -284,52 +295,32 @@
             <!-- teaser 1 response -->
             <chat-bubble
                 :gridClass="'right'"
-                v-if="this.formPosition>4">
+                v-if="this.formPosition>4"
+                :additionalBubbles="this.bubbleCount['setTeasers']"
+                >
                 <template v-slot:end>
                     <p>{{ starterOneResponse }}</p>
                 </template>
                  <template v-slot:third>
                       <the-icons :name="'profile'"></the-icons>
                 </template>
+                <!-- teaser 2 response (appears after being set in component below) -->
+                 <template v-slot:end-next
+                   v-if="this.formPosition>5">
+                    <p>{{ starterTwoResponse }}</p>
+                </template>
             </chat-bubble>
 
             <!-- emotional teaser step 2 -->
-            <chat-bubble
-             :gridClass="'left'"
-             v-if="this.formPosition>4"
-             >
-                    <template v-slot:start>
-                    <the-icons :name="'reg-reg'"></the-icons>
-                    </template>
-                    <template v-slot:end>
-                        <div>
-                        <chat-typer
-                         @scroll="scrollToBottom(this.content)"
-                          :scrollType="setScroll"
-                        :chatString="this.pandaChats[6].string"
-                        ></chat-typer>
-                        </div>
-                    </template>
-                       <template  v-slot:responses>
+                <div class="teaser-responses">
                     <emotional-teaser
+                         v-if="this.formPosition===5"
+                        @scroll="scrollToBottom(this.content)"
                         :step="2"
-                        @update:starters="getStarterTones"
-                        v-if="this.formPosition===5">  
+                        :teasers="teaserSentences"
+                        @update:starters="getStarterTones">  
                     </emotional-teaser>
-                </template>
-            </chat-bubble>
-
-            <!-- teaser 2 response -->
-            <chat-bubble
-                :gridClass="'right'"
-                v-if="this.formPosition>5">
-                <template v-slot:end>
-                    <p>{{ starterTwoResponse }}</p>
-                </template>
-                 <template v-slot:third>
-                      <the-icons :name="'profile'"></the-icons>
-                </template>
-            </chat-bubble>
+                </div>
 
             <!-- exit teaser -->
             <chat-bubble
@@ -485,6 +476,7 @@
                     confirmChoices: 0,
                     customGripe: 0,
                     personmateInvalid: 0,
+                    setTeasers: 0,
                 },
                 personmateInvalid: false,
 
@@ -528,7 +520,7 @@
                 gripeChange: false,
             
                 confirmResponses: [
-                    { text: 'sure', value: true, icon: checkmarkCircle},
+                    { text: 'close enough', value: true, icon: checkmarkCircle},
                     { text: 'no, change something', value: false, icon: closeCircle}
                 ],
 
@@ -647,6 +639,13 @@
                     ],
 
                     starterTones: [],
+                    starterConjunctions: {
+                            e: '',
+                            f: '',
+                            g: '',
+                            h: '',
+                        },
+                    teaserSentences: [],
 
                     output: {
                         op0: '',
@@ -689,6 +688,18 @@
                     }
                     return pro
             },
+
+            proOneLower(){
+            let pro
+                    if(this.chosen.chosenPronoun==="we"){
+                    
+                        pro = 'we'
+                    } else {
+                  
+                        pro = 'I'
+                    }
+                    return pro
+            },
             proTwo(){
             let pro
                     if(this.chosen.chosenPronoun==="we"){
@@ -701,9 +712,13 @@
                     return pro
             },
 
+            sentenceToCheckPreamble(){
+                let sentence = "You know, that's a pretty serious allegation to make. Just imagine saying it out loud..."
+                return sentence 
+            },
+
             sentenceToCheck(){ 
-                let sentence = 
-                `"${this.stringA} ${this.gripeFollowUp} ${this.stringC} ${this.stringD}" Does that make sense?`
+                let sentence = `"${this.stringA} ${this.gripeFollowUp} ${this.stringC} ${this.stringD}" Does that even make sense to you?`
 
                 return sentence
             },
@@ -752,18 +767,19 @@
              starterTwoResponse() {
                 let arg = this.starterTones[1]
                 let response = ''
+
                 switch(arg) {
                     case 'angry':
-                        response = "they need to know that this is NOT ON."
+                        response = `${this.starterConjunctions['e']} they need to know that this is NOT ON.`
                         break;
                     case 'polite':
-                        response = `${this.proOne} will bravely pretend it never happened`
+                        response = `${this.starterConjunctions['f']} ${this.proOneLower} will bravely pretend it never happened`
                         break;
                     case 'paggro':
-                        response = `${this.proOne} will be leaving them a strongly worded post-it note.`
+                        response = `${this.starterConjunctions['g']} ${this.proOneLower} I intend to express my feelings in a strongly worded note.`
                         break;
                     case 'pirate':
-                        response = `${this.proOne} best consult ${this.proTwo} parrot before taking any further action.`
+                        response = `${this.starterConjunctions['h']} ${this.proOneLower} best consult ${this.proTwo} parrot before taking any further action.`
                 }
                 return response
             }
@@ -788,14 +804,16 @@
             },
 
             swapChoices(choice){
+               
                 this.chosen.confirmResponse = choice
+                //  console.log('choice to be swapped is: ' + choice)
 
                 if(choice==='none') {
                     this.choicesConfirmed=true
                     this.chosen.confirmResponseDemo = 'change nothing'
                     this.formPosition++
                 } else if (choice==='all') {
-                    this.formPositon=-1
+                    this.formPosition=-1
                     this.editing=true
                 } else if (choice==='name'){
                     this.formPosition=0
@@ -822,8 +840,8 @@
                     this.choicesConfirmed = response
                     this.chosen.confirmResponse = response
 
-                            if(response===true){
-                        this.chosen.confirmResponseDemo = 'sure'
+                        if(response===true){
+                        this.chosen.confirmResponseDemo = 'close enough'
                         } else if (response===false){
                             this.bubbleCount['confirmChoices']++
                             this.chosen.confirmResponseDemo = 'no, change something'
@@ -881,17 +899,23 @@
                
             },
 
-            getPersonmate(personmate) {
+            async getPersonmate(personmate) {
                     if(!personmate){
                         this.personmateInvalid = true
                         this.bubbleCount['personmateInvalid']++
                     } else {
+                        //* set main value
                     this.chosen.chosenPersonmate = personmate;
                     this.$store.state.chosenPersonmate = personmate;
+
+                        //* set strings for checkSentence
                     this.samplePersonmate = personmate + '.'
                     this.stringD = `${this.proTwo} ${personmate}.`
                     this.checkStrings[3].text = this.stringD
 
+                        //* set article for chat/phrases
+                        await this.setArticle(personmate)
+                       
                     if(this.editing===true&&this.chosen.confirmResponse==='personmate'){
                         this.choicesConfirmed=true
                         this.formPosition=3
@@ -900,6 +924,25 @@
                     }
                 }
         
+            },
+
+            setArticle(word){
+                return new Promise((resolve) => {
+                     let vowels = ['a', 'e', 'i', 'o', 'u']
+
+                        let pString = Array.from(word)
+                        // console.log('first letter is: ' + pString[0])
+                        if (vowels.indexOf(pString[0])!== -1){
+                             this.$store.state.personmateArticle = 'an'
+                             resolve()
+                            console.log('personmate: first letter WAS a vowel')
+                        } else {
+                            this.$store.state.personmateArticle = 'a'
+                            resolve()
+                            console.log('personmate: first letter was not a vowel')
+                        }
+
+                })
             },
 
             calcB(gripe){
@@ -950,8 +993,42 @@
             getStarterTones(tone) {
                 this.starterTones.push(tone)
                 this.$store.state.starterTones.push(tone)
-                // console.log(this.$store.state.starterTones)
-                // console.log(tone)
+                this.starterConjunctions
+                switch(tone){
+                    case 'angry':
+                        this.starterConjunctions['e']= 'and'
+                        this.starterConjunctions['f']= 'and'
+                        this.starterConjunctions['g']= 'although'
+                        this.starterConjunctions['h']= 'although'
+                        break;
+                     case 'paggro':
+                        this.starterConjunctions['e']= 'and'
+                        this.starterConjunctions['f']= 'and'
+                        this.starterConjunctions['g']= 'although'
+                        this.starterConjunctions['h']= 'although'
+                        break;
+                     case 'polite':
+                        this.starterConjunctions['e']= 'although'
+                        this.starterConjunctions['f']= 'although'
+                        this.starterConjunctions['g']= 'although'
+                        this.starterConjunctions['h']= 'although'
+                        break;
+                     case 'pirate':
+                        this.starterConjunctions['e']= 'and'
+                        this.starterConjunctions['f']= 'and'
+                        this.starterConjunctions['g']= 'although'
+                        this.starterConjunctions['h']= 'and'
+                        break;
+                }
+                this.teaserSentences.push(
+                `${this.starterConjunctions['e']} they need to know that this is NOT ON.`,
+                `${this.starterConjunctions['f']} ${this.proOneLower} will bravely pretend it never happened`,
+                `${this.starterConjunctions['g']} ${this.proOneLower} will be leaving them a strongly worded post-it note.`,
+                `${this.starterConjunctions['h']} ${this.proOneLower} best consult ${this.proTwo} parrot before taking any further action.` 
+                )
+                if(this.starterTones.length>1){
+                    this.bubbleCount['setTeasers']++
+                }
                 this.formPosition++;
             },
 
@@ -959,6 +1036,8 @@
                 return new Promise((resolve) => {
                     if(this.$store.state.starterTones.length===2){
                         resolve()
+                    } else {
+                        console.log('starter tones not fully added')
                     }
                 })
             },
@@ -1345,5 +1424,14 @@ ion-chip {
 
 ion-icon {
     color: black;
+}
+
+.chat.scrollable {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.teaser-responses {
+    padding-right: 3rem;
 }
 </style>

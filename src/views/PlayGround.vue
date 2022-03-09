@@ -21,79 +21,12 @@
                         </chat-bubble>
                 </ion-content>
 
-            <!-- <div id="gridtop">
-                    <chat-bubble
-                        :gridClass="'left'">
-                        <template v-slot:start>
-                            <the-icons :name="'reg-reg'"></the-icons>
-                        </template>
-                        <template v-slot:end>
-                            <chat-typer
-                            :chatString="'how about a starter grumble?'"
-                            @scroll="setBackchat('starter', 'two')"
-                            ></chat-typer>
-                        </template>
-                    </chat-bubble>
-
-                    <chat-bubble
-                                v-if="collapsed===false&&chatCount>0"
-                                id="mobilefooter"
-                                :gridClass="'left'"
-                                :iconSlot="true">
-                                    <template v-slot:start>
-                                        <the-icons :name="'reg-reg'"></the-icons>
-                                    </template>
-                                    <template v-slot:icon>
-                                    <span
-                                    @click="toggleChat"
-                                    class="close-chat"
-                                    >x</span>
-                                    </template>
-                                    <template v-slot:end>
-                                            <chat-typer
-                                            :chatString="this.backchat"
-                                            @scroll="loadNext"
-                                            ></chat-typer>
-                                    </template>
-                        </chat-bubble>
-
-                            <div
-                            v-else-if="chatCount>0"
-                            @click="toggleChat">
-                            <chat-bubble
-                                
-                                    id="mobilefooter"
-                                    :gridClass="'left'"
-                                    :iconSlot="true">
-                                        <template v-slot:start>
-                                            <the-icons :name="'chat-active'"
-                                            :newChat="newChat"
-                                            ></the-icons>
-                                        </template>
-                            </chat-bubble>
-                            </div>
-            </div> -->
-               
-                  <transition name="footer">
+                <transition name="footer">
 
                 <div id="gridbottom"
-                v-if="this.chatCount>1"
-                >
-               
-                       
-                            <div id="snippetarea">
-                                <!-- (old test thingy) <div class="snippets">
-                                            <div v-for="(item, index) in testStringObject"
-                                            :key="index"
-                                            class="snippety"
-                                            >
-                                                <test-snippet
-                                                :snippet="item.value"
-                                                @transitioned="pushSnippet(index+1)"
-                                                ></test-snippet>
-                                            </div>
-                                </div> -->
+                v-if="this.chatCount>1">
 
+                            <div id="snippetarea">
                                 <div class="snippets">
                                             <new-snippet v-for="(value, name, index) in gripeObject"
                                             :key="index"
@@ -104,30 +37,87 @@
                                             @transitioned="setInits"
                                             ></new-snippet>
                                 </div>
-
                                 <ion-icon :icon="send"
                                  @click="goToEnd"
                                  class="send-icon"
                                 ></ion-icon>
-
-                                <!-- (old verson) <div class="snippets">
-                                            <new-snippet v-for="(value, name, index) in gripeObject"
-                                            :key="index"
-                                            :value="value"
-                                            :name="name"
-                                            :index="index"
-                                            :snippet="gripeObject[name]"
-                                            ></new-snippet>
-                                </div> -->
-                                <!-- <chat-response
-                                            :data="chatResponseOptions"
-                                            :noIcon="true"
-                                            @update:value="goToEnd"
-                                            >
-                                </chat-response> -->
                             </div>
-                                        
-                            <div id="sliders">
+
+                            <div id="emoji-container">
+                                     <div class="button-holder">
+                                    <button class="emoji-button" @click="cycleEmoji('angry', 'add')">
+                                        <the-emoji-buttons :clickstep="this.btnStep['angry']"
+                                        :type="'add'"
+                                        :tone="'angry'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                    <button class="emoji-button" @click="cycleEmoji('angry', 'sub')"
+                                    v-if="this.prevStep['angry']>-1">
+                                        <the-emoji-buttons :clickstep="this.prevStep['angry']"
+                                        :type="'sub'"
+                                        :tone="'angry'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                      <div class="show-moodcount"><p>{{ this.moodcount['angry'] }}</p></div>
+                                    </div>
+
+                                    <div class="button-holder">
+                                    <button class="emoji-button" @click="cycleEmoji('paggro', 'add')">
+                                        <the-emoji-buttons :clickstep="this.btnStep['paggro']"
+                                        :type="'add'"
+                                        :tone="'paggro'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                    <button class="emoji-button" @click="cycleEmoji('paggro', 'sub')"
+                                    v-if="this.prevStep['paggro']>-1">
+                                        <the-emoji-buttons :clickstep="this.prevStep['paggro']"
+                                        :type="'sub'"
+                                        :tone="'paggro'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                      <div class="show-moodcount"><p>{{ this.moodcount['paggro'] }}</p></div>
+                                    </div>
+
+                                    <div class="button-holder">
+                                    <button class="emoji-button" @click="cycleEmoji('polite', 'add')">
+                                        <the-emoji-buttons :clickstep="this.btnStep['polite']"
+                                        :type="'add'"
+                                        :tone="'polite'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                    <button class="emoji-button" @click="cycleEmoji('polite', 'sub')"
+                                    v-if="this.prevStep['polite']>-1">
+                                        <the-emoji-buttons :clickstep="this.prevStep['polite']"
+                                        :type="'sub'"
+                                        :tone="'polite'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                      <div class="show-moodcount"><p>{{ this.moodcount['polite'] }}</p></div>
+                                    </div>
+
+                                    <div class="button-holder">
+                                    <button class="emoji-button" @click="cycleEmoji('pirate', 'add')">
+                                        <the-emoji-buttons :clickstep="this.btnStep['pirate']"
+                                        :type="'add'"
+                                        :tone="'pirate'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                    <button class="emoji-button" @click="cycleEmoji('pirate', 'sub')"
+                                    v-if="this.prevStep['pirate']>-1">
+                                        <the-emoji-buttons :clickstep="this.prevStep['pirate']"
+                                        :type="'sub'"
+                                        :tone="'pirate'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                    <div class="show-moodcount"><p>{{ this.moodcount['pirate'] }}</p></div>
+                                    </div>
+
+                                    <div class="button-holder">
+                                         <div class="show-moodcount"><p>total: {{ this.moodcount['total'] }}</p></div>
+                                    </div>
+                            </div>
+                        
+                            <!-- <div id="sliders">
                                         <the-sliders
                                             v-for="mood in allMoods"
                                             :key="mood"
@@ -136,9 +126,7 @@
                                             :sliderVal="sliderVal[mood]"
                                             @update:getMoods="getMoods">
                                         </the-sliders>
-                            </div>
-                        
-                        
+                            </div> -->
                     </div>
                     </transition>
                 </div>
@@ -152,9 +140,10 @@
 // import TestSnippet from '../sections/components/TestSnippet.vue'
 
 import NewSnippet from '../sections/components/NewSnippet.vue'
-import TheSliders from '../sections/components/TheSliders.vue'
+// import TheSliders from '../sections/components/TheSliders.vue'
 import ChatBubble from '../sections/components/ChatBubble.vue'
 import ChatTyper from '../sections/components/ChatTyper.vue'
+import TheEmojiButtons from '../sections/components/TheEmojiButtons.vue'
 // import ChatResponse from '../sections/components/ChatResponse.vue'
 
 // import { IonChip } from '@ionic/vue'
@@ -175,11 +164,12 @@ export default {
         ChatBubble,
         ChatTyper,
         TheIcons,
-        TheSliders,
+        // TheSliders,
         NewSnippet,
         // ChatResponse,
         IonIcon,
         IonContent,
+        TheEmojiButtons,
 
         // TestSnippet
     },
@@ -235,6 +225,19 @@ export default {
         // phrase: position, status (boolean), phrase, tone
         //TODO: fill these out with some tut stuff
         return {
+
+        btnStep: {
+          angry: 0,
+          paggro: 0,
+          polite: 0,
+          pirate: 0
+        },
+        prevStep: {
+          angry: -1,
+          paggro: -1,
+          polite: -1,
+          pirate: -1,
+        },
 
             starterStrings: [
                 {value: 'one', grumbleIndex: 'one'},
@@ -687,6 +690,36 @@ export default {
 
     methods: {
 
+        cycleEmoji(tone, type){
+        if(type==='add'){
+          if(this.btnStep[tone]<10){
+        //* tracking for button appearance and enable/disable
+          this.btnStep[tone]++
+          this.prevStep[tone]++
+        //* add to moodcount
+          let newVal = this.moodcount[tone] + 1
+          let newTone = tone
+          this.getMoods({
+              val: newVal,
+              tone: newTone
+          })
+          } 
+        } else if (type==='sub'){
+          if(this.btnStep[tone]>0){
+          this.btnStep[tone]--
+          this.prevStep[tone]--
+          }
+
+          let newVal = this.moodcount[tone] - 1
+          let newTone = tone
+          this.getMoods({
+              val: newVal,
+              tone: newTone
+          })
+          
+        }
+      },
+
         pushSnippet(idx){
             //* FOR STARTER CHATS ONLY
             console.log('pushing snippet at index: ' + idx)
@@ -764,6 +797,8 @@ export default {
                     tone: this.firstTone
                 }
                 this.getMoods(sendDouble)
+                this.btnStep[this.firstTone]+=2
+                this.prevStep[this.firstTone]+=2
             } else {
 
                 const sendFirst = {
@@ -777,8 +812,12 @@ export default {
                     }
             
                     this.getMoods(sendFirst)
+                    this.btnStep[this.firstTone]++
+                    this.prevStep[this.firstTone]++
                 setTimeout(() => {
                     this.getMoods(sendSecond)
+                    this.btnStep[this.secondTone]++
+                    this.prevStep[this.secondTone]++
                 }, 800)
             }
         },
@@ -1056,7 +1095,8 @@ export default {
 
                      if(this.subFirst===true) {
                                 //* send message to change val on sliders where moods subbed, watcher in child pulls from vuex object
-                                this.sliderVal[tone]=true
+                                this.btnStep[tone]--
+                                this.prevStep[tone]--
                                 // console.log('slider val changed at: ' + tone)
                                 this.queue.sub.shift()
                                 
@@ -1553,6 +1593,26 @@ export default {
 
 <style scoped>
 /* temp styling! make less ugly */
+
+.show-moodcount {
+    text-align: center;
+}
+
+#emoji-container {
+    display: flex;
+    justify-content: start;
+}
+
+.button-holder {
+    display: flex;
+    flex-direction: column;
+    min-height: 7rem;
+}
+
+.emoji-button {
+    background-color: transparent;
+}
+
 .snippety {
     animation: snippetenter 2s forwards;
 }
@@ -1563,9 +1623,6 @@ export default {
     }
 }
 
-
-
-
 .footer-enter-from {
     transform: translateY(400px);
 }
@@ -1573,8 +1630,6 @@ export default {
 .footer-enter-active {
     transition: 1.5s ease-out;
 }
-
-
 
 .close-chat {
     cursor: pointer;
@@ -1684,8 +1739,8 @@ export default {
 
     #playground {
         display: flex;
-        height: calc(100% - 10px);
-        width: 90%;
+        height: 100%;
+        width: 100%;
         position: absolute;
         flex-direction: column;
         justify-content: space-between;
@@ -1701,9 +1756,10 @@ export default {
         bottom: 0%;
         min-height: 100px;
         padding: 2rem;
-        width: 90%;
+        width: 100%;
         max-width: 752px;
         border-top: 3px solid black;
+        background-color: #e9e9e9;
     }
 
     @media(max-width: 576px) {
@@ -1713,8 +1769,8 @@ export default {
 
         #gridbottom{
             min-height: 30vh;
-            padding-left: 0;
-            padding-right: 0;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
             padding-top: 0.5rem;
             padding-bottom: 0;
         }
@@ -1730,6 +1786,8 @@ export default {
 
     ion-content#chat {
         max-height: 50vh;
+        --padding-start: 1rem;
+        --padding-end: 1rem;
     }
    
 

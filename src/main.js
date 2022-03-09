@@ -36,6 +36,7 @@ const store = createStore({
       finalOutput: {},
       gripeString: '',
       chosenPronouns: {},
+      personmateArticle: '',
       chosenPersonmate: '',
       chosenGripe: '',
       chosenName: '',

@@ -32,32 +32,33 @@
   </div>
 
       <div
-    v-if="step===2"
+    v-if="step===2&&teasers"
     >
 
-    <ion-chip
-        
+    <ion-chip class="chonk-chip"
         @click="pushTone('angry')">
-        <ion-label>they need to know that this is NOT ON.</ion-label>
+        <ion-label>...{{ teasers[0] }}</ion-label>
     </ion-chip>
 
-    <ion-chip
+    <ion-chip class="chonk-chip"
        
         @click="pushTone('paggro')">
-        <ion-label>{{ proOne }} will be leaving them a strongly worded post-it note.</ion-label>
+        <ion-label>...{{ teasers[1] }}</ion-label>
     </ion-chip>
 
-    <ion-chip
-       
-       @click="pushTone('pirate')">
-        <ion-label>{{ proOne }} best consult {{ proTwo }} parrot before taking any further action.</ion-label>
-    </ion-chip>
-
-    <ion-chip
+        <ion-chip class="chonk-chip"
       
         @click="pushTone('polite')">
-        <ion-label>{{ proOne }} will bravely pretend it never happened.</ion-label>
+        <ion-label>...{{ teasers[2] }}</ion-label>
     </ion-chip>
+
+    <ion-chip class="chonk-chip"
+       
+       @click="pushTone('pirate')">
+        <ion-label>...{{ teasers[3] }}</ion-label>
+    </ion-chip>
+
+
 
   </div>
 
@@ -109,6 +110,10 @@ export default {
         step: {
             type: Number,
             required: true
+        },
+        teasers: {
+            type: Array,
+            required: false,
         }
     },
 
@@ -122,7 +127,7 @@ export default {
         }
      },
 
-    emits: ['update:starters', 'update:route'],
+    emits: ['update:starters', 'update:route', 'scroll'],
 
     methods: {
 
@@ -147,6 +152,28 @@ export default {
          proTwo(){
              return this.activePronouns.posessiveDeterminerP
          }
+     },
+
+     watch: {
+         step: {
+            immediate: true,
+            handler(newVal){
+             if(newVal===2){
+                 
+                 setTimeout(() => {
+                      this.$emit('scroll')
+                 }, 500)
+                
+             }
+         }
+         }
      }
 }
 </script>
+
+<style scoped>
+    .chonk-chip {
+        padding: 1rem;
+        border: 2.5px solid black;
+    }
+</style>

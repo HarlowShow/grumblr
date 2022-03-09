@@ -21,12 +21,19 @@
             </div>
         </div>
         <div class="end-bubble box"> 
-        <div class="inner-bubble extra"
-            v-if="additionalBubbles>0"
-            >
-             <slot name="end-next"></slot>
+            <div class="inner-bubble extra"
+                v-if="additionalBubbles>0"
+                >
+                <slot name="end-next"></slot>
             </div>
+        </div>
+        <div class="end-bubble box"> 
+         <div class="inner-bubble extra"
+                v-if="additionalBubbles>1"
+                >
+                <slot name="end-next-two"></slot>
             </div>
+         </div>
         </div>
 
         <div class="box">
@@ -34,7 +41,9 @@
         </div>
         
         <div class="responses">
+        
             <slot name="responses"></slot>
+            
         </div>
     </div>
 </template>
@@ -136,13 +145,18 @@ export default {
         align-self: end;
     }
 
+    .box {
+        align-self: end;
+    }
+
     .avatar.start-bubble {
         display: flex;
         justify-content: flex-end;
     }
 
     .responses {
-        grid-column: 1 / span 2;
+        grid-column-start: 2;
+        grid-column-end: 4;
     }
 
     .extra {
@@ -157,4 +171,5 @@ export default {
         justify-content: flex-end;
         text-align: end;
     }
+
 </style>

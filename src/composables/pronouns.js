@@ -30,7 +30,6 @@ export default function usePronouns(){
         pirateTitle: "this old cap'n",
         pirateTitleCap: "This old cap'n",
         groupType: "person",
-       
         }
             } else if (pronoun === "we") {
         
@@ -53,7 +52,7 @@ export default function usePronouns(){
         toBePastContractedCap: "We've",
         pirateTitle: "these fine crewmates",
         pirateTitleCap: "These fine crewmates",
-        groupType: 'people'
+        groupType: 'people',
         };
    
     } else {

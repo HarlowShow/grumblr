@@ -239,14 +239,14 @@ ion-icon {
 
 @media(max-width: 576px) {
  ion-content#main-page {
-     height: calc(100% - 100px);
-      --padding-start: 1rem;
-     --padding-end: 1rem;
-     --padding-top: 1rem;
-     --padding-bottom: 1rem;
+    height: calc(100% - 100px);
+    --padding-start: 0rem;
+    --padding-end: 0rem;
+    --padding-top: 0rem;
+    --padding-bottom: 0rem;
     --offset-top: 0px !important;
-      align-items: center;
-     justify-content: center;
+    align-items: center;
+    justify-content: center;
  }
 }
 

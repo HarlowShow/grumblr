@@ -137,6 +137,15 @@ export default {
     .examples {
         margin-top: 0px !important;
         font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        max-width: 250px;
+    }
+
+    .examples>p{
+        margin: 0;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 </style>
 

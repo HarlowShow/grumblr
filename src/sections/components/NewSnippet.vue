@@ -78,11 +78,11 @@ export default {
     mounted(){
         if(this.optionLimit===0){
              this.count = true
-             console.log('initially empty snippet')
+            //  console.log('initially empty snippet')
         } else {
             setTimeout(() => {
                 this.count = true
-                console.log('idx is: ' + this.idx)
+                // console.log('idx is: ' + this.idx)
                 if(this.index===12){
                     setTimeout(() => {
                         this.$emit('transitioned')

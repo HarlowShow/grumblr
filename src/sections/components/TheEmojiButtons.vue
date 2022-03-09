@@ -24,25 +24,25 @@
             <div class="btn-child"
             v-if="type==='add'">
                 <div class="icon-container" v-if="clickstep===0">
-                    <the-icons :name="`${tone}-neutral`" :opacity="5"></the-icons>
+                    <the-icons :name="`${tone}-one`" :opacity="5"></the-icons>
                 </div>
                 <div class="icon-container" v-if="clickstep===1">
-                    <the-icons :name="`${tone}-neutral`" :opacity="10"></the-icons>
+                    <the-icons :name="`${tone}-one`" :opacity="10"></the-icons>
                 </div>
                 <div class="icon-container" v-if="clickstep===2">
-                    <the-icons :name="`${tone}-neutral`" :opacity="20"></the-icons>
+                    <the-icons :name="`${tone}-one`" :opacity="20"></the-icons>
                 </div>
                 <div class="icon-container" v-if="clickstep===3">
-                    <the-icons :name="`${tone}-one`" :opacity="30"></the-icons>
+                    <the-icons :name="`${tone}-two`" :opacity="30"></the-icons>
                 </div>
                 <div class="icon-container" v-if="clickstep===4">
-                    <the-icons :name="`${tone}-one`" :opacity="40"></the-icons>
+                    <the-icons :name="`${tone}-two`" :opacity="40"></the-icons>
                 </div>
                   <div class="icon-container" v-if="clickstep===5">
                     <the-icons :name="`${tone}-two`" :opacity="50"></the-icons>
                 </div>
                   <div class="icon-container" v-if="clickstep===6"> 
-                    <the-icons :name="`${tone}-two`" :opacity="60"></the-icons>
+                    <the-icons :name="`${tone}-three`" :opacity="60"></the-icons>
                 </div>
                   <div class="icon-container" v-if="clickstep===7">
                     <the-icons :name="`${tone}-three`" :opacity="70"></the-icons>
@@ -104,18 +104,18 @@ export default {
 
  .icon-container {
      /* background-color: rgb(255, 255, 255); */
-     width: 6rem;
-     height: 5rem;
+     max-width: 6rem;
+     max-height: 5rem;
      background-color: none;
      background: none;
      
  }
 
- .big-emoje {
+ /* .big-emoje {
      position: relative;
      top: -0.5rem;
      left: -0.7rem;
- }
+ } */
 
  #btn-house {
      display: flex;

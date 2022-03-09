@@ -31,7 +31,7 @@ export default function speakTrashPanda(startingIdx = 0) {
         if(store.state.nameIsDefault===true){
             sentence = 'Mysterious. And what\'s their relationship to you?'
         } else {
-            sentence = `I see. And what's ${nameChoice}'s relationship to you?`
+            sentence = `${nameChoice}? Oh dear. What's their relationship to you?`
         }
         return sentence
     })
@@ -39,8 +39,9 @@ export default function speakTrashPanda(startingIdx = 0) {
     const personmateFollowUp = computed(function() {
         let sentence = ''
         let personmate = store.state.chosenPersonmate
+        let article = store.state.personmateArticle
         if(personmate) {
-            sentence = `Oh dear. What did this ${personmate} do then?`
+            sentence = `Somehow it's always ${article} ${personmate}... What have they done this time?`
         } else {
             sentence = 'Oh dear. What did they do?'
         }
@@ -69,13 +70,13 @@ export default function speakTrashPanda(startingIdx = 0) {
         string: "Are you ready to grumble?",
         stringTwo: "I see. And what's their relationship to you?",
         idx: 0},
-        { string: 'Ok. Who - or what - should we grumble about?', stringTwo: 'I see'},
+        { string: 'What should we grumble about?', stringTwo: 'I see'},
         { string: 'I see. Who did this then?', type: 'formQ', idx: 1},
         { string: '',
-        stringTwo: "try to follow the examples and avoid unnecessary punctuation",
+        stringTwo: "Try to follow the same format as the examples. You don't need to write a complete sentence or use a full stop.",
         type: 'formQ', idx: 2},
         { string: 'Which bit should we change?'},
-        { string: 'Last bit... how do you feel about this?', type: 'formQ'},
+        { string: 'Finally, how does all this make you feel?', type: 'formQ'},
         { string: "And what are you gonna do about it?", type: 'formQ'},
         { string: "I can work with this. How's about I whip ya' up a little sump'n sump'n?", type: 'formQ'},
         { string: "Too bad schmucko! I didn't build in a back button yet. Here we go!", type: 'response'},

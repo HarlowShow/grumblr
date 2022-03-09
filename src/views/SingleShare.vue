@@ -1,9 +1,33 @@
 <template>
     <base-layout>
-    <div>
-        <p>Check out this spicy grumble about {{ personmate }} {{ name }}</p>
-        <p>{{ grumbleText }}</p>
-        <ion-button @click="routin">Make my own grumble</ion-button>
+          <div class="chat scrollable">
+
+            <!-- CLICK, set form, position to 0 -->
+            <!-- pronoun response -->
+            <chat-bubble
+             :gridClass="'right'"
+             :responseClass="true"
+             :additionalBubbles="1"
+            >
+                <template v-slot:end>
+                    <p>{{`check out this spicy grumble about ${personmate} ${name}`}}</p>
+                </template>
+                 <template v-slot:third>
+                      <the-icons :name="'reg-reg'"></the-icons>
+                </template>
+                 <template v-slot:end-next>
+                         <p> {{ grumbleText }}</p>
+                </template>
+            </chat-bubble>
+
+            <div  class="end-btn">
+            <ion-chip
+            size="medium"
+            outline="true"
+            router-link="/input">make my own grumble
+            </ion-chip>
+       </div>
+
     </div>
     </base-layout>
 
@@ -13,10 +37,18 @@
 import { ref } from 'vue'
 import { db } from '../firebase/config'
 import { collection, getDocs } from 'firebase/firestore'
-import { IonButton } from '@ionic/vue'
+
+
+import { IonChip } from '@ionic/vue'
+import ChatBubble from '../sections/components/ChatBubble.vue'
+import TheIcons from '../sections/components/TheIcons.vue'
 export default {
+
     components: {
-        IonButton,
+        // IonIcon,
+        IonChip,
+        ChatBubble,
+        TheIcons
     },
     props: ['id'],
 
@@ -98,3 +130,26 @@ export default {
   
 }
 </script>
+
+<style scoped>
+.end-btn {
+      display: flex;
+      justify-content: center;
+      justify-items: center;
+      align-items: center;
+      align-content: center;
+    }
+
+.chat.scrollable {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.sharing-icons {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      padding: 0.25rem;
+    }
+
+</style>
