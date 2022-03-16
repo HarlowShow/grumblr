@@ -55,12 +55,6 @@ export default {
         const optionItem = 1;
         const typeText = newText.value
         const currentText = typeText[wordIdx].split('')
-
-        console.log(words.value)
-        console.log(currentWord)
-        console.log(typeText)
-        console.log('optionLimit =' + optionLimit)
-
         return {
             wordValue,
             currentWord,
@@ -90,12 +84,11 @@ export default {
 
         doing() {
         
-        console.log(this.typeArray)
         this.stopped = false;
              if (this.initPush === false) {
                     this.displayText.push(this.typeArray[0]);
                     this.initPush = true
-                    console.log('this.initPush is' + this.initPush)
+                    // console.log('this.initPush is' + this.initPush)
                 } else if (this.paused === true) {
                     this.startStop = true;
                     this.paused=!this.paused
@@ -111,9 +104,7 @@ export default {
             // console.log(this.displayText)
             this.optionItem++
             this.dostuff();
-            } else {
-            console.log('no more stuff to do already reached:' + this.optionItem)
-                }
+            }
         },
 
     dostuff(started) {
@@ -121,8 +112,6 @@ export default {
                     setTimeout(()=> {
                         this.doOther(started);
                     }, 100);
-            } else {
-                console.log('no, stop!')
             }
         },
 
@@ -171,17 +160,14 @@ export default {
 
     watch: {
         newText() {
-            console.log('something happened with new text')
          
             this.typeText = this.newText
 
                 this.toType = this.newText[0]
                 // this.typeArray = this.toType[this.wordIdx].split('')
-               console.log(this.toType)
         
                this.typeArray = [...this.toType]
                this.newLimit=this.typeArray.length
-                console.log(this.newLimit)
         },
 
     }

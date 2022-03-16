@@ -7,7 +7,6 @@ export default function usePronouns(){
   
 
     const setPronouns = function(pronoun) {
-        console.log('set pronoun function happening with pronoun: ' + pronoun)
         if(pronoun === "me") {
 
         this.$store.state.chosenPronouns = {
@@ -55,8 +54,6 @@ export default function usePronouns(){
         groupType: 'people',
         };
    
-    } else {
-        console.log("no pronouns chosen");
     }
         
     }

@@ -33,7 +33,6 @@ export default {
     watch: {
         count(newVal){
              if(newVal===true) {
-                console.log('snippet delay emitted')
                 this.$emit('transitioned')
             }
         }

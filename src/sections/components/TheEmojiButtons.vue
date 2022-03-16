@@ -57,7 +57,19 @@
                     <the-icons :name="`${tone}-four`" :opacity="100"></the-icons>
                 </div>
             </div>
+            <div class="btn-child"
+            v-else-if="type==='special'">
+            <div class="icon-container" v-if="clickstep===0">
+                    <the-icons :name="`${tone}`" :opacity="5"></the-icons>
+                </div>
+            </div>
+
             <div class="btn-child" v-if="type==='sub'">
+                <div class="icon-container">
+                    <the-icons :name="`${tone}-sub`" :opacity="0"></the-icons>
+                </div>
+            </div>
+            <div class="btn-child" v-else-if="type==='special-sub'">
                 <div class="icon-container">
                     <the-icons :name="`${tone}-sub`" :opacity="0"></the-icons>
                 </div>
@@ -100,25 +112,20 @@ export default {
 
  .btn-child {
      background-color: none;
+     min-height: 2rem;
+     min-width: 2rem;
  }
 
  .icon-container {
-     /* background-color: rgb(255, 255, 255); */
-     max-width: 6rem;
-     max-height: 5rem;
-     background-color: none;
      background: none;
+     display: flex;
+     min-height: 1.4rem;
      
  }
-
- /* .big-emoje {
-     position: relative;
-     top: -0.5rem;
-     left: -0.7rem;
- } */
 
  #btn-house {
      display: flex;
      background-color: none;
+     align-items: flex-start;
  }
 </style>

@@ -6,6 +6,7 @@
                 <ion-input 
                 type="text"
                 required="true"
+                mode="ios"
                 @ionChange="outputValue=$event.target.value"
                 >
                 </ion-input>
@@ -36,6 +37,7 @@
                 </chat-typer>
                 </div>
                  <ion-textarea v-else
+                    mode="ios"
                     class="input inner"
                     :class="[{ hidePlaceholder : focus==='true'},{ showPlaceholder : focus==='false'}]"
                     type="text"
@@ -56,12 +58,16 @@
 <script>
 import ChatTyper from '../ChatTyper.vue'
 
+
 import {
     IonChip,
     IonInput,
     IonIcon,
-    IonTextarea
+    IonTextarea,
+    useKeyboard
 } from '@ionic/vue';
+import { watch } from 'vue'
+
 
 import { checkmarkCircle } from 'ionicons/icons'
 
@@ -107,8 +113,14 @@ export default {
 
     setup() {
 
+    const { isOpen, keyboardHeight } = useKeyboard()
+    watch(keyboardHeight, () => {
+    console.log(`Is Keyboard Open: ${isOpen.value}, Keyboard Height: ${keyboardHeight.value}`);
+    });
+
+
         return {
-            checkmarkCircle
+            checkmarkCircle,
         }
     },
 

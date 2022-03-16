@@ -1,20 +1,22 @@
 <template>
-    <base-layout>
+    <base-layout v-if="ready===true">
       <div class="chat scrollable">
             <chat-bubble
             :gridClass="'right'"
             :responseClass="true"
             v-if="fullGripe">
                 <template v-slot:end>
-                            <p>{{ fullGripe }}</p>
+                            <div :class="classObject">
+                                <p>{{ fullGripe }}</p>
+                            </div>
                         </template>
                         <template v-slot:third>
                             <the-icons :name="'profile'"></the-icons>
                         </template>
             </chat-bubble>
-
-            <div v-if="ready===true"
-                class="sharing-icons">
+       </div>
+       <div class="other-stuff">
+       <div class="sharing-icons">
 
                 <ShareNetwork
                 network="facebook"
@@ -54,10 +56,10 @@
                     <ion-chip
                     size="medium"
                     outline="true"
-                    router-link="/input">Grumble Again
+                    router-link="/input">Keep Grumbling
                     </ion-chip>
             </div>
-       </div>
+        </div>
     </base-layout>
 </template>
 
@@ -69,7 +71,7 @@
 
   import { logoFacebook, logoTwitter, logoReddit, logoWhatsapp } from 'ionicons/icons';
     import { useStore } from 'vuex'
-    import { ref, toRef } from 'vue'
+    import { ref } from 'vue'
 
     import { db } from '../firebase/config'
     import { doc, setDoc, collection } from 'firebase/firestore'
@@ -87,6 +89,7 @@ export default {
 
         const store = useStore()
         const gripe = store.state.finalOutput
+        const classObject = store.state.boxProps
         const fullGripe = Object.values(gripe).join('');
         store.state.gripeString = fullGripe
         const nameVal = ref('')
@@ -102,6 +105,8 @@ export default {
         const sharingURL = ref('')
 
         const grumbleRef = doc(collection(db, 'grumbles'));
+        let newId = grumbleRef.id
+        console.log('id is: ' + newId)
 
         const createShare = async () => {
     
@@ -111,14 +116,14 @@ export default {
             personmate: personmateVal,
         })
 
-            idRef.value = grumbleRef.id
-            const id = toRef(idRef)
-            // sharingURL.value = `https://grumblr-web.web.app/shared/${id.value}`
-            sharingURL.value = `http://localhost:8100/shared/${id.value}`
+            sharingURL.value = `https://grumblr-web.web.app/shared/${newId}`
+            // sharingURL.value = `http://localhost:8100/shared/${id.value}`
+            console.log('sharing url is: ' + sharingURL.value)
         }
 
         return {
             nameVal,
+            classObject,
             personmateVal: personmateVal.value,
             sharingURL,
             idRef,
@@ -171,8 +176,11 @@ ion-chip {
     .sharing-icons {
       margin-top: 1rem;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       padding: 0.25rem;
+      max-width: 20rem;
+      min-width: 12rem;
+    
     }
 
     .end-btn {
@@ -181,10 +189,38 @@ ion-chip {
       justify-items: center;
       align-items: center;
       align-content: center;
+      padding-top: 1rem;
     }
 
     .chat.scrollable {
     padding-left: 1rem;
     padding-right: 1rem;
+    
 }
+    .other-stuff {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    ion-icon {
+        font-size: 2.2rem;
+    }
+
+    .reverse {
+-moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+}
+
+.upsidedown {
+-moz-transform: scale(1, -1);
+  -webkit-transform: scale(1, -1);
+  -o-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  transform: scale(1, -1);
+}
+
 </style>

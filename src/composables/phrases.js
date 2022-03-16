@@ -237,7 +237,7 @@ export default function speakPhrases() {
         {
             position: "of1",
             status: false,
-            phrase: `Please don't think ill of ${activePronouns.objectP} for mentioning  `,
+            phrase: `Please don't think ill of ${activePronouns.objectP} for mentioning this. `,
             tone: "polite",
 
         },

@@ -253,21 +253,8 @@ export default {
         this.angryTracker++
       },
 
-      getVal(value){
-        console.log(value)
-      }
     },
 
-    watch: {
-
-      angryTracker(newValue) {
-        if (newValue>3) {
-          this.noActivated = true;
-        }
-        console.log(this.angryTracker)
-        console.log(this.noActivated)
-      }
-    }
 }
 </script>
 

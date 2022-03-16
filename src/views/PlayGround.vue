@@ -13,21 +13,27 @@
                                 <the-icons :name="chat.icon"></the-icons>
                             </template>
                             <template v-slot:end>
+                                <!-- @scroll="setBackchat(chat.nextObj, chat.nextInner)" -->
                                 <chat-typer
                                 :chatString="chat.string"
-                                @scroll="setBackchat(chat.nextObj, chat.nextInner)"
                                 ></chat-typer>
                             </template>
                         </chat-bubble>
+                                <chat-response
+                                :data="this.helpOptions"
+                                :noIcon="true"
+                                @update:value="navigateHelp"
+                                ></chat-response>
                 </ion-content>
 
                 <transition name="footer">
 
                 <div id="gridbottom"
-                v-if="this.chatCount>1">
+                v-if="this.chatCount>0">
 
                             <div id="snippetarea">
-                                <div class="snippets">
+                                <div class="snippets"
+                                :class="grumbleBox">
                                             <new-snippet v-for="(value, name, index) in gripeObject"
                                             :key="index"
                                             :value="value"
@@ -43,7 +49,7 @@
                                 ></ion-icon>
                             </div>
 
-                            <div id="emoji-container">
+                            <div class="emoji-container">
                                      <div class="button-holder">
                                     <button class="emoji-button" @click="cycleEmoji('angry', 'add')">
                                         <the-emoji-buttons :clickstep="this.btnStep['angry']"
@@ -58,7 +64,7 @@
                                         :tone="'angry'">
                                         </the-emoji-buttons>
                                     </button>
-                                      <div class="show-moodcount"><p>{{ this.moodcount['angry'] }}</p></div>
+                                      <!-- <div class="show-moodcount"><p>{{ this.moodcount['angry'] }}</p></div> -->
                                     </div>
 
                                     <div class="button-holder">
@@ -75,7 +81,7 @@
                                         :tone="'paggro'">
                                         </the-emoji-buttons>
                                     </button>
-                                      <div class="show-moodcount"><p>{{ this.moodcount['paggro'] }}</p></div>
+                                      <!-- <div class="show-moodcount"><p>{{ this.moodcount['paggro'] }}</p></div> -->
                                     </div>
 
                                     <div class="button-holder">
@@ -92,7 +98,7 @@
                                         :tone="'polite'">
                                         </the-emoji-buttons>
                                     </button>
-                                      <div class="show-moodcount"><p>{{ this.moodcount['polite'] }}</p></div>
+                                      <!-- <div class="show-moodcount"><p>{{ this.moodcount['polite'] }}</p></div> -->
                                     </div>
 
                                     <div class="button-holder">
@@ -109,12 +115,50 @@
                                         :tone="'pirate'">
                                         </the-emoji-buttons>
                                     </button>
-                                    <div class="show-moodcount"><p>{{ this.moodcount['pirate'] }}</p></div>
+                                    <!-- <div class="show-moodcount"><p>{{ this.moodcount['pirate'] }}</p></div> -->
                                     </div>
 
-                                    <div class="button-holder">
-                                         <div class="show-moodcount"><p>total: {{ this.moodcount['total'] }}</p></div>
+                                    <div class="button-holder"
+                                    v-for="button in emojiButtons"
+                                    :key="button.tone">
+                                    <button class="emoji-button" @click="cycleEmoji(button.tone, button.type)">
+                                        <the-emoji-buttons :clickstep="this.btnStep[button.tone]"
+                                        :type="button.type"
+                                        :tone="button.tone">
+                                        </the-emoji-buttons>
+                                    </button>
+                                    <button class="emoji-button" @click="cycleEmoji(button.tone, `${button.type}-sub`)"
+                                    v-if="this.prevStep[button.tone]>-1">
+                                        <the-emoji-buttons :clickstep="this.prevStep[button.tone]"
+                                        :type="`${button.type}-sub`"
+                                        :tone="button.tone">
+                                        </the-emoji-buttons>
+                                    </button>
                                     </div>
+
+
+                                    <!-- <div class="button-holder">
+                                    <button class="emoji-button" @click="cycleEmoji('🔥', 'special')">
+                                        <the-emoji-buttons :clickstep="this.btnStep['🔥']"
+                                        :type="'special'"
+                                        :tone="'🔥'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                    <button class="emoji-button" @click="cycleEmoji('💧', 'special')"
+                                    v-if="this.prevStep['pirate']>-1">
+                                        <the-emoji-buttons :clickstep="this.prevStep['💧']"
+                                        :type="'special'"
+                                        :tone="'💧'">
+                                        </the-emoji-buttons>
+                                    </button>
+                                    </div> -->
+
+                                    <!-- <div class="button-holder">
+                                         <div class="show-moodcount"><p>total: {{ this.moodcount['total'] }}</p></div>
+                                    </div> -->
+                            </div>
+                            <div class="emoji-container">
+
                             </div>
                         
                             <!-- <div id="sliders">
@@ -144,15 +188,17 @@ import NewSnippet from '../sections/components/NewSnippet.vue'
 import ChatBubble from '../sections/components/ChatBubble.vue'
 import ChatTyper from '../sections/components/ChatTyper.vue'
 import TheEmojiButtons from '../sections/components/TheEmojiButtons.vue'
-// import ChatResponse from '../sections/components/ChatResponse.vue'
+import ChatResponse from '../sections/components/ChatResponse.vue'
+import TheSideModal from '../components/base/TheSideModal.vue'
 
 // import { IonChip } from '@ionic/vue'
 import TheIcons from '../sections/components/TheIcons.vue'
 import { send } from 'ionicons/icons'
-import { IonIcon, IonContent } from '@ionic/vue'
+import { IonIcon, IonContent, modalController } from '@ionic/vue'
 
 import speakPhrases from '../composables/phrases'
 import speakTrashPanda from '../composables/trashpandachat'
+import useHelpText from '../composables/helptext'
 
 import { useStore } from 'vuex'
 import { ref } from 'vue'
@@ -166,7 +212,7 @@ export default {
         TheIcons,
         // TheSliders,
         NewSnippet,
-        // ChatResponse,
+        ChatResponse,
         IonIcon,
         IonContent,
         TheEmojiButtons,
@@ -187,12 +233,19 @@ export default {
         const backchat = ref('')
         backchat.value = trashPandaObject.backtalkChat
 
+        //help text
+        const helpTextObject = useHelpText()
+        // const helpchat = ref('')
+
         //set initial moods
         const initVal = ref(0)
         const firstTone = store.state.starterTones[0]
         const secondTone = store.state.starterTones[1]    
 
         return {
+            helpTextObject,
+            helpOptions: helpTextObject.activeHelpOptions,
+            helpActions: helpTextObject.playgroundHelpText,
             trashPandaObject,
             backchat: backchat.value,
             setChat: trashPandaObject.setChat,
@@ -217,6 +270,7 @@ export default {
             // this.checkRender=true;
             // this.addingInit = true
             // this.addInit()
+            setTimeout(() => {this.scrollFix()}, 200)
            
         },
 
@@ -225,18 +279,27 @@ export default {
         // phrase: position, status (boolean), phrase, tone
         //TODO: fill these out with some tut stuff
         return {
+        
+        emojiButtons: [
+            { tone: 'reverse', type: 'special'},
+            { tone: 'upsidedown', type: 'special'},
+        ],
 
         btnStep: {
           angry: 0,
           paggro: 0,
           polite: 0,
-          pirate: 0
+          pirate: 0,
+          reverse: 0,
+          upsidedown: 0,
         },
         prevStep: {
           angry: -1,
           paggro: -1,
           polite: -1,
           pirate: -1,
+          reverse: -1,
+          upsidedown: -1,
         },
 
             starterStrings: [
@@ -258,7 +321,7 @@ export default {
 
             addedChatStrings: [
 
-                {string: "the starter chat string!", icon: 'reg-reg', nextObj: 'starter', nextInner: 'two'},
+                {string: "Here you go. Click on the buttons under your grumble to change the text.", icon: 'reg-reg', nextObj: 'starter', nextInner: 'two'},
             ],
 
             chatCount: 1,
@@ -535,11 +598,11 @@ export default {
                     this.chatted.angry=1
                     this.alertChat()
                 }
-                if(newValue>=8&&this.chatted.angry===1) {
-                    this.setBackchat('high', 'angry')
-                    this.chatted.angry=2
-                    this.alertChat()
-                }
+                // if(newValue>=8&&this.chatted.angry===1) {
+                //     this.setBackchat('high', 'angry')
+                //     this.chatted.angry=2
+                //     this.alertChat()
+                // }
                  if(newValue>=10&&this.chatted.angry===2) {
                     this.setBackchat('max', 'angry')
                     this.chatted.angry=3
@@ -563,11 +626,11 @@ export default {
                     this.chatted.polite=1
                     this.alertChat()
                 }
-                if(newValue>=8&&this.chatted.polite===1) {
-                    this.setBackchat('high', 'polite')
-                    this.chatted.polite=2
-                    this.alertChat()
-                }
+                // if(newValue>=8&&this.chatted.polite===1) {
+                //     this.setBackchat('high', 'polite')
+                //     this.chatted.polite=2
+                //     this.alertChat()
+                // }
                  if(newValue>=10&&this.chatted.polite===2) {
                     this.setBackchat('max', 'polite')
                     this.chatted.polite=3
@@ -591,11 +654,11 @@ export default {
                     this.chatted.paggro=1
                     this.alertChat()
                 }
-                if(newValue>=8&&this.chatted.paggro===1) {
-                    this.setBackchat('high', 'paggro')
-                    this.chatted.paggro=2
-                    this.alertChat()
-                }
+                // if(newValue>=8&&this.chatted.paggro===1) {
+                //     this.setBackchat('high', 'paggro')
+                //     this.chatted.paggro=2
+                //     this.alertChat()
+                // }
                  if(newValue>=10&&this.chatted.paggro===2) {
                     this.setBackchat('max', 'paggro')
                     this.chatted.paggro=3
@@ -620,11 +683,11 @@ export default {
                     this.chatted.pirate=1
                     this.alertChat()
                 }
-                if(newValue>=8&&this.chatted.pirate===1) {
-                    this.setBackchat('high', 'pirate')
-                    this.chatted.pirate=2
-                    this.alertChat()
-                }
+                // if(newValue>=8&&this.chatted.pirate===1) {
+                //     this.setBackchat('high', 'pirate')
+                //     this.chatted.pirate=2
+                //     this.alertChat()
+                // }
                  if(newValue>=10&&this.chatted.pirate===2) {
                     this.setBackchat('max', 'pirate')
                     this.chatted.pirate=3
@@ -647,7 +710,7 @@ export default {
 
         activeMoodLength(newVal) {
             if(newVal>=3&&this.chatted.confused===0) {
-                  this.setBackchat('confused', 'one')
+                //   this.setBackchat('confused', 'one')
                   this.chatted.confused++
                   this.alertChat()
             }  else if(newVal>=3&&this.chatted.confused===1&&this.chatted.confusedReset===true) {
@@ -690,7 +753,39 @@ export default {
 
     methods: {
 
+        navigateHelp(chosenval){
+            
+            //find action and do the corresponding method
+            const actions = this.helpActions.filter((opt) => opt.responseTo===chosenval)
+                if(actions.length>0){
+                let action = actions[0]
+
+                if(action.stringMethod){
+                    action.stringMethod()
+                    this.addedChatStrings.push(
+                        {
+                            string: action.string,
+                            icon: 'reg-reg',
+                            nextObj: 'starter',
+                            nextInner: 'two'
+                        }
+                    )
+                } else if (action.actionMethod){
+                    action.actionMethod()
+                } else if (action.routeMethod){
+                    this.$router.push(action.routeMethod)
+                }
+            }
+        },
+
+        scrollFix(){
+            window.scrollTo(0,1);
+        },
+
         cycleEmoji(tone, type){
+        if(type==='special'||type==='special-sub'){
+            this.handleSpecial(tone, type);
+        }
         if(type==='add'){
           if(this.btnStep[tone]<10){
         //* tracking for button appearance and enable/disable
@@ -720,13 +815,41 @@ export default {
         }
       },
 
+      handleSpecial(tone, type){
+          let mode = ''
+          if(type==='special-sub'){
+              mode = 'sub'
+          } else {
+              mode = 'add'
+          }
+          switch(tone){
+              case 'reverse':
+                  if(mode==='sub'){
+                    this.btnStep[tone]--
+                    this.prevStep[tone]--
+                  } else if (mode==='add'){
+                    this.btnStep[tone]++
+                    this.prevStep[tone]++
+                  }
+                break;
+                case 'upsidedown':
+                    if(mode==='sub'){
+                    this.btnStep[tone]--
+                    this.prevStep[tone]--
+                  } else {
+                    this.btnStep[tone]++
+                    this.prevStep[tone]++
+                  }
+                break;
+          }
+      },
+
         pushSnippet(idx){
             //* FOR STARTER CHATS ONLY
-            console.log('pushing snippet at index: ' + idx)
             if(idx<this.starterStrings.length){
                 this.starterStringObject.push(this.starterStrings[idx])
             } else if (idx===this.starterStrings.length){
-               console.log('placeholder for once strings pushed')    
+            //    console.log('placeholder for once strings pushed')    
             }
         },
 
@@ -744,8 +867,24 @@ export default {
         },
 
         goToEnd(){
+        const classProps = this.getClassProperties()
+        this.$store.state.boxProps = { ...classProps };
         this.$store.state.finalOutput = { ...this.gripeObject }
            this.$router.push('/finish')
+        },
+
+        getClassProperties(){
+            const props = {
+                reverse: false,
+                upsidedown: false,
+            }
+            if(this.btnStep['reverse']>0){
+                props.reverse = true
+            }
+            if(this.btnStep['upsidedown']>0){
+                props.upsidedown = true
+            }
+            return props
         },
 
         alertChat(){
@@ -872,7 +1011,7 @@ export default {
                 // console.log('push difference is: ' + pushDifference)
 
               } catch(e) {
-                  console.log(e)
+                //   console.log(e)
               } finally {
                   //? update final count here, but useful to set init count somewhere else to decide on scenarios
                 //   console.log('all done! moving on')
@@ -913,7 +1052,7 @@ export default {
             await this.nextQueue('add')
             // console.log(added)
             } catch {
-                console.log('error in some part of the queue bit')
+                // console.log('error in some part of the queue bit')
             } finally {
                 //* update total
                 let newTotal = this.updateTotal('base')
@@ -1514,7 +1653,6 @@ export default {
                    
                 }, 500)
             } else {
-                console.log('no backchat keys passed')
                 this.chatCount++
             }
         },
@@ -1547,9 +1685,27 @@ export default {
                 ar.sort(() => {return 0.5 - Math.random()});
             },
 
+        async openModal() {
+        const modal = await modalController.create({
+          component: TheSideModal,
+          cssClass: 'my-custom-class',
+        //   componentProps: {
+        //     title: 'New Title',
+        //   },
+        });
+        return modal.present();
+      },
+
     },
 
      computed: {
+
+        grumbleBox(){
+            return {
+                'reverse': this.btnStep['reverse']>0,
+                'upsidedown': this.btnStep['upsidedown']>0
+            }
+        },
         moodTotal(){
             return this.moodcount.angry+this.moodcount.polite+this.moodcount.paggro+this.moodcount.pirate;
         },
@@ -1594,11 +1750,27 @@ export default {
 <style scoped>
 /* temp styling! make less ugly */
 
+.reverse {
+-moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+}
+
+.upsidedown {
+-moz-transform: scale(1, -1);
+  -webkit-transform: scale(1, -1);
+  -o-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  transform: scale(1, -1);
+}
+
 .show-moodcount {
     text-align: center;
 }
 
-#emoji-container {
+.emoji-container {
     display: flex;
     justify-content: start;
 }
@@ -1607,6 +1779,7 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 7rem;
+    /* justify-items: flex-start; */
 }
 
 .emoji-button {
@@ -1629,20 +1802,6 @@ export default {
 
 .footer-enter-active {
     transition: 1.5s ease-out;
-}
-
-.close-chat {
-    cursor: pointer;
-}
-
-.grey {
-      font-size: 4rem;
-     color: grey;
-}
-
-.red {
-      font-size: 4rem;
-      color: red;
 }
 
 .help {
@@ -1720,8 +1879,8 @@ export default {
     .snippets {
         background-color: #ffffff;
         border-radius: 10px;
-        border: 3px solid rgb(85, 85, 85);
-        box-shadow: 0px 4px 0px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0);
+        border: 3px solid rgb(189, 189, 189);
+        /* box-shadow: 0px 4px 0px 0px #000000, 5px 5px 15px 5px rgba(0,0,0,0); */
         padding: 1rem;
         min-width: 60%;
         
@@ -1741,7 +1900,7 @@ export default {
         display: flex;
         height: 100%;
         width: 100%;
-        position: absolute;
+        /* position: fixed; */
         flex-direction: column;
         justify-content: space-between;
     }
@@ -1779,15 +1938,22 @@ export default {
         }
     }
 
+    /* @media(min-width: 576px) {
+        p {
+            font-size: 1.5rem;
+        }
+    } */
+
     #inner-grid {
         display: grid;
         grid-template-rows: auto min-content;
     }
 
     ion-content#chat {
-        max-height: 50vh;
+        /* max-height: 40vh; */
         --padding-start: 1rem;
         --padding-end: 1rem;
+        overflow: auto;
     }
    
 

@@ -42,8 +42,7 @@
     <h1>?</h1>
     </div>
     <div v-if="name==='profile'"
-    class="avatar">
-        <ion-icon :icon="personCircle"></ion-icon>
+    class="avatar profile">
     </div>
     <div v-if="name==='chat-active'"
     class="avatar"
@@ -71,150 +70,184 @@
     </div>
 
 <!-- emojis -->
+
     <div :class="gradation">
 
 <!-- tone - one -->
         <div
         v-if="name==='angry-one'"
-        class='angry-one avatar'>
-        <span>😡</span>
+        class='angry-one one e-container'>
+        <span>😠</span>
         </div>
 
         <div
         v-if="name==='paggro-one'"
-        class='paggro-one avatar'>
+        class='paggro-one one e-container'>
         <span>🙄</span>
         </div>
 
         <div
         v-if="name==='polite-one'"
-        class='polite-one avatar'>
-       <span>😅</span>
+        class='polite-one one e-container'>
+       <span>😧</span>
         </div>
 
         <div
         v-if="name==='pirate-one'"
-        class='pirate-one avatar'
+        class='pirate-one one e-container'
         >
-       <span>🦜</span>
+       <span>🏴‍☠️</span>
+        </div>
+
+        <div
+        v-if="name==='reverse'"
+        class='e-container'
+        >
+       <span>↩️</span>
+        </div>
+
+        <div
+        v-if="name==='upsidedown'"
+        class='e-container'
+        >
+       <span>⤵️</span>
         </div>
 <!-- tone - two -->
         <div
         v-if="name==='angry-two'"
-        class='angry-two avatar'>
+        class='angry-two two e-container'>
         <span>😡</span>
         </div>
 
         <div
         v-if="name==='paggro-two'"
-        class='paggro-two avatar'>
+        class='paggro-two two e-container'>
         <span>🙄</span>
         </div>
 
         <div
         v-if="name==='polite-two'"
-        class='polite-two avatar'>
-       <span>😅</span>
+        class='polite-two two e-container'>
+       <span>😨</span>
         </div>
 
         <div
         v-if="name==='pirate-two'"
-        class='pirate-two avatar'
+        class='pirate-two two e-container'
         >
-         <span>🦜</span>
+         <span>🏴‍☠️</span>
         </div>
 <!-- tone - three-->
         <div
         v-if="name==='angry-three'"
-        class='angry-three avatar l'>
-        <span>😡</span>
+        class='angry-three three e-container'>
+        <span>🤬</span>
         </div>
 
         <div
         v-if="name==='paggro-three'"
-        class='paggro-three avatar l'>
+        class='paggro-three three e-container'>
         <span>🙄</span>
         </div>
 
         <div
         v-if="name==='polite-three'"
-        class='polite-three avatar l'>
-       <span>😅</span>
+        class='polite-three three e-container'>
+       <span>😰</span>
         </div>
 
         <div
         v-if="name==='pirate-three'"
-        class='pirate-three avatar l'
+        class='pirate-three three e-container'
         >
-          <span>🦜</span>
+          <span>🏴‍☠️</span>
         </div>
 <!-- tone - four -->
         <div
         v-if="name==='angry-four'"
-        class='angry-four avatar xl'>
-        <span>😡</span>
+        class='angry-four four e-container'>
+        <span>🤬</span>
         </div>
 
         <div
         v-if="name==='paggro-four'"
-        class='paggro-four avatar xl'>
+        class='paggro-four four e-container'>
         <span>🙄</span>
         </div>
 
         <div
         v-if="name==='polite-four'"
-        class='polite-four avatar xl'>
-      <span>😅</span>
+        class='polite-four four e-container'>
+      <span>😰</span>
         </div>
         
         <div
         v-if="name==='pirate-four'"
-        class='pirate-four avatar xl'>
-          <span>🦜</span>
+        class='pirate-four four e-container'>
+          <span>🏴‍☠️</span>
         </div>
 <!-- tone - neutral (starting add button) -->
        <div
         v-if="name==='angry-neutral'"
-        class='angry-neutral avatar'>
+        class='angry-neutral e-container'>
         </div>
 
         <div
         v-if="name==='paggro-neutral'"
-        class='paggro-neutral avatar'>
+        class='paggro-neutral e-container'>
         </div>
 
         <div
         v-if="name==='polite-neutral'"
-        class='polite-neutral avatar'>
-       
+        class='polite-neutral e-container'>
         </div>
 
         <div
         v-if="name==='pirate-neutral'"
-        class='pirate-neutral avatar'>
+        class='pirate-neutral e-container'>
       
         </div>
 <!-- tone - sub = always sub button -->
-        <div
-        v-if="name==='angry-sub'"
-        class='angry-neutral avatar sub-emoje'>
-        
+        <div class="sub-e-container"
+        v-if="name==='angry-sub'">
+        <span
+         class='angry-neutral sub-emoje'>😠</span>
         </div>
        
-        <div
-        v-if="name==='paggro-sub'"
-        class='paggro-neutral avatar sub-emoje'>
+        <div class="sub-e-container"
+        v-if="name==='paggro-sub'">
+        <span class='paggro-neutral sub-emoje'>🙄</span>
         </div>
-        <div
-        v-if="name==='polite-sub'"
-        class='polite-neutral avatar sub-emoje'>
-       
+
+        <div class="sub-e-container"
+        v-if="name==='polite-sub'">
+        <span class='polite-neutral sub-emoje'>
+        😧
+        </span>
         </div>
         
-        <div
+        <div class="sub-e-container"
         v-if="name==='pirate-sub'"
-        class='pirate-neutral avatar sub-emoje'>
-    
+        >
+         <span
+         class='pirate-neutral sub-emoje'
+         >🏴‍☠️</span>
+        </div>
+
+        <div class="sub-e-container"
+        v-if="name==='reverse-sub'"
+        >
+         <span
+         class='sub-emoje'
+         >↪️</span>
+        </div>
+
+        <div class="sub-e-container"
+        v-if="name==='upsidedown-sub'"
+        >
+         <span
+         class='sub-emoje'
+         >⤴️</span>
         </div>
     </div>
 
@@ -249,6 +282,7 @@ export default {
                         choice = 'sub-emoje'
                     break;
                     case 5:
+                        //* starter for tone 0
                         choice= 'graded-0'
                     break;
                     case 10:
@@ -278,6 +312,9 @@ export default {
                     case 90:
                         choice = 'graded-90'
                     break;
+                     case 100:
+                        choice = 'graded-100'
+                    break;
                 }
                 
             } else {
@@ -300,66 +337,131 @@ ion-icon {
 /* emojis - neutral */
 
 /* PLACEHOLDER */
-.angry-neutral {
+/* .angry-neutral {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 248.81 222.38'%3E%3Cdefs%3E%3Cstyle%3E.a%7Bfill:%2357fde4;%7D.b%7Bfill:%230d0e0e;%7D.c%7Bfill:%230e0e0c;%7D.d%7Bfill:%2318aaad;%7D%3C/style%3E%3C/defs%3E%3Cpath class='a' d='M142.77,217.43C-70.42,232.21-12.71-37.71,164.23,12,284.31,39.45,259.34,214.92,142.77,217.43Z'/%3E%3Cpath class='b' d='M84.74,113.83c-17.83.75-20.47-26-2.79-26.6C98.47,87.11,103.8,113.28,84.74,113.83Z'/%3E%3Cpath class='b' d='M161.46,112.24c-17.14.44-18.09-24.51-1-24.5C177.11,87.26,178.22,112.15,161.46,112.24Z'/%3E%3Cpath class='c' d='M181.84,154.35c-.75,6.47-4.9,8.08-14,7.73-13.21-.51-26.5-.37-39.76-.38-18.8,0-37.61.14-56.41,0-6.56,0-9.9-2-10.08-5.15-.21-3.71,3.86-6.84,10.2-6.94,10.43-.16,20.88.09,31.31.26,19.1.3,38.2.69,57.3,1a25.82,25.82,0,0,0,4.32-.61,25.34,25.34,0,0,1,14.08,1.54A9.78,9.78,0,0,1,181.84,154.35Z'/%3E%3Cpath class='d' d='M18.88,87.28c-22.17,81.47,71,127.19,141.05,108.05,39.46-9.86,79.42-50.14,76.46-88.4C251.06,296.39-53.6,219.73,18.88,87.28Z'/%3E%3Cpath class='b' d='M143.66,221.77C-79.8,237.27-19.31-45.65,166.15,6.4,292,35.23,265.83,219.14,143.66,221.77ZM20,85.31h0C-30.11,184.12,124.3,239.71,193,189.87,328.68,65,83.63-78.27,20,85.31Z'/%3E%3C/svg%3E");
-}
+} */
 
-.paggro-neutral {
+/* .paggro-neutral {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 212.76 209.1'%3E%3Cdefs%3E%3Cstyle%3E.a%7Bfill:%23f7e247;%7D.b%7Bfill:%23b9980b;%7D.c%7Bfill:%23fefefe;%7D.d%7Bfill:%230e0e0c;%7D.e%7Bfill:%230b0b0b;%7D%3C/style%3E%3C/defs%3E%3Cpolygon class='a' points='202.1 200.71 43.86 202.29 5.96 169.33 9.66 9.42 201.56 6.81 206.18 41.56 202.1 200.71'/%3E%3Cpath class='b' d='M186.32,72c-2.07-18.77-2-37.78-2.19-56.78,3.75-.37,12.88-.73,16.63-1.09,1.51,54.5-1.33,118-4,175.74-45.83-1.62-91.5-2.26-137.4-2.37-.14-1.72-.24-2.78-.33-3.84,42-3.77,84-.39,126.14,1.56C187.46,147.42,188.42,109.72,186.32,72Z'/%3E%3Cpath class='a' d='M47.57,195C32,195.25,17.3,177.64,10,165.85c10.85-4.62,26.32,2.46,38.56-1.36C48.26,174.51,47.93,184.47,47.57,195Z'/%3E%3Cpath class='c' d='M67.57,103.46l1.52.53Z'/%3E%3Cpath class='c' d='M51.82,93.91l.55.87Z'/%3E%3Cpath class='c' d='M55.1,55.51l-.58.62Z'/%3E%3Cpath class='c' d='M55.77,55l-.74.57Z'/%3E%3Cpath class='d' d='M212.67,70.29c.64,41.55-2.23,83-3.43,124.55-1.92,23-33.73,9.85-49.63,13.49C119,206.05,71.37,214.06,34,203.41-5.22,183.82,1.73,152.55,4.19,115.67,1.53,84.72,1.84,53.65,1,22.61c-3-15.87.2-22,17.45-21C61,.65,103.49,2.85,146,3.05c83.65-5.12,63.65-13.55,66.13,67.24ZM198.52,31.5c-.2-5.81-.41-11.63-.61-17.37-60.74,5.64-121.71,3.56-182.6,5,3.22,44.91-4.62,89.49.37,134.27,36.42,1.43,46.12-10.67,45.2,34.05,44.77.11,89.33.75,134,2.37C197.79,137,199.53,84.24,198.52,31.5ZM47.57,195c.36-10.56.69-20.52,1-30.54-12.25,3.82-27.7-3.25-38.56,1.35C17.31,177.65,32,195.24,47.57,195Z'/%3E%3Cpath class='d' d='M172.25,123.81c-.75,6.48-4.91,8.09-14,7.74-13.22-.51-26.51-.37-39.76-.39-18.81,0-37.61.15-56.41.05-6.56,0-9.9-2-10.08-5.15-.21-3.71,3.85-6.84,10.19-6.94,10.43-.17,20.88.09,31.32.25,19.1.31,38.19.7,57.29,1a25.65,25.65,0,0,0,4.32-.6,25.32,25.32,0,0,1,14.08,1.54A10,10,0,0,1,172.25,123.81Z'/%3E%3Cpath class='e' d='M62.33,68.45C63.51,72,64.28,75.72,66,79c3.13,6.12,10.21,7,15.27,2.25,6.7-6.29,5.53-19.75-2.65-24-2.71-1.41-7-1.21-10.1-.25C64.63,58.22,62.78,63.18,62.33,68.45Z'/%3E%3Cpath class='e' d='M159,69.94c-.14-9.41-7.48-16.47-15.26-14.67-5.7,1.32-9.58,6.76-10,14-.38,6.28,3.41,12.83,8.57,14.48a10.88,10.88,0,0,0,4.53.44C152.6,83.47,159.13,75.69,159,69.94Z'/%3E%3C/svg%3E");
-}
+} */
 
-.polite-neutral {
+/* .polite-neutral {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 248.81 222.38'%3E%3Cdefs%3E%3Cstyle%3E.a%7Bfill:%2357fde4;%7D.b%7Bfill:%230d0e0e;%7D.c%7Bfill:%230e0e0c;%7D.d%7Bfill:%2318aaad;%7D%3C/style%3E%3C/defs%3E%3Cpath class='a' d='M142.77,217.43C-70.42,232.21-12.71-37.71,164.23,12,284.31,39.45,259.34,214.92,142.77,217.43Z'/%3E%3Cpath class='b' d='M84.74,113.83c-17.83.75-20.47-26-2.79-26.6C98.47,87.11,103.8,113.28,84.74,113.83Z'/%3E%3Cpath class='b' d='M161.46,112.24c-17.14.44-18.09-24.51-1-24.5C177.11,87.26,178.22,112.15,161.46,112.24Z'/%3E%3Cpath class='c' d='M181.84,154.35c-.75,6.47-4.9,8.08-14,7.73-13.21-.51-26.5-.37-39.76-.38-18.8,0-37.61.14-56.41,0-6.56,0-9.9-2-10.08-5.15-.21-3.71,3.86-6.84,10.2-6.94,10.43-.16,20.88.09,31.31.26,19.1.3,38.2.69,57.3,1a25.82,25.82,0,0,0,4.32-.61,25.34,25.34,0,0,1,14.08,1.54A9.78,9.78,0,0,1,181.84,154.35Z'/%3E%3Cpath class='d' d='M18.88,87.28c-22.17,81.47,71,127.19,141.05,108.05,39.46-9.86,79.42-50.14,76.46-88.4C251.06,296.39-53.6,219.73,18.88,87.28Z'/%3E%3Cpath class='b' d='M143.66,221.77C-79.8,237.27-19.31-45.65,166.15,6.4,292,35.23,265.83,219.14,143.66,221.77ZM20,85.31h0C-30.11,184.12,124.3,239.71,193,189.87,328.68,65,83.63-78.27,20,85.31Z'/%3E%3C/svg%3E");
+} */
+
+/* .pirate-neutral {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 239.05 217.72'%3E%3Cdefs%3E%3Cstyle%3E.a%7Bopacity:0.9;%7D.b%7Bfill:%23f93ad0;%7D.c%7Bfill:%23aa1d9d;%7D.d%7Bfill:%230e0e0c;%7D.e%7Bfill:%230b0b0b;%7D%3C/style%3E%3C/defs%3E%3Cg class='a'%3E%3Cpath class='b' d='M229.91,104.47c50.77,123.58-123.5,127.7-192.09,97.78C-87.9,143.92,132-155.25,229.91,104.47Z'/%3E%3C/g%3E%3Cpath class='c' d='M7.89,138.49c-3.2,24.77,10.19,40.71,38.17,53.15,0,0,5-12.08,4.5-16.26C44.28,127.74,7.89,138.49,7.89,138.49Z'/%3E%3Cpath class='c' d='M231.62,153.13c-.52,24-16.11,37.39-45.61,45.53,0,0-2.88-12.08-2-16.06C191.39,148.05,231.62,153.13,231.62,153.13Z'/%3E%3Cpath d='M123.66,0V15c16.5,0,32.14,6.62,46.48,19.66,17.59,16,33,41.27,45.74,75.11l.08.2.08.2c10.37,25.26,10.65,45.51.8,60.19-7,10.4-19.06,18.54-35.94,24.19-16,5.35-35.74,8.17-57.14,8.17-29.12,0-59.67-5.42-79.79-14.15-12.54-5.86-21.12-14.94-25.49-27-4.22-11.62-4.6-26.15-1.1-42,5.53-25.06,20.58-52,40.25-72,20.71-21,44.16-32.63,66-32.63V0m0,0C32.47,0-50.89,161.09,37.82,202.25c21.61,9.43,53.69,15.47,85.94,15.47,70.11,0,140.93-28.6,106.15-113.25C201.08,28,161.69,0,123.65,0Z'/%3E%3Cpath class='d' d='M179,145.62c-.75,6.48-4.9,8.09-14,7.74-13.21-.51-26.5-.37-39.76-.39-18.8,0-37.61.15-56.41.05-6.56,0-9.9-2-10.08-5.15-.2-3.71,3.86-6.84,10.2-6.94,10.43-.16,20.88.09,31.31.26,19.1.3,38.2.69,57.3,1a24.8,24.8,0,0,0,4.32-.6A25.34,25.34,0,0,1,176,143.12,9.92,9.92,0,0,1,179,145.62Z'/%3E%3Cpath class='e' d='M75.07,92.26c1.18,3.53,2,7.27,3.64,10.57,3.12,6.12,10.2,7,15.26,2.25,6.71-6.29,5.54-19.75-2.65-24-2.71-1.41-7-1.2-10.09-.25C77.37,82,75.52,87,75.07,92.26Z'/%3E%3Cpath class='e' d='M165.79,95.75c-.14-9.41-7.49-16.47-15.27-14.66-5.7,1.31-9.58,6.75-10,14-.37,6.28,3.41,12.83,8.57,14.48a10.91,10.91,0,0,0,4.54.44C159.35,109.28,165.87,101.5,165.79,95.75Z'/%3E%3C/svg%3E");
+} */
+
+.e-container {
+    text-align: start;
+    font-size: 1.4rem;
 }
 
-.pirate-neutral {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 239.05 217.72'%3E%3Cdefs%3E%3Cstyle%3E.a%7Bopacity:0.9;%7D.b%7Bfill:%23f93ad0;%7D.c%7Bfill:%23aa1d9d;%7D.d%7Bfill:%230e0e0c;%7D.e%7Bfill:%230b0b0b;%7D%3C/style%3E%3C/defs%3E%3Cg class='a'%3E%3Cpath class='b' d='M229.91,104.47c50.77,123.58-123.5,127.7-192.09,97.78C-87.9,143.92,132-155.25,229.91,104.47Z'/%3E%3C/g%3E%3Cpath class='c' d='M7.89,138.49c-3.2,24.77,10.19,40.71,38.17,53.15,0,0,5-12.08,4.5-16.26C44.28,127.74,7.89,138.49,7.89,138.49Z'/%3E%3Cpath class='c' d='M231.62,153.13c-.52,24-16.11,37.39-45.61,45.53,0,0-2.88-12.08-2-16.06C191.39,148.05,231.62,153.13,231.62,153.13Z'/%3E%3Cpath d='M123.66,0V15c16.5,0,32.14,6.62,46.48,19.66,17.59,16,33,41.27,45.74,75.11l.08.2.08.2c10.37,25.26,10.65,45.51.8,60.19-7,10.4-19.06,18.54-35.94,24.19-16,5.35-35.74,8.17-57.14,8.17-29.12,0-59.67-5.42-79.79-14.15-12.54-5.86-21.12-14.94-25.49-27-4.22-11.62-4.6-26.15-1.1-42,5.53-25.06,20.58-52,40.25-72,20.71-21,44.16-32.63,66-32.63V0m0,0C32.47,0-50.89,161.09,37.82,202.25c21.61,9.43,53.69,15.47,85.94,15.47,70.11,0,140.93-28.6,106.15-113.25C201.08,28,161.69,0,123.65,0Z'/%3E%3Cpath class='d' d='M179,145.62c-.75,6.48-4.9,8.09-14,7.74-13.21-.51-26.5-.37-39.76-.39-18.8,0-37.61.15-56.41.05-6.56,0-9.9-2-10.08-5.15-.2-3.71,3.86-6.84,10.2-6.94,10.43-.16,20.88.09,31.31.26,19.1.3,38.2.69,57.3,1a24.8,24.8,0,0,0,4.32-.6A25.34,25.34,0,0,1,176,143.12,9.92,9.92,0,0,1,179,145.62Z'/%3E%3Cpath class='e' d='M75.07,92.26c1.18,3.53,2,7.27,3.64,10.57,3.12,6.12,10.2,7,15.26,2.25,6.71-6.29,5.54-19.75-2.65-24-2.71-1.41-7-1.2-10.09-.25C77.37,82,75.52,87,75.07,92.26Z'/%3E%3Cpath class='e' d='M165.79,95.75c-.14-9.41-7.49-16.47-15.27-14.66-5.7,1.31-9.58,6.75-10,14-.37,6.28,3.41,12.83,8.57,14.48a10.91,10.91,0,0,0,4.54.44C159.35,109.28,165.87,101.5,165.79,95.75Z'/%3E%3C/svg%3E");
+.sub-e-container {
+    text-align: start;
+    display: flex;
+    font-size: 1.4rem;
+    position: absolute;
 }
+
+/* .pirate-neutral:before, .paggro-neutral:before, .angry-neutral:before, .polite-neutral:before{
+ 
+    left: 0%;
+    top: -50%;
+    display: inline-block;
+    width: 100%;
+    display: inline-block;
+    content: "🚫";
+    transform: scale(0.8) translate(1rem, 2rem);
+} */
+
+.pirate-neutral:after, .paggro-neutral:after, .angry-neutral:after, .polite-neutral:after{
+ 
+    display: inline-block;
+    /* width: 100%; */
+    content: "🚫";
+    transform: scale(0.8) translate(-1rem);
+}
+
+   /* overflow: hidden; */
+    /* position: relative; */
+
 
 .sub-emoje {
-    opacity: 100%;
-    filter: grayscale(100%)
+    text-align: start;
+    position: relative;
+    /* vertical-align: text-top; */
+    /* filter: grayscale(15%); */
+    /* text-align: center; */
+    /* padding-top: 3px; */
 }
 
 .graded-0 {
-    /* opacity: 10%; */
-    filter: grayscale(80%)
+    filter: grayscale(30%);
 }
+
 .graded-10 {
     /* opacity: 10%; */
-    filter: grayscale(65%)
+    filter: grayscale(20%);
+    transform: scale(1.1);
+    transform-origin: center;
 }
 .graded-20 {
     /* opacity: 20%; */
-    filter: grayscale(65%)
+    filter: grayscale(20%);
+    transform: scale(1.2);
+    transform-origin: center;
 }
 .graded-30 {
     /* opacity: 30%; */
-    filter: grayscale(50%)
+    filter: grayscale(10%);
+    transform: scale(1.3);
+    transform-origin: center;
 }
 .graded-40 {
     /* opacity: 40%; */
-    filter: grayscale(35%)
+    filter: grayscale(10%);
+    transform: scale(1.4);
+    transform-origin: center;
 }
 .graded-50 {
     /* opacity: 50%; */
-    filter: grayscale(35%)
+    filter: grayscale(5%);
+    transform: scale(1.5);
+    transform-origin: center;
+
 }
 .graded-60 {
     /* opacity: 60%; */
-    filter: grayscale(20%)
+    filter: grayscale(5%);
+    transform: scale(1.6);
+    transform-origin: center;
+
 }
 .graded-70 {
     /* opacity: 70%; */
-    filter: grayscale(10%)
+    transform: scale(1.7);
+    transform-origin: center;
+    /* font-size: 1.8rem; */
 }
 .graded-80 {
     /* opacity: 80%; */
-    filter: grayscale(10%)
+    transform: scale(1.8);
+    transform-origin: center;
+  
 }
 .graded-90 {
     /* opacity: 90%; */
-    filter: grayscale(10%)
+
+    transform: scale(1.9);
+    transform-origin: center;
+}
+
+.graded-100 {
+    /* opacity: 90%; */
+    transform: scale(2);
+    transform-origin: center;
 }
 
 .chat-normal {
@@ -394,16 +496,11 @@ ion-icon {
 .avatar {
     width: 4rem;
     height: 4rem;
-    max-width: 6rem;
-    max-height:4rem;
-  
-    background-size: 75%;
-    /* background-position: 50% 20%; */
-    background-repeat: no-repeat
+    font-size: 2rem;
 }
 
 /* placeholders - may be needed */
-.avatar.l {
+/* .avatar.l {
     background-size: 90%
 }
 
@@ -411,7 +508,7 @@ ion-icon {
     background-size: 100%;
     margin-left: -5px;
     margin-top: -3px;
-}
+} */
 
 /* .avatar.l {
     width: 4rem;
@@ -453,12 +550,27 @@ ion-icon {
 .user.avatar {
     height: 4rem;
     width: 4rem;
+   
+}
+
+.profile {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 243.48 222.5'%3E%3Cdefs%3E%3Cstyle%3E.a%7Bfill:%239f9f9f;%7D.b%7Bfill:%23eef7f6;%7D.c%7Bfill:%23030303;%7D.d%7Bfill:%230e0e0e;%7D%3C/style%3E%3C/defs%3E%3Cpath class='a' d='M27.66,169.4a17,17,0,0,1-1.8-1.91c-11.29-16.75-16.34-35-11.88-55C19.88,86,30.9,61.57,50.51,42.56,79.84,14.14,115.59,7.5,154.64,16.18c16,3.55,28.94,13.3,41.54,23C213.9,52.81,226.6,70.31,232.8,92.07c3,10.64,2.38,21.36,0,32-5.3,23.31-15.29,44.11-32.83,60.8-1.74,1.66-4.05,2.73-6.09,4.07a56.17,56.17,0,0,0,.24-7.21c-1-11.89-1.09-24-3.61-35.57-4.84-22.29-16.24-40.41-37.72-50.7-.44-.21-.62-2.06-.22-2.73,6.08-10.15,7.76-20.79,3.75-32.08-10-28.08-44.13-38.16-69.38-20.29A36.57,36.57,0,0,0,70.94,68c-.85,9.63,2.9,17.92,8.32,25.55,1.39,1.95.77,2.18-1.13,2.93-5.86,2.32-12.11,4.21-17.24,7.68-19,12.82-28,32-32.47,53.69C27.64,161.56,27.89,165.53,27.66,169.4Z'/%3E%3Cpath class='b' d='M177.55,198.51c-40.24,13.66-80.09,13-119.24-3.95-6.56-2.84-12.33-7.49-18.47-11.31.29-3.24.68-6.48.87-9.72,1.16-19.36,7.75-36.51,21.57-50.28,8-8,17.31-13.39,29.49-11.2,4.54.82,11.28-6.94,10.48-11.54A9.13,9.13,0,0,0,100.77,97c-1.58-2.31-3.42-4.44-5-6.75C93.18,86.57,90.5,82.91,88.28,79c-3.53-6.22-2.68-12.28,1.23-18.17a29.1,29.1,0,0,1,47.65-1.19C142.72,67,143.4,74.9,138.83,83a89.69,89.69,0,0,1-5.67,8.63c-5.57,7.71-3.89,13.26,5.1,16.42A48.2,48.2,0,0,1,165.47,131c6.16,11.21,8.6,23.39,9.57,36C175.86,177.48,176.72,188,177.55,198.51Z'/%3E%3Cpath class='c' d='M177.55,198.51c-.83-10.51-1.69-21-2.51-31.54-1-12.58-3.41-24.76-9.57-36a48.2,48.2,0,0,0-27.21-22.93c-9-3.16-10.67-8.71-5.1-16.42A89.69,89.69,0,0,0,138.83,83c4.57-8.12,3.89-16-1.67-23.4a29.1,29.1,0,0,0-47.65,1.19c-3.91,5.89-4.76,12-1.23,18.17,2.22,3.93,4.9,7.59,7.47,11.31,1.6,2.31,3.44,4.44,5,6.75a9.13,9.13,0,0,1,1.48,3.47c.8,4.6-5.94,12.36-10.48,11.54-12.18-2.19-21.51,3.25-29.49,11.2C48.46,137,41.87,154.17,40.71,173.53c-.19,3.24-.58,6.48-.87,9.72-1.24,2.23-3.18,4-5.61,3A8.27,8.27,0,0,1,30,181.67c-1.21-3.95-1.58-8.17-2.3-12.27.23-3.87,0-7.84.76-11.59,4.51-21.68,13.51-40.87,32.47-53.69,5.13-3.47,11.38-5.36,17.24-7.68,1.9-.75,2.52-1,1.13-2.93C73.84,85.88,70.09,77.59,70.94,68a36.57,36.57,0,0,1,16-27.58c25.25-17.87,59.42-7.79,69.38,20.29,4,11.29,2.33,21.93-3.75,32.08-.4.67-.22,2.52.22,2.73,21.48,10.29,32.88,28.41,37.72,50.7,2.52,11.57,2.57,23.68,3.61,35.57a56.17,56.17,0,0,1-.24,7.21c-.44,2.58-.52,5.29-1.39,7.72-2.66,7.42-9,8.49-14.12,2.56C178.1,199,177.81,198.76,177.55,198.51Z'/%3E%3Cpath class='d' d='M.4,114.44c0-.27,0-.54,0-.82l.27-1.5.06-1,.28-1.1c.13-.84.26-1.67.4-2.51l.28-1.37c0-.27.07-.55.11-.82a13.36,13.36,0,0,0,.69-1.67A175.5,175.5,0,0,1,30.2,44.19c3.37-4.67,7.35-8.86,11.05-13.26C50.67,22.69,60.49,15.05,72,10.23,98.62-.87,125.75-3.5,153.61,5.13c1.34.42,2.87.1,4.3.23,2.76.27,5.74,0,8.23,1C204.59,21.82,230.43,49.54,241.56,91c3.14,11.72,2,23.8-.53,35.58a147.71,147.71,0,0,1-27.06,59c-13.77,18.07-32.21,28.33-53.21,32.5-36.78,7.3-73.34,6.48-108.52-9.92C19.55,193-1.49,158,.08,121c.07-1.54,0-3.08,0-4.62C.21,115.73.31,115.09.4,114.44Zm39.44,68.81c6.14,3.82,11.91,8.47,18.47,11.31,39.15,17,79,17.61,119.24,3.95.26.25.55.46.78.73,5.09,5.93,11.46,4.86,14.12-2.56.87-2.43,1-5.14,1.39-7.72,2-1.34,4.35-2.41,6.09-4.07,17.54-16.69,20.43-28.82,25.73-52.13,2.42-10.66,3.68-25.84.65-36.48-6.2-21.77-12.41-43.47-30.13-57.1-12.6-9.7-25.57-19.45-41.54-23-39-8.68-74.8-2-104.13,26.38C30.9,61.57,19.88,86,14,112.48c-4.46,20,.59,38.26,11.88,55a17,17,0,0,0,1.8,1.91c.72,4.1,1.09,8.32,2.3,12.27a8.27,8.27,0,0,0,4.27,4.55C36.66,187.26,38.6,185.48,39.84,183.25Z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    height: 3rem;
+    width: 3rem;
 }
 
 .reg {
     height: 3rem;
     width: 3rem;
     background-repeat: no-repeat
+}
+
+@media (min-width: 660px) {
+    .profile, .reg {
+    height: 4rem;
+    width: 4rem;
+    }
 }
 
 .grumblr-logo {

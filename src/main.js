@@ -34,6 +34,7 @@ const store = createStore({
     return {
       baseOutput: {},
       finalOutput: {},
+      boxProps: {},
       gripeString: '',
       chosenPronouns: {},
       personmateArticle: '',

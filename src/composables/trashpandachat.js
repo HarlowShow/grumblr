@@ -78,7 +78,7 @@ export default function speakTrashPanda(startingIdx = 0) {
         { string: 'Which bit should we change?'},
         { string: 'Finally, how does all this make you feel?', type: 'formQ'},
         { string: "And what are you gonna do about it?", type: 'formQ'},
-        { string: "I can work with this. How's about I whip ya' up a little sump'n sump'n?", type: 'formQ'},
+        { string: "I'd feel the same. I can work with this... should I whip something up?", type: 'formQ'},
         { string: "Too bad schmucko! I didn't build in a back button yet. Here we go!", type: 'response'},
         { string: "Who - or what - should we grumble about?", stringTwo: ''},
         { string: "Which bit do you want to change?", type: 'response'},
@@ -96,29 +96,30 @@ export default function speakTrashPanda(startingIdx = 0) {
         },
 
         medium: {
-            angry: 'Oh my.',
+            angry: 'Oh my...',
             polite: 'That\'s nice...',
-            paggro: 'I\'m sensing a spot of unresolved tension',
-            pirate: 'Yaarrrrrrrggggghhhh?',
+            paggro: 'Is that a bit...? Nevermind...',
+            pirate: 'Yaarrrrrrrggggghhhh...',
         },
 
-        high: {
-            angry: 'Have you tried taking a few deep breaths?',
-            polite: 'That\'s right, you need to take a defiant stand. Set clear boundaries. Just like that.',
-            paggro: 'Oh no you DIDN\'T',
-            pirate: 'It seems like you\re returning to your authentic self. Will things ever be the same again?',
-        },
+        // high: {
+        //     angry: 'Have you tried taking a few deep breaths?',
+        //     polite: 'That\'s right, you need to take a defiant stand. Set clear boundaries. Just like that.',
+        //     paggro: 'Oh no you DIDN\'T',
+        //     pirate: 'It seems like you\re returning to your authentic self. Will things ever be the same again?',
+        // },
 
         max: {
-            angry: `I know it's been a rough time, but I'm not sure that ${chatName.value} deserves THIS...`,
-            polite: 'Well you sure told them.',
-            paggro: 'It\'s ok. Everything will be ok.',
+            angry: `Have you tried taking a few deep breaths?`,
+            polite: "I couldn't have put it better myself.",
+            paggro: "I'm definitely sensing a spot of unresolved tension.",
             pirate: 'YAAAAARRRRRRGGGGGGHHHHHHHHHHHHHH.',
         },
 
         confused: {
+            // * confused one atm will be set to happen never
             one: `Are we sending ${chatName.value} mixed messages? We might be sending ${chatName.value} mixed messages.`,
-            two: "Everything's going to be alright"
+            two: `Are we sending ${chatName.value} mixed messages? We might be sending ${chatName.value} mixed messages.`
         },
 
         alerts: {
@@ -132,10 +133,7 @@ export default function speakTrashPanda(startingIdx = 0) {
 
         let newChat = backtalkChats[objKey]
         let newChatString = newChat[innerKey]
-    
-        // console.log('new chat string is: ' + newChatString)
         return newChatString
-        // console.log('new chat string is: ' + newChatString.value)
     })
 
     function nextChat() {
@@ -144,13 +142,8 @@ export default function speakTrashPanda(startingIdx = 0) {
         if(limit>chatIdx.value) {
         currentChat.value = formChats.value[chatIdx.value]
         currentString.value = currentChat.value.string
-        // console.log('current string is ' + currentString.value)
-        // console.log('length is: ' + length)
-        // console.log('idx is: ' + chatIdx.value)
         chatIdx.value++
         } else {
-            //reset index
-            // console.log('index reset')
             chatIdx.value = 0;
             nextChat()
         }

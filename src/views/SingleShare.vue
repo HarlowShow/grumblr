@@ -10,13 +10,16 @@
              :additionalBubbles="1"
             >
                 <template v-slot:end>
-                    <p>{{`check out this spicy grumble about ${personmate} ${name}`}}</p>
+                   
+                    <p>{{`I've been grumbling about ${personmate} ${name}`}}</p>
                 </template>
                  <template v-slot:third>
                       <the-icons :name="'reg-reg'"></the-icons>
                 </template>
                  <template v-slot:end-next>
+                      <div :class="classObject">
                          <p> {{ grumbleText }}</p>
+                        </div>
                 </template>
             </chat-bubble>
 
@@ -35,6 +38,7 @@
 
 <script>
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 import { db } from '../firebase/config'
 import { collection, getDocs } from 'firebase/firestore'
 
@@ -54,7 +58,9 @@ export default {
 
     setup(props){
         // console.log(props.id)
+        const store = useStore()
         const grumble = ref({})
+        const classObject = store.state.boxProps
 
         const query = getDocs(collection(db, 'grumbles'))
         .then(querySnapshot => 
@@ -75,6 +81,7 @@ export default {
         return {
             query,
             grumble,
+            classObject
         }
     },
 
@@ -151,5 +158,21 @@ export default {
       justify-content: center;
       padding: 0.25rem;
     }
+
+.reverse {
+-moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+}
+
+.upsidedown {
+-moz-transform: scale(1, -1);
+  -webkit-transform: scale(1, -1);
+  -o-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  transform: scale(1, -1);
+}
 
 </style>

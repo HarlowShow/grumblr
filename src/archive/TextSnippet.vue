@@ -64,7 +64,6 @@ export default {
     },
 
    mounted() {
-        console.log('this snipped has been updated this many times: ' + this.total)
         this.rendered=true
     },
 
@@ -118,7 +117,6 @@ export default {
             this.optionItem++
             this.dostuff();
             } else {
-            console.log('no more stuff to do already reached:' + this.optionItem)
             this.active = false
             }
         },
@@ -129,34 +127,17 @@ export default {
                     setTimeout(()=> {
                         this.doOther();
                     }, 30);
-            } else {
-                console.log('no, stop!')
             }
         },
         
         startAdd(newVal){
 
-               
-
                 this.snippetOneActive = !this.snippetOneActive
                 this.snippetTwoActive = !this.snippetTwoActive
                 this.active = true
-
-                console.log(this.stateMoodcount)
-            
-                // console.log('doing start add')
-                // console.log('new value is' + newVal)
-                // console.log('old value is' + oldVal)
-
-                // console.log('add count is' + this.addCount)
-                // console.log('old add count is' + this.oldAddCount)
-
                 this.nextSnippet = newVal
                 this.snippetArray = [...newVal]
                 this.optionLimit = this.snippetArray.length
-        
-                // console.log('snippet array is' + this.snippetArray + 'and option limit is ' + this.optionLimit)
-
                 this.doing()
         }
     },
@@ -204,7 +185,6 @@ export default {
         watch: {
 
         initReset(newValue) {
-            console.log('new init reset value is' + newValue)
             this.swapsies = newValue;
         },
         snippet(newValue, oldValue) {
@@ -212,7 +192,6 @@ export default {
             this.changeMade = true;
 
             if(this.$store.state.replace===true) {
-                console.log('swapsies instead')
                 this.displayText = [];
                 this.optionItem = 0;
                 this.startAdd(newValue, oldValue);
@@ -244,7 +223,6 @@ export default {
         stateTotal(newVal){
          
                    if(newVal===this.limit) {
-                    console.log('replace mode on')
                     this.$store.state.replace = true
                     } 
                     if (newVal < this.limit) {

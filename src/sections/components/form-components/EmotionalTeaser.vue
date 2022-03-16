@@ -26,7 +26,7 @@
     <ion-chip
        
        @click="pushTone('pirate')">
-        <ion-label>🦜</ion-label>
+        <ion-label>🏴‍☠️</ion-label>
     </ion-chip>
 
   </div>
@@ -43,13 +43,13 @@
     <ion-chip class="chonk-chip"
        
         @click="pushTone('paggro')">
-        <ion-label>...{{ teasers[1] }}</ion-label>
+        <ion-label>...{{ teasers[2] }}</ion-label>
     </ion-chip>
 
         <ion-chip class="chonk-chip"
       
         @click="pushTone('polite')">
-        <ion-label>...{{ teasers[2] }}</ion-label>
+        <ion-label>...{{ teasers[1] }}</ion-label>
     </ion-chip>
 
     <ion-chip class="chonk-chip"
@@ -69,19 +69,19 @@
     <ion-chip
        
         @click="routin(true)">
-        <ion-label>sure</ion-label>
+        <ion-label>yes</ion-label>
     </ion-chip>
 
     <ion-chip
        
         @click="routin(true)">
-        <ion-label>whip me up sump'n real good</ion-label>
+        <ion-label>ok</ion-label>
     </ion-chip>
 
     <ion-chip
        
-       @click="routin(false)">
-        <ion-label>no.</ion-label>
+       @click="routin(true)">
+        <ion-label>definitely</ion-label>
     </ion-chip>
 
   </div>
@@ -175,5 +175,9 @@ export default {
     .chonk-chip {
         padding: 1rem;
         border: 2.5px solid black;
+    }
+
+    ion-label {
+        text-align: center;
     }
 </style>

@@ -132,9 +132,9 @@ import {
     IonButton
 } from '@ionic/vue'
 
-import useTypewriter from '../../composables/typewriter'
-import speakTrashPanda from '../../composables/trashpandachat'
-import ChatTyper from './ChatTyper.vue'
+import useTypewriter from '../composables/typewriter'
+import speakTrashPanda from '../composables/trashpandachat'
+import ChatTyper from '../sections/components/ChatTyper.vue'
 
 import { ref } from 'vue'
 

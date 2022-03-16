@@ -172,7 +172,6 @@ export default  {
 
         goBack() {
             
-            console.log('goback')
             this.$emit('backClick')
 
         },
@@ -292,9 +291,7 @@ watch: {
 
             let currentPlaceholder = this.placeholders[this.idx];
             this.chosenSpeed = currentPlaceholder.speed
-            console.log(currentPlaceholder)
             let pString = currentPlaceholder.string.split("");
-            console.log(pString)
             this.startPush(pString);
         }
     },

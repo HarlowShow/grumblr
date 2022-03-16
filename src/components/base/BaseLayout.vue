@@ -1,26 +1,8 @@
 <template>
-   <!-- <the-side-menu></the-side-menu> -->
    <ion-page >
 
-       <ion-header class="ion-no-border">
+       <ion-header class="ion-no-border" collapse="condense">
          <ion-toolbar>
-         
-          
-            <!-- <ion-buttons>
-               <ion-title class="logo ion-text-center">
-                   </ion-title>
-                </ion-buttons> -->
-
-                <!-- <div>
-                <ion-title class="logo-long">
-                    <div class="btn-div">
-                    </div>
-                     <div class="btn-div">
-                    <the-icons name="q-icon"></the-icons>
-                  </div>
-                </ion-title>
-                </div> -->
-
                 <div class="sharing-icons-two">
                   <div class="end-line"></div>
 
@@ -149,9 +131,9 @@ export default {
               role: 'cancel',
               cssClass: 'secondary',
               id: 'cancel-button',
-              handler: blah => {
-                console.log('Confirm Cancel:', blah)
-              },
+              // handler: blah => {
+              //   console.log('Confirm Cancel:', blah)
+              // },
             },
             {
               text: 'Yes, leave this page',
@@ -207,7 +189,7 @@ ion-icon {
  ion-toolbar {
      --padding-bottom: 0px;
      --min-height: 60px;
-     --background: #FCF5E6;
+     --background: var(--ion-background-color);
  }
 
 
@@ -239,12 +221,13 @@ ion-icon {
 
 @media(max-width: 576px) {
  ion-content#main-page {
-    height: calc(100% - 100px);
+    height: 100vh;
     --padding-start: 0rem;
     --padding-end: 0rem;
     --padding-top: 0rem;
-    --padding-bottom: 0rem;
-    --offset-top: 0px !important;
+    --padding-bottom: 3.5rem;
+    /* --padding-bottom: 0rem; */
+    /* --offset-top: 100px !important; */
     align-items: center;
     justify-content: center;
  }
@@ -286,5 +269,16 @@ ion-icon {
       width: 20px;
     }
 
+    @media (min-width: 1000px) {
+      .end-line {
+        width: 90%;
+      }
+    }
+
+    @media (min-width: 1250px) {
+      .end-line {
+        width: 100%;
+      }
+    }
     
 </style>

@@ -51,7 +51,6 @@ export default {
 
             el.style.opacity = 0;
 
-            console.log('beforeEnter')
             console.log(el);
         },
 

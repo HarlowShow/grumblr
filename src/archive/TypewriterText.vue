@@ -46,11 +46,6 @@ setup(props) {
     const displayText = ref([])
     const optionLimit = currentWord.length;
     const optionItem = 1;
-
-  console.log(words.value)
-  console.log(currentWord)
-  console.log('optionLimit =' + optionLimit)
-
   return {
       wordValue,
       currentWord,
@@ -73,12 +68,11 @@ setup(props) {
 
     doing() {
         
-        console.log(this.currentWord)
         this.stopped = false;
              if (this.initPush === false) {
                     this.displayText.push(this.currentWord[0]);
                     this.initPush = true
-                    console.log('this.initPush is' + this.initPush)
+                    // console.log('this.initPush is' + this.initPush)
                 } else if (this.paused === true) {
                     this.startStop = true;
                     this.paused=!this.paused
@@ -94,8 +88,6 @@ setup(props) {
         // console.log(this.displayText)
         this.optionItem++
         this.dostuff();
-        } else {
-        console.log('no more stuff to do already reached:' + this.optionItem)
         }
     },
 
@@ -104,8 +96,6 @@ setup(props) {
                 setTimeout(()=> {
                     this.doOther(started);
                 }, 100);
-        } else {
-            console.log('no, stop!')
         }
     },
 

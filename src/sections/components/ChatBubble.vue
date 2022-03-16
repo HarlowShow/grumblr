@@ -165,7 +165,7 @@ export default {
     }
 
     .icon-slot{
-        margin-bottom: -1rem;;
+        /* margin-bottom: -1rem; */
         padding: 0;
         display: flex;
         justify-content: flex-end;

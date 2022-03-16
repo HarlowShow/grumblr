@@ -109,8 +109,6 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
                 status.pulling=true
                 tracking.idx=stringArray.value.length
                 startPull()
-            } else {
-                console.log('something went wrong')
             }
         })
 
@@ -142,7 +140,6 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
            
             } else if (length.value===tracking.optionItem && mode.value==='looping') {
                 
-                console.log('change direction!')
                 // console.log('mode is: ' + mode.value)
                 status.pushing=false
                  //do a little pause before changing
@@ -154,8 +151,6 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
             } else if (length.value===tracking.optionItem){
                isFinished.value=true
             //    console.log('is finished is now: ' + isFinished.value)
-            } else {
-                console.log('else')
             }
         }
         })

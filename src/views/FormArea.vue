@@ -18,9 +18,10 @@
                 </template>
                  <template v-slot:end>
                      <!-- Q: who's grumbling -->
+                     <!-- @scroll="scrollToBottom(this.content)" -->
                    <chat-typer
                    :chatString="this.pandaChats[0].string"
-                   @scroll="scrollToBottom(this.content)"
+                   
                     :scrollType="setScroll"
                    ></chat-typer>
                 </template>
@@ -62,7 +63,7 @@
                                 <!-- Q: choose name -->
                             <chat-typer
                             :chatString="this.pandaChats[1].string"
-                            @scroll="scrollToBottom(this.content)"
+                           
                                 :scrollType="setScroll"
                             ></chat-typer>
                             </template>
@@ -73,7 +74,7 @@
                                     v-if="this.formPosition===0"
                                     @update:value="setName"
                                     :inputType="'short'"
-                                    :examples="['weather, cheese, Paul, Vlad']"
+                                    :examples="['weather, cheese, Linda, Vlad']"
                                     :exampleType="'list'"
                                     ></text-input>
                 </div>
@@ -104,7 +105,7 @@
                     <template v-slot:end>
                         <!-- Q: enter personmate -->
                        <chat-typer
-                         @scroll="scrollToBottom(this.content)"
+                        
                         :scrollType="setScroll"
                         :chatString="this.nameFollowUp"
                         ></chat-typer>
@@ -113,7 +114,7 @@
                                 <!-- form validation message -->
                             <chat-typer
                             v-if="personmateInvalid===true"
-                                @scroll="scrollToBottom(this.content)"
+                                
                                 :scrollType="setScroll"
                                 :chatString="`You're going to have to give me a little more than that...`"
                                 ></chat-typer>
@@ -153,7 +154,7 @@
                     <template v-slot:end>
                            <!-- Q: enter gripe -->
                           <chat-typer
-                            @scroll="scrollToBottom(this.content)"
+                            
                             :scrollType="setScroll"
                             :chatString="this.personmateFollowUp"
                         ></chat-typer>
@@ -172,7 +173,7 @@
                                         v-if="this.$store.state.customGripe===true&&this.formPosition>1"
 
                                         :chatString="this.pandaChats[3].stringTwo"
-                                        @scroll="scrollToBottom(this.content)"
+                                       
                                         :scrollType="setScroll"
                                     ></chat-typer>
                             </template>
@@ -203,7 +204,7 @@
                     <!-- Q: check sentence 1-->
                    <chat-typer
                    :chatString="sentenceToCheckPreamble"
-                   @scroll="[scrollToBottom(this.content), this.bubbleCount['confirmChoices']++]"
+                   @scroll="this.bubbleCount['confirmChoices']++"
                     :scrollType="setScroll"
                    ></chat-typer>
                 </template>
@@ -213,7 +214,7 @@
                 <template v-slot:end-next>
                     <chat-typer
                    :chatString="sentenceToCheck"
-                   @scroll="scrollToBottom(this.content)"
+                  
                     :scrollType="setScroll"
                    ></chat-typer>
 
@@ -224,7 +225,7 @@
                     <chat-typer
                     v-if="choicesConfirmed===false&&this.formPosition>2"
                     :chatString="this.pandaChats[4].string"
-                    @scroll="scrollToBottom(this.content)"
+                   
                     :scrollType="setScroll">
                     </chat-typer>
                    </template>
@@ -276,7 +277,7 @@
                         <div>
                             <!-- Q: get tone 1 -->
                         <chat-typer
-                         @scroll="scrollToBottom(this.content)"
+                        
                         :scrollType="setScroll"
                         :chatString="this.pandaChats[5].string"
                         ></chat-typer>
@@ -315,7 +316,7 @@
                 <div class="teaser-responses">
                     <emotional-teaser
                          v-if="this.formPosition===5"
-                        @scroll="scrollToBottom(this.content)"
+                      
                         :step="2"
                         :teasers="teaserSentences"
                         @update:starters="getStarterTones">  
@@ -334,7 +335,7 @@
                         <div>
                         <chat-typer
                          :chatString="this.pandaChats[7].string"
-                         @scroll="scrollToBottom(this.content)"
+                        
                          :scrollType="setScroll"
                         ></chat-typer>
                         </div>
@@ -373,7 +374,7 @@
                         <div>
                         <chat-typer
                         :chatString="this.pandaChats[6].string"
-                         @scroll="scrollToBottom(this.content)"
+                        
                           :scrollType="setScroll"
                         ></chat-typer>
                         </div>
@@ -759,7 +760,7 @@
                         response = '🙄'
                         break;
                     case 'pirate':
-                        response = '🦜'
+                        response = '🏴‍☠️'
                 }
                 return response
             },
@@ -776,7 +777,7 @@
                         response = `${this.starterConjunctions['f']} ${this.proOneLower} will bravely pretend it never happened`
                         break;
                     case 'paggro':
-                        response = `${this.starterConjunctions['g']} ${this.proOneLower} I intend to express my feelings in a strongly worded note.`
+                        response = `${this.starterConjunctions['g']} ${this.proOneLower} intend to express my feelings in a strongly worded note.`
                         break;
                     case 'pirate':
                         response = `${this.starterConjunctions['h']} ${this.proOneLower} best consult ${this.proTwo} parrot before taking any further action.`
@@ -798,7 +799,7 @@
                         this.$router.push('/playground')
                     })
                     .catch(() => {
-                        console.log('something went wrong with routing promise')
+                        // console.log('something went wrong with routing promise')
                     })
                 }
             },
@@ -933,13 +934,11 @@
                         let pString = Array.from(word)
                         // console.log('first letter is: ' + pString[0])
                         if (vowels.indexOf(pString[0])!== -1){
-                             this.$store.state.personmateArticle = 'an'
-                             resolve()
-                            console.log('personmate: first letter WAS a vowel')
+                            this.$store.state.personmateArticle = 'an'
+                            resolve()
                         } else {
                             this.$store.state.personmateArticle = 'a'
                             resolve()
-                            console.log('personmate: first letter was not a vowel')
                         }
 
                 })
@@ -963,7 +962,6 @@
                 return new Promise ((resolve) => {
                     if(this.confirmedSet === true){
                         resolve()
-                        console.log('confirmed set')
                     }
                 })
             },
@@ -972,14 +970,12 @@
             async getGripe(gripe) {
    
                 this.chosen.chosenGripe = gripe;
-                console.log(this.chosen.chosenGripe)
                 await this.generateGripe()
                 this.confirmedSet = true
                 
                 //* set custom prop to decide if we should show guidance text in custom input.
                 //* really sloppy code, this bit should all be consolidated in one function
                 const string = this.calcB(gripe)
-                console.log('string is: ' + string)
                 this.stringB = string
                 this.checkStrings[1].text = string
               
@@ -1036,8 +1032,6 @@
                 return new Promise((resolve) => {
                     if(this.$store.state.starterTones.length===2){
                         resolve()
-                    } else {
-                        console.log('starter tones not fully added')
                     }
                 })
             },
@@ -1060,7 +1054,6 @@
                 this.output.so0 = `
                 Thanks. `
                     resolve()
-                    console.log('temp open set')
                 })
                 
             },
@@ -1174,7 +1167,6 @@
                 }
                  this.output.of0 = this.chosen.chosenOffense;
                  resolve()
-                 console.log('gripe set')
                 })
                
             },
@@ -1188,7 +1180,6 @@
                 this.output.co1 = chosenConsequence.middle;
                 this.output.co2 = chosenConsequence.stringTwo;
                 resolve()
-                console.log('consequence set')
                 })
 
             },
@@ -1201,7 +1192,6 @@
                 this.output.pl1 = chosenPlea.stringTwo;
                 this.output.pl2 = chosenPlea.stringThree;
                 resolve()
-                console.log('plea set')
                 })
              
             }, 
@@ -1429,9 +1419,12 @@ ion-icon {
 .chat.scrollable {
     padding-left: 1rem;
     padding-right: 1rem;
+    margin-bottom: 4rem;
+    padding-top: 0.5rem;
 }
 
 .teaser-responses {
     padding-right: 3rem;
 }
+
 </style>

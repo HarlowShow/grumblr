@@ -154,7 +154,7 @@ export default {
                 this.optionLimit = this.snippetArray.length
                 this.doing()
                 } catch(e) {
-                    console.log(e)
+                    // console.log(e)
                 }
             
         }
@@ -185,23 +185,6 @@ export default {
                     this.$store.state.oldSub++
                 }
         },
-
-        // count(newVal){
-        //      if(newVal===true) {
-        //         console.log('snippet delay emitted')
-        //         this.$emit('transitioned')
-        //     }
-        // },
-
-        name: {
-            immediate: true,
-            handler(newVal){
-                if(newVal===this.index){
-                    console.log('name and index match!')
-                }
-            }
-
-        }
     },
     computed: {
         classObject() {

@@ -57,7 +57,7 @@
 import { IonMenu, IonItem, IonList, IonMenuToggle, IonButton, IonLabel,
 //  IonToolbar, IonHeader
  } from '@ionic/vue'
-import ThePithyQuote from './ThePithyQuote.vue'
+import ThePithyQuote from '../../archive/ThePithyQuote.vue'
 export default {
     components: {
         IonMenu, IonItem, IonList, IonMenuToggle, IonButton, IonLabel, ThePithyQuote
@@ -70,19 +70,6 @@ export default {
             open: false,
         }
     },
-
-    // mounted() {
-    //      menuController.enable(true, 'main');
-
-    // },
-
-    methods: {
-
-        menuDidClose(){
-            console.log('menu closed')
-        },
-
-    }
 }
 </script>
 

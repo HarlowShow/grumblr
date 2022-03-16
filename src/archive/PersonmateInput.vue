@@ -114,7 +114,7 @@
 
 <script>
 
-import AreaTitle from '../sections/components/AreaTitle.vue'
+import AreaTitle from './AreaTitle.vue'
 
 import {
     // IonSelect,
@@ -183,20 +183,16 @@ export default {
     methods: {
 
         goBack() {
-            console.log('goback')
             this.$emit('backClick')
         },
 
         isChecked(event) {
             this.customNamed = event;
-            console.log(this.customNamed)
         },
 
         validateLength(choice) {
-                console.log(choice);
                 if (choice.length < 1 || choice === 'none yet') {
                     this.invalidInput = true;
-                    console.log("invalid input");
                     return this.choice;
                 } else {
                 this.invalidInput = false;
@@ -204,7 +200,6 @@ export default {
         },
 
         validateSubmission() {
-            console.log("function happened")
                 if (this.personmateIsCustom === true) {
                     this.selectedPersonmate = this.otherPersonmate;
                 } else {
@@ -217,7 +212,6 @@ export default {
                 this.validateSubmission();
 
                 if(this.invalidInput === false) {
-                    console.log("input was valid")
                     personmate = this.selectedPersonmate;
 
                 this.$emit('update:personmate', personmate)
