@@ -74,8 +74,8 @@
                                     v-if="this.formPosition===0"
                                     @update:value="setName"
                                     :inputType="'short'"
-                                    :examples="['weather, cheese, Linda, Vlad']"
-                                    :exampleType="'list'"
+                                    :examples="['(or leave this blank)']"
+                                    :exampleType="'sentence'"
                                     ></text-input>
                 </div>
                 </template>
@@ -110,22 +110,30 @@
                         :chatString="this.nameFollowUp"
                         ></chat-typer>
                     </template>
-                            <template v-slot:end-next>
+                    <template v-slot:end-next>
                                 <!-- form validation message -->
                             <chat-typer
                             v-if="personmateInvalid===true"
                                 
                                 :scrollType="setScroll"
-                                :chatString="`You're going to have to give me a little more than that...`"
+                                :chatString="`Work with me here.`"
                                 ></chat-typer>
                     </template>
+                     <template v-slot:end-next-two>
+                        <chat-typer
+                            v-if="personmateInvalid===true && this.bubbleCount['personmateInvalid'] > 1"
+                                
+                                :scrollType="setScroll"
+                                :chatString="`Enter a response to continue.`"
+                                ></chat-typer>
+                   </template>
                       <template  v-slot:responses>
                                      <!-- chips - choose/enter personmate -->
                      <text-input
                      v-if="this.formPosition===1"
                                     @update:value="getPersonmate"
                                     :inputType="'short'"
-                                    :examples="['force of nature', 'dairy product', 'landlord', 'world leader']"
+                                    :examples="['flatmate', 'neighbour', 'landlord', 'world leader']"
                                     :exampleType="'list'"
                                     ></text-input>
                     </template>
@@ -176,7 +184,7 @@
                                        
                                         :scrollType="setScroll"
                                     ></chat-typer>
-                            </template>
+                    </template>
             </chat-bubble>
             <!-- CLICK, set form, position to 3 -->
             <!-- gripe response -->
@@ -903,7 +911,13 @@
             async getPersonmate(personmate) {
                     if(!personmate){
                         this.personmateInvalid = true
+                        if (this.bubbleCount['personmateInvalid'] >= 2 ) {
+                            console.log('bubble max hit');
+                            return;
+                        } else {
                         this.bubbleCount['personmateInvalid']++
+                        // console.log(this.bubbleCount['personmateInvalid']);
+                        }
                     } else {
                         //* set main value
                     this.chosen.chosenPersonmate = personmate;

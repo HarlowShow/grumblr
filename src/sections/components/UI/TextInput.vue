@@ -18,7 +18,8 @@
     </ion-chip>
     <div v-if="examples"
     class="examples">
-        <p><span v-if="exampleType==='list'">e.g. </span>{{ examples.join(', ')}}</p>
+        <p v-if="exampleType==='list'"><span >e.g. </span>{{ examples.join(', ')}}</p>
+        <p v-else>{{ examples[0] }}</p>
     </div>
 
 
@@ -32,7 +33,7 @@
                  >
                 <chat-typer
                         @click="focus=true"
-                        :chatString="'period blood on the walls'"
+                        :chatString="''"
                         :mode="'looping'">
                 </chat-typer>
                 </div>
@@ -106,7 +107,7 @@ export default {
         exampleType: {
             type: String,
             required: false
-        }
+        },
     },
 
     emits: ['update:value'],

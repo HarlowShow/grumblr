@@ -46,7 +46,6 @@
             </ion-item>
           </ion-list>
           </div>
-           <the-pithy-quote id="mobile"></the-pithy-quote>
       </ion-menu>
       
 
@@ -57,10 +56,9 @@
 import { IonMenu, IonItem, IonList, IonMenuToggle, IonButton, IonLabel,
 //  IonToolbar, IonHeader
  } from '@ionic/vue'
-import ThePithyQuote from '../../archive/ThePithyQuote.vue'
 export default {
     components: {
-        IonMenu, IonItem, IonList, IonMenuToggle, IonButton, IonLabel, ThePithyQuote
+        IonMenu, IonItem, IonList, IonMenuToggle, IonButton, IonLabel
         // IonToolbar, IonHeader
     },
 

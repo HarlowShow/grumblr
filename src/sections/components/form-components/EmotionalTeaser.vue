@@ -6,25 +6,25 @@
     >
 
     <ion-chip
-       
+       class="emoji-chip"
         @click="pushTone('polite')">
         <ion-label>😅</ion-label>
     </ion-chip>
 
     <ion-chip
-      
+        class="emoji-chip"
         @click="pushTone('angry')">
         <ion-label>😡</ion-label>
     </ion-chip>
 
     <ion-chip
-       
+        class="emoji-chip"
         @click="pushTone('paggro')">
         <ion-label>🙄</ion-label>
     </ion-chip>
 
     <ion-chip
-       
+        class="emoji-chip"
        @click="pushTone('pirate')">
         <ion-label>🏴‍☠️</ion-label>
     </ion-chip>
@@ -35,25 +35,22 @@
     v-if="step===2&&teasers"
     >
 
-    <ion-chip class="chonk-chip"
+    <ion-chip color="angry" class="chip-extra-padding"
         @click="pushTone('angry')">
         <ion-label>...{{ teasers[0] }}</ion-label>
     </ion-chip>
 
-    <ion-chip class="chonk-chip"
-       
+    <ion-chip color="paggro" class="chip-extra-padding"
         @click="pushTone('paggro')">
         <ion-label>...{{ teasers[2] }}</ion-label>
     </ion-chip>
 
-        <ion-chip class="chonk-chip"
-      
+        <ion-chip color="polite" class="chip-extra-padding"
         @click="pushTone('polite')">
         <ion-label>...{{ teasers[1] }}</ion-label>
     </ion-chip>
 
-    <ion-chip class="chonk-chip"
-       
+    <ion-chip color="pirate" class="chip-extra-padding"
        @click="pushTone('pirate')">
         <ion-label>...{{ teasers[3] }}</ion-label>
     </ion-chip>
@@ -172,12 +169,16 @@ export default {
 </script>
 
 <style scoped>
-    .chonk-chip {
+    .chip-extra-padding {
         padding: 1rem;
         border: 2.5px solid black;
+        font-size: 1rem;
     }
 
-    ion-label {
+    .emoji-chip {
         text-align: center;
+        font-size: 1rem;
+        padding: 1rem;
+        vertical-align: baseline;
     }
 </style>

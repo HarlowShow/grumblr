@@ -106,7 +106,7 @@ export default {
 
         const grumbleRef = doc(collection(db, 'grumbles'));
         let newId = grumbleRef.id
-        console.log('id is: ' + newId)
+        // console.log('id is: ' + newId)
 
         const createShare = async () => {
     
@@ -118,7 +118,7 @@ export default {
 
             sharingURL.value = `https://grumblr-web.web.app/shared/${newId}`
             // sharingURL.value = `http://localhost:8100/shared/${id.value}`
-            console.log('sharing url is: ' + sharingURL.value)
+            // console.log('sharing url is: ' + sharingURL.value)
         }
 
         return {

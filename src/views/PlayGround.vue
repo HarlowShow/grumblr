@@ -180,7 +180,7 @@
     </base-layout>
 </template>
 
-<script>
+<script lang="js">
 // import TestSnippet from '../sections/components/TestSnippet.vue'
 
 import NewSnippet from '../sections/components/NewSnippet.vue'
@@ -1223,8 +1223,6 @@ export default {
                     this.seeDeleteOptions = deleteOptions
                     if(deleteOptions.length>1){
                     deleteOptions.sort(() => {return 0.5 - Math.random()})
-                    } else {
-                        console.log('something went wrong with delete options')
                     }
 
                     //* find an index where a used phrase can be deleted

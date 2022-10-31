@@ -63,7 +63,7 @@ export default function useTypewriter(chosenString = 'default string', chosenMod
 
         const placeholderOptions = ref([
             {string: "insulted my cousin", speed: speeds.slow, classes: ["green"]},
-            {string: "left bodily fluids on the walls", speed: speeds.normal},
+            {string: "trimmed my wisteria without my permission", speed: speeds.normal},
             {string: "got crumbs all over the breadbin", speed: speeds.fast},
             {string: "ate all the sticky toffee puddings", speed: speeds.normal},
        ])

@@ -70,7 +70,7 @@ export default function speakTrashPanda(startingIdx = 0) {
         string: "Are you ready to grumble?",
         stringTwo: "I see. And what's their relationship to you?",
         idx: 0},
-        { string: 'What should we grumble about?', stringTwo: 'I see'},
+        { string: 'Who should we grumble about?', stringTwo: 'I see'},
         { string: 'I see. Who did this then?', type: 'formQ', idx: 1},
         { string: '',
         stringTwo: "Try to follow the same format as the examples. You don't need to write a complete sentence or use a full stop.",
@@ -78,7 +78,7 @@ export default function speakTrashPanda(startingIdx = 0) {
         { string: 'Which bit should we change?'},
         { string: 'Finally, how does all this make you feel?', type: 'formQ'},
         { string: "And what are you gonna do about it?", type: 'formQ'},
-        { string: "I'd feel the same. I can work with this... should I whip something up?", type: 'formQ'},
+        { string: "I can work with this... ", type: 'formQ'},
         { string: "Too bad schmucko! I didn't build in a back button yet. Here we go!", type: 'response'},
         { string: "Who - or what - should we grumble about?", stringTwo: ''},
         { string: "Which bit do you want to change?", type: 'response'},
@@ -87,7 +87,7 @@ export default function speakTrashPanda(startingIdx = 0) {
     const chatLength = formChats.value.length
     const currentChat = ref(formChats.value[chatIdx.value])
     const currentString = ref(currentChat.value.string)
-
+// TODO: Remove this
     const backtalkChats = reactive({
 
         starter: {

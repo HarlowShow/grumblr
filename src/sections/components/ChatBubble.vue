@@ -51,7 +51,7 @@
 <script>
 
 export default {
-    props: ['gridClass', 'iconSlot', 'additionalBubbles'],
+    props: ['gridClass', 'iconSlot', 'additionalBubbles', 'maxBubbles'],
     }
 
 </script>
