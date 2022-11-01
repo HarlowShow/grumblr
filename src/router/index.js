@@ -17,7 +17,13 @@ const router = createRouter({
     {
       path: '/input',
       component: FormArea,
-      props: true
+      // props: true
+    },
+
+    {
+      path: '/input/:isNew',
+      component: FormArea,
+      // props: true
     },
   
     { path: '/playground',

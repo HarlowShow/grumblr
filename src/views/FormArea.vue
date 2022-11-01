@@ -2,7 +2,8 @@
     <base-layout page-title="Gripe Deets">
 
         <div class="chat scrollable"
-        ref="msgContainer">
+        ref="msgContainer"
+        >
 
     <!-- <button @click="getElPosition">get el position</button> -->
            <!-- <p>{{ checkStrings }}</p>
@@ -33,6 +34,8 @@
                     @update:pronoun="getPronoun"
                     >
                     </set-pronouns>
+                    <!-- <ion-button
+                    @click="generateDemoGripe">Skip</ion-button> -->
                 </div>
                 </template>
 
@@ -393,6 +396,7 @@
             </div>
 
         </div>
+        <!-- <div v-else> <p>Loading... {{ isResetting }}</p> </div> -->
 
     </base-layout>
 
@@ -402,10 +406,12 @@
 <script>
 
     import { accessibility, earth, infinite, sad, ellipse, checkmarkCircle, closeCircle } from 'ionicons/icons'
-
+    import { onIonViewWillEnter } from '@ionic/vue';
     import SetPronouns from '../sections/components/form-components/SetPronouns.vue'
     // import SetPersonmate from '../sections/components/form-components/SetPersonmate.vue'
     import SetGripe from '../sections/components/form-components/SetGripe.vue'
+    import { useStore } from 'vuex'
+    import { useRouter } from 'vue-router';
     // import ReviewSelection from '../sections/components/form-components/ReviewSelection.vue'
     // import ConfirmSelection from '../sections/components/form-components/ConfirmSelection.vue'
     // import InputSummary from './components/InputSummary.vue';
@@ -420,11 +426,12 @@
     import speakTrashPanda from '../composables/trashpandachat'
     import usePronouns from '../composables/pronouns'
 
-    import { ref } from 'vue';
+    import { ref, } from 'vue';
 
     export default {
 
         components: {
+            // IonButton,
             ChatTyper,
             EmotionalTeaser,
             TheIcons,
@@ -440,7 +447,17 @@
 
 
         setup() {
-            
+            const store = useStore();
+            const router = useRouter();
+            onIonViewWillEnter(() => {
+                console.log('Home page will enter');
+                if(store.state.shouldReset === true) {
+                    console.log('should rerender');
+                    store.state.shouldReset = false;
+                    router.go(0);
+                }
+            })
+
             const pandaChat = speakTrashPanda()
             const pandaChats = pandaChat.formChats.value
          
@@ -463,16 +480,13 @@
                 nameFollowUp: pandaChat.nameFollowUp,
                 personmateFollowUp: pandaChat.personmateFollowUp,
                 gripeFollowUp: pandaChat.gripeFollowUp,
-
                 pronouns,
                 setPronouns: pronouns.setPronouns,
             }
         },
 
         mounted() {
-        //    console.log(this.msgContainer)
            this.content = this.msgContainer.parentElement
-        //    console.log(this.content)
         },
 
         data() {
@@ -806,8 +820,10 @@
                         this.$router.push('/playground')
                     })
                     .catch(() => {
-                        // console.log('something went wrong with routing promise')
+                        console.log('something went wrong with routing promise')
                     })
+                } else if (shouldRoute === 'demo') {
+                    this.$router.push('/playground')
                 }
             },
 
@@ -1194,6 +1210,28 @@
                 ar.sort(() => {return 0.5 - Math.random()});
             },
 
+            generateDemoGripe() {
+                this.$store.state.baseOutput = {
+                        op0: 'Hey demo person, ',
+                        op1: '',
+                        op2: '',
+                        of0: 'you failed to do your washing up. ',
+                        of1: '',
+                        of2: '',
+                        co0: 'Hate to bring this up, but ',
+                        co1: 'dealing with this ',
+                        co2: 'is inconvenient. ',
+                        pl0: 'So ',
+                        pl1: 'please ',
+                        pl2: 'be more considerate in the future. ',
+                        so0: `
+                Thanks. `,
+
+                };
+                this.$store.state.starterTones.push('pirate', 'pirate');
+                this.routin('demo');
+            },
+
             generateGripe() {
                 return new Promise((resolve) => {
                         this.tempChosen = this.chosen;
@@ -1222,6 +1260,10 @@
             scrollToBottom(el) {
                el.scrollToBottom(150)
              
+            },
+
+            resetPage() {
+
             },
         },
 

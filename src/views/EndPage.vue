@@ -56,7 +56,7 @@
                     <ion-chip
                     size="medium"
                     outline="true"
-                    router-link="/input">Keep Grumbling
+                    @click="setStorePropTest">Grumble Again
                     </ion-chip>
             </div>
         </div>
@@ -65,7 +65,7 @@
 
 <script>
 
-    import { IonIcon, IonChip } from '@ionic/vue'
+    import { IonIcon, IonChip, } from '@ionic/vue'
     import ChatBubble from '../sections/components/ChatBubble.vue'
     import TheIcons from '../sections/components/TheIcons.vue'
 
@@ -147,6 +147,18 @@ export default {
         async handleShare(){
             await this.createShare()
             this.ready=true
+        },
+
+        async setResetProperty() {
+            console.log('stuff happened');
+            this.$store.state.shouldReset = true;
+        },
+
+        async setStorePropTest() {
+            await this.setResetProperty()
+            // console.log(this.$store.state.shouldReset);
+            // window.location.reload();
+            this.$router.push('/input')
         }
     },
 

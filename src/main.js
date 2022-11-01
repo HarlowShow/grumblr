@@ -77,6 +77,7 @@ const store = createStore({
       },
       classTone: 'default',
       customGripe: false,
+      shouldReset: false,
     };
   },
 });
