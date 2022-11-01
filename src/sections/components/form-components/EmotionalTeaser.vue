@@ -31,7 +31,7 @@
 
   </div>
 
-      <div
+      <div class="step-two"
     v-if="step===2&&teasers"
     >
 
@@ -64,21 +64,8 @@
     >
 
     <ion-chip
-       
         @click="routin(true)">
-        <ion-label>yes</ion-label>
-    </ion-chip>
-
-    <ion-chip
-       
-        @click="routin(true)">
-        <ion-label>ok</ion-label>
-    </ion-chip>
-
-    <ion-chip
-       
-       @click="routin(true)">
-        <ion-label>definitely</ion-label>
+        <ion-label>Generate Grumble</ion-label>
     </ion-chip>
 
   </div>
@@ -169,6 +156,8 @@ export default {
 </script>
 
 <style scoped>
+
+/* TODO this messes up on mobile so add media query or fix overall css */
     .chip-extra-padding {
         padding: 1rem;
         border: 2.5px solid black;
@@ -180,5 +169,11 @@ export default {
         font-size: 1rem;
         padding: 1rem;
         vertical-align: baseline;
+    }
+
+    .step-two {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
     }
 </style>
