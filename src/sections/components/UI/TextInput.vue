@@ -1,18 +1,20 @@
 <template>
+    <div ref="el">
      <ion-chip v-if="inputType==='short'"
             class="input"
            
             outline="true">
                 <ion-input 
-                type="text"
-                required="true"
                 mode="ios"
+                inputmode="text"
+                required="true"
                 @ionChange="outputValue=$event.target.value"
+                autofocus="true"
+                @keydown.enter="setVal(outputValue)"
                 >
                 </ion-input>
                 <ion-icon 
                 :icon="checkmarkCircle"
-               
                 @click="setVal(outputValue)"
                 ></ion-icon>
     </ion-chip>
@@ -25,7 +27,6 @@
 
     <ion-chip v-if="inputType==='long'"
             class="input outer"
-           
             outline="true">
                
                 <div
@@ -41,19 +42,19 @@
                     mode="ios"
                     class="input inner"
                     :class="[{ hidePlaceholder : focus==='true'},{ showPlaceholder : focus==='false'}]"
-                    type="text"
                     @ionChange="outputValue=$event.target.value"
                     @ionFocus="focus=true"
                     @ionBlur="resetPlaceholders"
                     inputmode="text"
+                    @keydown.enter="setVal(outputValue)"
                     rows="3">
                 </ion-textarea>
                 <ion-icon 
                 :icon="checkmarkCircle"
-               
                 @click="setVal(outputValue)"
                 ></ion-icon>
             </ion-chip>
+        </div>
 </template>
 
 <script>
@@ -131,6 +132,10 @@ export default {
         }
     },
 
+    mounted() {
+        this.getElPosition();
+    },
+
     methods: {
 
         setVal(value) {
@@ -140,7 +145,27 @@ export default {
         resetPlaceholders(){
             this.focus=false
             // console.log('reset placeholders')
-        }
+        },
+// TODO scroll behaviour - here temporarily
+        getElPosition(){
+                console.log('function called')
+                let currentEl = this.$refs.el
+                let rect = currentEl.getBoundingClientRect()
+                console.log('current el is' + currentEl)
+                let right  = rect.right + window.scrollY
+                let height = window.innerHeight
+                let pos = right/height*100
+                pos = pos.toFixed(2)
+
+                // console.log('left is: ' + left)
+                console.log('right is: ' + right)
+                console.log('content inner height: ' + height)
+                console.log('position is: ' + pos)
+
+                if (pos>75) {
+                    this.setScroll = 'instant'
+                }
+            },
     },
 
 }

@@ -1911,7 +1911,7 @@ export default {
     #gridbottom{
         position: sticky;
         bottom: 0%;
-        min-height: 100px;
+        min-height: 40vh;
         padding: 2rem;
         width: 100%;
         max-width: 752px;
@@ -1925,7 +1925,7 @@ export default {
         }
 
         #gridbottom{
-            min-height: 30vh;
+            min-height: 60vh;
             padding-left: 0.5rem;
             padding-right: 0.5rem;
             padding-top: 0.5rem;

@@ -21,14 +21,13 @@
                      <!-- @scroll="scrollToBottom(this.content)" -->
                    <chat-typer
                    :chatString="this.pandaChats[0].string"
-                   
                     :scrollType="setScroll"
                    ></chat-typer>
                 </template>
 
                     <!-- chips - choose pronoun -->
                 <template  v-slot:responses>
-                <div ref="el">
+                <div>
                     <set-pronouns
                     v-if="this.formPosition===-1"
                     @update:pronoun="getPronoun"
@@ -861,25 +860,6 @@
                        
                         this.formPosition++
                     }
-            },
-//tbc here on the scroll thing
-            getElPosition(){
-                let currentEl = this.$refs.el
-                let rect = currentEl.getBoundingClientRect()
-                // console.log(currentEl)
-                let right  = rect.right + window.scrollY
-                let height = window.innerHeight
-                let pos = right/height*100
-                pos = pos.toFixed(2)
-
-                // console.log('left is: ' + left)
-                // console.log('right is: ' + right)
-                // console.log('content inner height: ' + height)
-                // console.log('position is: ' + pos)
-
-                if (pos>75) {
-                    this.setScroll = 'instant'
-                }
             },
 
             getPronoun(pronoun) {
