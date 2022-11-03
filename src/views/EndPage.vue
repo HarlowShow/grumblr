@@ -56,7 +56,7 @@
                     <ion-chip
                     size="medium"
                     outline="true"
-                    @click="setStorePropTest">Grumble Again
+                    @click="goToStart">Grumble Again
                     </ion-chip>
             </div>
         </div>
@@ -154,10 +154,8 @@ export default {
             this.$store.state.shouldReset = true;
         },
 
-        async setStorePropTest() {
+        async goToStart() {
             await this.setResetProperty()
-            // console.log(this.$store.state.shouldReset);
-            // window.location.reload();
             this.$router.push('/input')
         }
     },
