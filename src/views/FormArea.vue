@@ -34,8 +34,8 @@
                     @update:pronoun="getPronoun"
                     >
                     </set-pronouns>
-                    <!-- <ion-button
-                    @click="generateDemoGripe">Skip</ion-button> -->
+                    <ion-button
+                    @click="generateDemoGripe">Skip</ion-button>
                 </div>
                 </template>
 

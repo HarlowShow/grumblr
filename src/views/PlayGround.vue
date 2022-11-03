@@ -118,44 +118,6 @@
                                     <!-- <div class="show-moodcount"><p>{{ this.moodcount['pirate'] }}</p></div> -->
                                     </div>
 
-                                    <div class="button-holder"
-                                    v-for="button in emojiButtons"
-                                    :key="button.tone">
-                                    <button class="emoji-button" @click="cycleEmoji(button.tone, button.type)">
-                                        <the-emoji-buttons :clickstep="this.btnStep[button.tone]"
-                                        :type="button.type"
-                                        :tone="button.tone">
-                                        </the-emoji-buttons>
-                                    </button>
-                                    <button class="emoji-button" @click="cycleEmoji(button.tone, `${button.type}-sub`)"
-                                    v-if="this.prevStep[button.tone]>-1">
-                                        <the-emoji-buttons :clickstep="this.prevStep[button.tone]"
-                                        :type="`${button.type}-sub`"
-                                        :tone="button.tone">
-                                        </the-emoji-buttons>
-                                    </button>
-                                    </div>
-
-
-                                    <!-- <div class="button-holder">
-                                    <button class="emoji-button" @click="cycleEmoji('🔥', 'special')">
-                                        <the-emoji-buttons :clickstep="this.btnStep['🔥']"
-                                        :type="'special'"
-                                        :tone="'🔥'">
-                                        </the-emoji-buttons>
-                                    </button>
-                                    <button class="emoji-button" @click="cycleEmoji('💧', 'special')"
-                                    v-if="this.prevStep['pirate']>-1">
-                                        <the-emoji-buttons :clickstep="this.prevStep['💧']"
-                                        :type="'special'"
-                                        :tone="'💧'">
-                                        </the-emoji-buttons>
-                                    </button>
-                                    </div> -->
-
-                                    <!-- <div class="button-holder">
-                                         <div class="show-moodcount"><p>total: {{ this.moodcount['total'] }}</p></div>
-                                    </div> -->
                             </div>
                             <div class="emoji-container">
 
