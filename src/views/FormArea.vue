@@ -34,8 +34,8 @@
                     @update:pronoun="getPronoun"
                     >
                     </set-pronouns>
-                    <ion-button
-                    @click="generateDemoGripe">Skip</ion-button>
+                    <!-- <ion-button
+                    @click="generateDemoGripe">Skip</ion-button> -->
                 </div>
                 </template>
 
@@ -800,7 +800,7 @@
                         response = `${this.starterConjunctions['f']} ${this.proOneLower} will bravely pretend it never happened`
                         break;
                     case 'paggro':
-                        response = `${this.starterConjunctions['g']} ${this.proOneLower} intend to express my feelings in a strongly worded note.`
+                        response = `${this.starterConjunctions['g']} ${this.proOneLower} will be leaving them a strongly worded post-it note.`
                         break;
                     case 'pirate':
                         response = `${this.starterConjunctions['h']} ${this.proOneLower} best consult ${this.proTwo} parrot before taking any further action.`
