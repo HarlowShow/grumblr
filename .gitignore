@@ -8,6 +8,7 @@
 *.tmp.*
 *.sublime-project
 *.sublime-workspace
+*.env
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
@@ -29,4 +30,3 @@ npm-debug.log*
 /platforms
 /plugins
 /www
-/firebase
