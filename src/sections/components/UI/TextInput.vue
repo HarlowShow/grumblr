@@ -11,6 +11,7 @@
                 @ionChange="outputValue=$event.target.value"
                 autofocus="true"
                 @keydown.enter="setVal(outputValue)"
+                :maxlength="maxLength"
                 >
                 </ion-input>
                 <ion-icon 
@@ -109,6 +110,10 @@ export default {
             type: String,
             required: false
         },
+
+        maxLength: {
+            type: Number,
+        }
     },
 
     emits: ['update:value'],

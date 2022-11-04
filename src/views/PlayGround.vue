@@ -20,9 +20,9 @@
                             </template>
                         </chat-bubble>
                                 <chat-response
-                                :data="this.helpOptions"
+                                :data="finalOptions"
                                 :noIcon="true"
-                                @update:value="navigateHelp"
+                                @update:value="handleFinalOptions"
                                 ></chat-response>
                 </ion-content>
 
@@ -119,9 +119,6 @@
                                     </div>
 
                             </div>
-                            <div class="emoji-container">
-
-                            </div>
                         
                             <!-- <div id="sliders">
                                         <the-sliders
@@ -142,7 +139,7 @@
     </base-layout>
 </template>
 
-<script lang="js">
+<script>
 // import TestSnippet from '../sections/components/TestSnippet.vue'
 
 import NewSnippet from '../sections/components/NewSnippet.vue'
@@ -159,8 +156,6 @@ import { send } from 'ionicons/icons'
 import { IonIcon, IonContent, modalController } from '@ionic/vue'
 
 import speakPhrases from '../composables/phrases'
-import speakTrashPanda from '../composables/trashpandachat'
-import useHelpText from '../composables/helptext'
 
 import { useStore } from 'vuex'
 import { ref } from 'vue'
@@ -190,14 +185,9 @@ export default {
         const store = useStore()
         const gripeObject = store.state.baseOutput
 
-        //panda backchat
-        const trashPandaObject = speakTrashPanda()
-        const backchat = ref('')
-        backchat.value = trashPandaObject.backtalkChat
-
-        //help text
-        const helpTextObject = useHelpText()
-        // const helpchat = ref('')
+        const finalOptions = [
+                    { text: 'I\'m done grumbling', value: true, },
+                ];
 
         //set initial moods
         const initVal = ref(0)
@@ -205,12 +195,6 @@ export default {
         const secondTone = store.state.starterTones[1]    
 
         return {
-            helpTextObject,
-            helpOptions: helpTextObject.activeHelpOptions,
-            helpActions: helpTextObject.playgroundHelpText,
-            trashPandaObject,
-            backchat: backchat.value,
-            setChat: trashPandaObject.setChat,
             phraseObject,
             gripeObject,
             phrases: phraseObject.phrases,
@@ -218,7 +202,8 @@ export default {
             firstTone,
             secondTone,
             checkRender,
-            send
+            send,
+            finalOptions,
         }
 
     },
@@ -242,11 +227,6 @@ export default {
         //TODO: fill these out with some tut stuff
         return {
         
-        emojiButtons: [
-            { tone: 'reverse', type: 'special'},
-            { tone: 'upsidedown', type: 'special'},
-        ],
-
         btnStep: {
           angry: 0,
           paggro: 0,
@@ -715,31 +695,6 @@ export default {
 
     methods: {
 
-        navigateHelp(chosenval){
-            
-            //find action and do the corresponding method
-            const actions = this.helpActions.filter((opt) => opt.responseTo===chosenval)
-                if(actions.length>0){
-                let action = actions[0]
-
-                if(action.stringMethod){
-                    action.stringMethod()
-                    this.addedChatStrings.push(
-                        {
-                            string: action.string,
-                            icon: 'reg-reg',
-                            nextObj: 'starter',
-                            nextInner: 'two'
-                        }
-                    )
-                } else if (action.actionMethod){
-                    action.actionMethod()
-                } else if (action.routeMethod){
-                    this.$router.push(action.routeMethod)
-                }
-            }
-        },
-
         scrollFix(){
             window.scrollTo(0,1);
         },
@@ -827,6 +782,12 @@ export default {
                 this.chatCount++
             }, 500)
         },
+
+        handleFinalOptions(val) {
+            if (val === true) {
+                this.goToEnd()
+            }
+         },
 
         goToEnd(){
         const classProps = this.getClassProperties()

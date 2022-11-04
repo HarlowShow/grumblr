@@ -50,6 +50,7 @@
             @ionBlur="resetPlaceholders"
             auto-grow="true"
             inputmode="text"
+            maxlength=120
             :placeholder="placeholderArray"
             >
                

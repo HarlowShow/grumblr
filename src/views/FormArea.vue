@@ -78,6 +78,7 @@
                                     :inputType="'short'"
                                     :examples="['(or leave this blank)']"
                                     :exampleType="'sentence'"
+                                    :maxLength="45"
                                     ></text-input>
                 </div>
                 </template>
@@ -137,6 +138,7 @@
                                     :inputType="'short'"
                                     :examples="['flatmate', 'neighbour', 'landlord', 'world leader']"
                                     :exampleType="'list'"
+                                    :maxLength="45"
                                     ></text-input>
                     </template>
             </chat-bubble>
