@@ -3,12 +3,13 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /grumbles/{document=**} {
       allow read;
-      allow write: if request.resource.data.name is string &&
-      request.resource.data.name.size() <= 45 &&
-      request.resource.data.personmate is string &&
-      request.resource.data.personmate.size() <= 45 &&
-      request.resource.data.text is string &&
-  		request.resource.data.text.size() <= 120;
+      allow write;
+      // allow write: if request.resource.data.name is string &&
+      // request.resource.data.name.size() <= 45 &&
+      // request.resource.data.personmate is string &&
+      // request.resource.data.personmate.size() <= 45 &&
+      // request.resource.data.text is string &&
+  		// request.resource.data.text.size() <= 120;
     }
   }
 }

@@ -87,9 +87,9 @@ export default {
 
     setup(){
 
-        const testingNameVal = 'this is gonna be exactly fourty five characts';
-        const testingPersonmateVal = 'this is gonna be exactly fourty six characters';
-        const testingFullGripe = 'this is gonna be exactly fourty six characters but what if this was actually exactly one hundred and twenty characters i';
+        // const testingNameVal = 'this is gonna be exactly fourty five characts';
+        // const testingPersonmateVal = 'this is gonna be exactly fourty six characters';
+        // const testingFullGripe = 'this is gonna be exactly fourty six characters but what if this was actually exactly one hundred and twenty characters i';
         const store = useStore()
         const gripe = store.state.finalOutput
         const classObject = store.state.boxProps
@@ -124,18 +124,18 @@ export default {
             // console.log('sharing url is: ' + sharingURL.value)
         }
 
-         const createTestingShare = async () => {
+        //  const createTestingShare = async () => {
     
-            await setDoc(grumbleRef, {
-            text: testingFullGripe,
-            name: testingNameVal,
-            personmate: testingPersonmateVal,
-        })
+        //     await setDoc(grumbleRef, {
+        //     text: testingFullGripe,
+        //     name: testingNameVal,
+        //     personmate: testingPersonmateVal,
+        // })
 
-            sharingURL.value = `https://grumblr-web.web.app/shared/${newId}`
-            // sharingURL.value = `http://localhost:8100/shared/${id.value}`
-            // console.log('sharing url is: ' + sharingURL.value)
-        }
+        //     sharingURL.value = `https://grumblr-web.web.app/shared/${newId}`
+        //     // sharingURL.value = `http://localhost:8100/shared/${id.value}`
+        //     // console.log('sharing url is: ' + sharingURL.value)
+        // }
 
         return {
             nameVal,
@@ -151,10 +151,10 @@ export default {
             logoTwitter,
             logoReddit,
             logoWhatsapp,
-            createTestingShare,
-            testingFullGripe,
-            testingNameVal,
-            testingPersonmateVal,
+            // createTestingShare,
+            // testingFullGripe,
+            // testingNameVal,
+            // testingPersonmateVal,
         }
     },
 
@@ -165,7 +165,7 @@ export default {
     methods: {
 
         async handleShare(){
-            // TODO change back
+            console.log('beginning handleShare');
             await this.createShare()
             this.ready=true
         },
