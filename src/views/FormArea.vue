@@ -425,7 +425,7 @@
     import TextInput from '../sections/components/UI/TextInput.vue'
 
 
-    import speakTrashPanda from '../composables/trashpandachat'
+    import speakTrashPanda from '../composables/regchat'
     import usePronouns from '../composables/pronouns'
 
     import { ref, } from 'vue';
@@ -452,9 +452,9 @@
             const store = useStore();
             const router = useRouter();
             onIonViewWillEnter(() => {
-                console.log('Home page will enter');
+                // console.log('Home page will enter');
                 if(store.state.shouldReset === true) {
-                    console.log('should rerender');
+                    // console.log('should rerender');
                     store.state.shouldReset = false;
                     router.go(0);
                 }
@@ -822,7 +822,7 @@
                         this.$router.push('/playground')
                     })
                     .catch(() => {
-                        console.log('something went wrong with routing promise')
+                        // console.log('something went wrong with routing promise')
                     })
                 } else if (shouldRoute === 'demo') {
                     this.$router.push('/playground')
@@ -910,7 +910,7 @@
                     if(!personmate){
                         this.personmateInvalid = true
                         if (this.bubbleCount['personmateInvalid'] >= 2 ) {
-                            console.log('bubble max hit');
+                            // console.log('bubble max hit');
                             return;
                         } else {
                         this.bubbleCount['personmateInvalid']++

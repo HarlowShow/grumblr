@@ -365,6 +365,14 @@ ion-icon {
     position: absolute;
 }
 
+@media (min-width: 576px) {
+    .e-container, .sub-e-container {
+        font-size: 2rem;
+        padding: 0.5rem;
+    }
+
+ }
+
 /* .pirate-neutral:before, .paggro-neutral:before, .angry-neutral:before, .polite-neutral:before{
  
     left: 0%;

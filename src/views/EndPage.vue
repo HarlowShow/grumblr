@@ -165,13 +165,13 @@ export default {
     methods: {
 
         async handleShare(){
-            console.log('beginning handleShare');
+            // console.log('beginning handleShare');
             await this.createShare()
             this.ready=true
         },
 
         async setResetProperty() {
-            console.log('stuff happened');
+            // console.log('stuff happened');
             this.$store.state.shouldReset = true;
         },
 

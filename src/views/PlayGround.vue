@@ -156,6 +156,8 @@ import { send } from 'ionicons/icons'
 import { IonIcon, IonContent, modalController } from '@ionic/vue'
 
 import speakPhrases from '../composables/phrases'
+import speakReg from '../composables/regchat'
+import useHelpText from '../composables/helptext'
 
 import { useStore } from 'vuex'
 import { ref } from 'vue'
@@ -189,12 +191,24 @@ export default {
                     { text: 'I\'m done grumbling', value: true, },
                 ];
 
+        const regObject = speakReg()
+        const backchat = ref('')
+        backchat.value = regObject.backtalkChat
+        //help text
+        const helpTextObject = useHelpText()
+
         //set initial moods
         const initVal = ref(0)
         const firstTone = store.state.starterTones[0]
         const secondTone = store.state.starterTones[1]    
 
         return {
+            helpTextObject,
+            helpOptions: helpTextObject.activeHelpOptions,
+            helpActions: helpTextObject.playgroundHelpText,
+            regObject,
+            backchat: backchat.value,
+            setChat: regObject.setChat,
             phraseObject,
             gripeObject,
             phrases: phraseObject.phrases,
@@ -536,9 +550,9 @@ export default {
                 //* tracking for the backchat ui stuff
                 //? move this too? into a separate function?
                 if(newValue>=3&&this.chatted.angry===0) {
-                    this.setBackchat('medium', 'angry')
+                    // this.setBackchat('medium', 'angry')
                     this.chatted.angry=1
-                    this.alertChat()
+                    // this.alertChat()
                 }
                 // if(newValue>=8&&this.chatted.angry===1) {
                 //     this.setBackchat('high', 'angry')
@@ -546,9 +560,9 @@ export default {
                 //     this.alertChat()
                 // }
                  if(newValue>=10&&this.chatted.angry===2) {
-                    this.setBackchat('max', 'angry')
+                    // this.setBackchat('max', 'angry')
                     this.chatted.angry=3
-                    this.alertChat()
+                    // this.alertChat()
                 }
         },
 
@@ -564,9 +578,9 @@ export default {
 
             
                 if(newValue>=3&&this.chatted.polite===0) {
-                    this.setBackchat('medium', 'polite')
+                    // this.setBackchat('medium', 'polite')
                     this.chatted.polite=1
-                    this.alertChat()
+                    // this.alertChat()
                 }
                 // if(newValue>=8&&this.chatted.polite===1) {
                 //     this.setBackchat('high', 'polite')
@@ -574,9 +588,9 @@ export default {
                 //     this.alertChat()
                 // }
                  if(newValue>=10&&this.chatted.polite===2) {
-                    this.setBackchat('max', 'polite')
+                    // this.setBackchat('max', 'polite')
                     this.chatted.polite=3
-                    this.alertChat()
+                    // this.alertChat()
                 }
             
         },
@@ -592,9 +606,9 @@ export default {
                 }
 
                 if(newValue>=3&&this.chatted.paggro===0) {
-                    this.setBackchat('medium', 'paggro')
+                    // this.setBackchat('medium', 'paggro')
                     this.chatted.paggro=1
-                    this.alertChat()
+                    // this.alertChat()
                 }
                 // if(newValue>=8&&this.chatted.paggro===1) {
                 //     this.setBackchat('high', 'paggro')
@@ -602,9 +616,9 @@ export default {
                 //     this.alertChat()
                 // }
                  if(newValue>=10&&this.chatted.paggro===2) {
-                    this.setBackchat('max', 'paggro')
+                    // this.setBackchat('max', 'paggro')
                     this.chatted.paggro=3
-                    this.alertChat()
+                    // this.alertChat()
                 }
             
             
@@ -621,9 +635,9 @@ export default {
                 }
 
                 if(newValue>=3&&this.chatted.pirate===0) {
-                    this.setBackchat('medium', 'pirate')
+                    // this.setBackchat('medium', 'pirate')
                     this.chatted.pirate=1
-                    this.alertChat()
+                    // this.alertChat()
                 }
                 // if(newValue>=8&&this.chatted.pirate===1) {
                 //     this.setBackchat('high', 'pirate')
@@ -631,9 +645,9 @@ export default {
                 //     this.alertChat()
                 // }
                  if(newValue>=10&&this.chatted.pirate===2) {
-                    this.setBackchat('max', 'pirate')
+                    // this.setBackchat('max', 'pirate')
                     this.chatted.pirate=3
-                    this.alertChat()
+                    // this.alertChat()
                 }
             
     
@@ -654,11 +668,11 @@ export default {
             if(newVal>=3&&this.chatted.confused===0) {
                 //   this.setBackchat('confused', 'one')
                   this.chatted.confused++
-                  this.alertChat()
+                //   this.alertChat()
             }  else if(newVal>=3&&this.chatted.confused===1&&this.chatted.confusedReset===true) {
-                  this.setBackchat('confused', 'two')
+                //   this.setBackchat('confused', 'two')
                   this.chatted.confused++
-                  this.alertChat()
+                //   this.alertChat()
             }
             
             if(this.chatted.confused===1&&newVal<3) {
@@ -686,7 +700,7 @@ export default {
                     this.$store.state.replace = false
                 }
               if(newVal>this.moodLimit) {
-                    this.setBackchat('alerts', 'moodTotalReached')
+                    // this.setBackchat('alerts', 'moodTotalReached')
                 }
         },
 
@@ -1550,33 +1564,33 @@ export default {
             return Math.floor(Math.random() * (max - min)) + min;
         },
 
-        setBackchat(obj, inner) {
+        // setBackchat(obj, inner) {
           
-            if(obj, inner){
-            let chosenChat = this.setChat(obj, inner)
-            this.backchat = chosenChat
+        //     if(obj, inner){
+        //     let chosenChat = this.setChat(obj, inner)
+        //     this.backchat = chosenChat
 
-            //* once, trigger snippets rendering after default two is loaded
-                if(obj==='starter'&&inner==='two'){
-                    setTimeout(() => {
-                         this.pushSnippet(0)
-                    }, 1000)
+        //     //* once, trigger snippets rendering after default two is loaded
+        //         if(obj==='starter'&&inner==='two'){
+        //             setTimeout(() => {
+        //                  this.pushSnippet(0)
+        //             }, 1000)
                    
-                }
+        //         }
 
-                 setTimeout(() => {
-                        this.addedChatStrings.push(
-                        {
-                            string: this.backchat,
-                            icon: 'reg-reg'
-                        }
-                    )
+        //          setTimeout(() => {
+        //                 this.addedChatStrings.push(
+        //                 {
+        //                     string: this.backchat,
+        //                     icon: 'reg-reg'
+        //                 }
+        //             )
                    
-                }, 500)
-            } else {
-                this.chatCount++
-            }
-        },
+        //         }, 500)
+        //     } else {
+        //         this.chatCount++
+        //     }
+        // },
 
         changeLog(key, newPhrase) {
 
@@ -1687,6 +1701,7 @@ export default {
   transform: scale(1, -1);
 }
 
+
 .show-moodcount {
     text-align: center;
 }
@@ -1694,6 +1709,26 @@ export default {
 .emoji-container {
     display: flex;
     justify-content: start;
+}
+
+@media (min-width: 576px) {
+
+.emoji-container {
+    /* font-size: 2rem; */
+    padding-left: 2rem;
+    padding-right: 2rem;
+    justify-content: space-evenly;
+}
+}
+
+@media (max-width: 576px) {
+
+.emoji-container {
+    /* font-size: 2rem; */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    justify-content: space-evenly;
+}
 }
 
 .button-holder {

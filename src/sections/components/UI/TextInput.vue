@@ -153,19 +153,19 @@ export default {
         },
 // TODO scroll behaviour - here temporarily
         getElPosition(){
-                console.log('function called')
+                // console.log('function called')
                 let currentEl = this.$refs.el
                 let rect = currentEl.getBoundingClientRect()
-                console.log('current el is' + currentEl)
+                // console.log('current el is' + currentEl)
                 let right  = rect.right + window.scrollY
                 let height = window.innerHeight
                 let pos = right/height*100
                 pos = pos.toFixed(2)
 
                 // console.log('left is: ' + left)
-                console.log('right is: ' + right)
-                console.log('content inner height: ' + height)
-                console.log('position is: ' + pos)
+                // console.log('right is: ' + right)
+                // console.log('content inner height: ' + height)
+                // console.log('position is: ' + pos)
 
                 if (pos>75) {
                     this.setScroll = 'instant'
